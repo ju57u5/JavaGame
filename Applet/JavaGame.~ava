@@ -15,12 +15,22 @@ import java.util.Observer;
 public class JavaGame extends Applet implements KeyListener {
   
   String appletpfad = (System.getProperty("user.dir")+"\texture\test.png");
-  
+  boolean notrunning = true;
   //File texture = new File(appletpfad); 
   File texture = new File("Z:\\test.png");
-  Player player1 = new Player(texture,texture,getGraphics());
-  Player player2 = new Player(texture,texture,getGraphics());
+  Player player1,player2;
+  Image dbImage;
+  Graphics dbGraphics;
+  Erzaehler erz = new Erzaehler(player1, player2);
   
+  public void init() {
+    dbImage = createImage(1920,1080);
+    dbGraphics = dbImage.getGraphics();
+    
+    
+    player1 = new Player(texture,texture,dbImage);
+    player2 = new Player(texture,texture,dbImage);
+  } // end of init
   
   
   public void keyPressed(KeyEvent e) 
@@ -39,61 +49,103 @@ public class JavaGame extends Applet implements KeyListener {
   }
   
   
-  public void init() {
-    
-    
-    
-  } // end of init
+  
   
   public void paint (Graphics g) {
-    player1.laden(this,g);
-    this.addKeyListener(player1);
-    Erzaehler erz = new Erzaehler(player1, player2);
     
+    if (notrunning) {
+      player1.laden(this,g,dbGraphics,0,0);
+      player2.laden(this,g,dbGraphics,100,100);    
+      this.addKeyListener(player1);
+      this.addKeyListener(player2);
+      
+      player1.start();
+      player2.start();
+      notrunning = false;
+    } // end of if
+    g.drawImage(dbImage,0,0,this);
   }  
   
 } // end of class JavaGame
 
-class Player extends Thread implements KeyListener, Observer  {
+class Player extends Thread implements KeyListener  {
   
   File playertexture,shottexture;
   BufferedImage textureImage = new BufferedImage(1000,1000,1);
-  Graphics g;
+  Graphics g,db;
   KeyEvent taste;
   JavaGame Game;
+  Image dbImage;
+  boolean firsttimepressed = false;
   int x,y=0;
   
-  public Player(File playertexture, File shottexture) {
+  public Player(File playertexture, File shottexture, Image dbImage) {
     this.playertexture = playertexture;
     this.shottexture = shottexture;
-    
+    this.dbImage = dbImage;
     
     
   }  
   
-  public void laden(JavaGame Game, Graphics g) {
+  public void laden(JavaGame Game, Graphics db, Graphics g, int x, int y) {
     
     this.Game = Game;
     this.g = g;
+    this.db = db;
+    this.x = x;
+    this.y = y;
     try { 
       textureImage = ImageIO.read(playertexture);
     } catch(IOException exeption) {
       
     }
-    g.drawImage(textureImage,x,y,Game);
+    db.drawImage(textureImage,x,y,Game);
   }
   
-  public void update(Observable obserable, Object keyEvent)
+  public void updateKey()
   {
-    taste = (KeyEvent) keyEvent;
-    if (taste.getKeyCode()==taste.VK_UP) {
-      g.drawImage(textureImage,0,0,Game);
-    } // end of if
+    if (firsttimepressed) {
+      
+      
+      if (taste.getKeyCode()==taste.VK_RIGHT && x<300) {                            // I'm in Space! SPACE!
+        x +=1;
+      } // end of if
+      
+      if (taste.getKeyCode()==taste.VK_LEFT && x>0) {                               // I'm in Space! SPACE!
+        x -=1; 
+      } // end of if
+      
+      if (taste.getKeyCode()==taste.VK_UP && y>0) {                                 // I'm in Space! SPACE!
+        y -=1; 
+      } // end of if
+      
+      if (taste.getKeyCode()==taste.VK_DOWN && y<300) {                             // I'm in Space! SPACE!
+        y +=1; 
+      } // end of if
+    } // end of if  
+    Game.repaint();                         
+    db.drawImage(textureImage,x,y,Game);
+    
   }
+  
+  public void run() {
+    while (true) { 
+      updateKey();
+      System.out.println("test"); 
+      try {
+        sleep(1);
+      }
+      catch(InterruptedException e) {
+      }
+      
+    } // end of while
+    
+  }  
   
   public void keyPressed(KeyEvent e) 
   {
-    
+    firsttimepressed = true;
+    this.taste = e;   
   }
   
   public void keyReleased(KeyEvent e) 
@@ -110,13 +162,13 @@ class Player extends Thread implements KeyListener, Observer  {
 
 
 
-/////////////////////////////////  Observable Classe für die Übergabe
+/////////////////////////////////  Observable Classe für die Übergabe       k
 
 class Erzaehler extends Observable { 
   
   public Erzaehler(Player p1, Player p2){ 
-    this.addObserver(p1);
-    this.addObserver(p2); 
+    //this.addObserver(p1);
+    //this.addObserver(p2); 
     
     
   } 
