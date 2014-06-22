@@ -18,18 +18,18 @@ public class JavaGame extends Applet implements KeyListener {
   boolean notrunning = true;
   //File texture = new File(appletpfad); 
   File texture = new File("Z:\\test.png");
-  Player player1,player2;
+  Player player[] = new Player[3];
   Image dbImage;
   Graphics dbGraphics;
-  Erzaehler erz = new Erzaehler(player1, player2);
+  //Erzaehler erz = new Erzaehler(player1, player2);
   
   public void init() {
     dbImage = createImage(1920,1080);
     dbGraphics = dbImage.getGraphics();
     
     
-    player1 = new Player(texture,texture,dbImage);
-    player2 = new Player(texture,texture,dbImage);
+    player[1] = new Player(texture,texture,dbImage);
+    player[2] = new Player(texture,texture,dbImage);
   } // end of init
   
   
@@ -54,16 +54,17 @@ public class JavaGame extends Applet implements KeyListener {
   public void paint (Graphics g) {
     
     if (notrunning) {
-      player1.laden(this,g,dbGraphics,0,0);
-      player2.laden(this,g,dbGraphics,100,100);    
-      this.addKeyListener(player1);
-      this.addKeyListener(player2);
+      player[1].laden(this,g,dbGraphics,0,0);
+      player[2].laden(this,g,dbGraphics,100,100);    
+      this.addKeyListener(player[1]);
+      this.addKeyListener(player[2]);
       
-      player1.start();
-      player2.start();
+      GameRunner gamerunner = new GameRunner(player,this);
+      
       notrunning = false;
     } // end of if
-    g.drawImage(dbImage,0,0,this);
+    //g.drawImage(dbImage,0,0,this); 
+    
   }  
   
 } // end of class JavaGame
@@ -76,13 +77,15 @@ class Player extends Thread implements KeyListener  {
   KeyEvent taste;
   JavaGame Game;
   Image dbImage;
-  boolean firsttimepressed = false;
+  boolean firsttimepressed=false;
   int x,y=0;
+  boolean[] keys = new boolean[1000];
   
   public Player(File playertexture, File shottexture, Image dbImage) {
     this.playertexture = playertexture;
     this.shottexture = shottexture;
     this.dbImage = dbImage;
+    
     
     
   }  
@@ -91,15 +94,20 @@ class Player extends Thread implements KeyListener  {
     
     this.Game = Game;
     this.g = g;
-    this.db = db;
+    this.db = dbImage.getGraphics();
     this.x = x;
     this.y = y;
+    for (int c=0;c<keys.length;c++ ) {
+      keys[c]=false;
+    } // end of for
+    
     try { 
       textureImage = ImageIO.read(playertexture);
     } catch(IOException exeption) {
       
     }
     db.drawImage(textureImage,x,y,Game);
+    
   }
   
   public void updateKey()
@@ -107,33 +115,38 @@ class Player extends Thread implements KeyListener  {
     if (firsttimepressed) {
       
       
-      if (taste.getKeyCode()==taste.VK_RIGHT && x<300) {                            // I'm in Space! SPACE!
+      if (keys[taste.VK_RIGHT] && x<300) {                            // I'm in Space! SPACE!
         x +=1;
       } // end of if
       
-      if (taste.getKeyCode()==taste.VK_LEFT && x>0) {                               // I'm in Space! SPACE!
+      if (keys[taste.VK_LEFT] && x>0) {                               // I'm in Space! SPACE!
         x -=1; 
       } // end of if
       
-      if (taste.getKeyCode()==taste.VK_UP && y>0) {                                 // I'm in Space! SPACE!
+      if (keys[taste.VK_UP] && y>0) {                                 // I'm in Space! SPACE!
         y -=1; 
       } // end of if
       
-      if (taste.getKeyCode()==taste.VK_DOWN && y<300) {                             // I'm in Space! SPACE!
+      if (keys[taste.VK_DOWN] && y<300) {                             // I'm in Space! SPACE!
         y +=1; 
       } // end of if
     } // end of if  
-    Game.repaint();                         
+    //Game.repaint();
+    
     db.drawImage(textureImage,x,y,Game);
+    g.drawImage(dbImage,0,0,Game);
+    System.out.println(x+" "+y);
     
   }
   
   public void run() {
     while (true) { 
-      updateKey();
-      System.out.println("test"); 
+      
+      //      System.out.println(x);
+      //      System.out.println(y);
+      updateKey(); 
       try {
-        sleep(1);
+        sleep(33);
       }
       catch(InterruptedException e) {
       }
@@ -145,12 +158,15 @@ class Player extends Thread implements KeyListener  {
   public void keyPressed(KeyEvent e) 
   {
     firsttimepressed = true;
-    this.taste = e;   
+    this.taste = e;
+    keys[taste.getKeyCode()]=true;   
   }
   
   public void keyReleased(KeyEvent e) 
   {
     
+    this.taste = e;
+    keys[taste.getKeyCode()]=false;   
   }
   
   public void keyTyped(KeyEvent e) 
@@ -162,7 +178,7 @@ class Player extends Thread implements KeyListener  {
 
 
 
-/////////////////////////////////  Observable Classe für die Übergabe       k
+/////////////////////////////////  Observable Classe für die Übergabe       
 
 class Erzaehler extends Observable { 
   
@@ -183,5 +199,37 @@ class Erzaehler extends Observable {
   
   
 } 
+
+
+////// Standart Thread für das aktualisieren aller Komponenten
+
+class GameRunner extends Thread {
+  Player player[] = null;
+  JavaGame Game ;
+  
+  public GameRunner (Player[] player, JavaGame Game) {
+    this.player = player;
+    this.Game = Game;
+    this.start();
+  }  
+  
+  public void run() {
+    while (true) { 
+      try {
+        sleep(33);
+      }
+      catch(InterruptedException e) {
+      }
+      Game.repaint();
+      for (int counter=1;counter<player.length;counter++)
+      { 
+        //System.out.println(counter);
+        player[counter].updateKey(); 
+        
+      }  
+    } // end of while
+    
+  }  
+}  
 
 
