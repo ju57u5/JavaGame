@@ -19,7 +19,7 @@ public class JavaGame extends Applet implements KeyListener {
   boolean notrunning = true;
   //File texture = new File(appletpfad);
   URL  PlayerTextureUrl;
-  File texture = new File("T:\\test.png");
+  File texture = new File("J:\\test.png");
   Player player[] = new Player[3];
   Image dbImage;
   Graphics dbGraphics;
@@ -30,8 +30,8 @@ public class JavaGame extends Applet implements KeyListener {
     dbGraphics = dbImage.getGraphics();
     
     
-    player[1] = new Player(texture,texture,dbImage);
-    player[2] = new Player(texture,texture,dbImage);
+    player[1] = new Player(texture,texture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_SHIFT);
+    player[2] = new Player(texture,texture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_Q);
     
     try {
       PlayerTextureUrl = new URL("http://www.mariowiki.com/images/5/57/WaluigiMP8Official.png");
@@ -86,14 +86,19 @@ class Player extends Thread implements KeyListener  {
   JavaGame Game;
   Image dbImage;
   boolean firsttimepressed=false;
-  int x,y=0;
+  int x,y=0;                                                                                                                  //Positionen
+  int left,right,jump,attack;                                                                                                 //Tasten
+  int jumpup, jumpdown = 0;                                                                                                   //Jump Vars
   boolean[] keys = new boolean[1000];
   
-  public Player(File playertexture, File shottexture, Image dbImage) {
+  public Player(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int attack) {
     this.playertexture = playertexture;
     this.shottexture = shottexture;
     this.dbImage = dbImage;
-    
+    this.left = left;
+    this.right = right;
+    this.jump = jump;
+    this.attack = attack;
     
     
   }  
@@ -105,6 +110,7 @@ class Player extends Thread implements KeyListener  {
     this.db = db;
     this.x = x;
     this.y = y;
+    
     for (int c=0;c<keys.length;c++ ) {
       keys[c]=false;
     } // end of for
@@ -114,7 +120,7 @@ class Player extends Thread implements KeyListener  {
     } catch(IOException exeption) {
       
     }
-    g.drawImage(textureImage,x,y,Game);
+    db.drawImage(textureImage,x,y,Game);
     
   }
   
@@ -123,26 +129,26 @@ class Player extends Thread implements KeyListener  {
     if (firsttimepressed) {
       
       
-      if (keys[taste.VK_RIGHT] && x<300) {                            // I'm in Space! SPACE!
-        x +=1;
+      if (keys[right] && x<900) {                            // I'm in Space! SPACE!
+        x +=5;
       } // end of if
       
-      if (keys[taste.VK_LEFT] && x>0) {                               // I'm in Space! SPACE!
-        x -=1; 
+      if (keys[left] && x>0) {                               // I'm in Space! SPACE!
+        x -=5; 
       } // end of if
       
-      if (keys[taste.VK_UP] && y>0) {                                 // I'm in Space! SPACE!
-        y -=1; 
+      if (keys[jump] && y>0) {                                 // I'm in Space! SPACE!
+        setJump(50); 
       } // end of if
       
-      if (keys[taste.VK_DOWN] && y<300) {                             // I'm in Space! SPACE!
+      if (keys[attack] && y<900) {                             // I'm in Space! SPACE!
         y +=1; 
       } // end of if
     } // end of if  
     //Game.repaint();
+    updateJump(10);
+    Game.dbImage.getGraphics().drawImage(textureImage,x,y,Game);
     
-    db.drawImage(textureImage,x,y,Game);
-    g.drawImage(dbImage,0,0,Game);
     System.out.println(x+" "+y);
     
   }
@@ -154,7 +160,7 @@ class Player extends Thread implements KeyListener  {
       //      System.out.println(y);
       updateKey(); 
       try {
-        sleep(33);
+        sleep(1);
       }
       catch(InterruptedException e) {
       }
@@ -182,6 +188,28 @@ class Player extends Thread implements KeyListener  {
     
   }
   
+  // PlayerLogig
+  
+  public void setJump(int heigth) {
+    if (jumpup == 0 && jumpdown == 0) {
+      jumpup += heigth;
+      jumpdown += heigth;
+    } // end of if
+    
+  } 
+  
+  public void updateJump(int speed) {
+    if (jumpup>0) {
+      y -= speed;
+      jumpup -= speed;
+    } // end of if
+    
+    else if (jumpdown>0) {
+      y += speed;
+      jumpdown -= speed;
+    } // end of if-else
+    
+  }   
 }
 
 
@@ -228,13 +256,15 @@ class GameRunner extends Thread {
       }
       catch(InterruptedException e) {
       }
-      //Game.repaint();
+      Game.repaint();
+      Game.dbImage.getGraphics().clearRect(0,0, (int)Game.getWidth(), (int)Game.getHeight());
       for (int counter=1;counter<player.length;counter++)
       { 
         //System.out.println(counter);
         player[counter].updateKey(); 
         
-      }  
+      }
+      Game.getGraphics().drawImage(Game.dbImage,0,0,Game);  
     } // end of while
     
   }  
