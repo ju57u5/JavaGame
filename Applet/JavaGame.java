@@ -6,7 +6,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.Observable; 
-import java.util.Observer; 
+import java.util.Observer;
+import java.net.*; 
 
 
 //                           Interfaces
@@ -16,8 +17,9 @@ public class JavaGame extends Applet implements KeyListener {
   
   String appletpfad = (System.getProperty("user.dir")+"\texture\test.png");
   boolean notrunning = true;
-  //File texture = new File(appletpfad); 
-  File texture = new File("Z:\\test.png");
+  //File texture = new File(appletpfad);
+  URL  PlayerTextureUrl;
+  File texture = new File("T:\\test.png");
   Player player[] = new Player[3];
   Image dbImage;
   Graphics dbGraphics;
@@ -30,6 +32,12 @@ public class JavaGame extends Applet implements KeyListener {
     
     player[1] = new Player(texture,texture,dbImage);
     player[2] = new Player(texture,texture,dbImage);
+    
+    try {
+      PlayerTextureUrl = new URL("http://www.mariowiki.com/images/5/57/WaluigiMP8Official.png");
+    } catch(Exception e) {
+      e.printStackTrace();
+    } 
   } // end of init
   
   
@@ -54,8 +62,8 @@ public class JavaGame extends Applet implements KeyListener {
   public void paint (Graphics g) {
     
     if (notrunning) {
-      player[1].laden(this,g,dbGraphics,0,0);
-      player[2].laden(this,g,dbGraphics,100,100);    
+      player[1].laden(this,dbGraphics,g,0,0);
+      player[2].laden(this,dbGraphics,g,100,100);    
       this.addKeyListener(player[1]);
       this.addKeyListener(player[2]);
       
@@ -94,7 +102,7 @@ class Player extends Thread implements KeyListener  {
     
     this.Game = Game;
     this.g = g;
-    this.db = dbImage.getGraphics();
+    this.db = db;
     this.x = x;
     this.y = y;
     for (int c=0;c<keys.length;c++ ) {
@@ -133,7 +141,7 @@ class Player extends Thread implements KeyListener  {
     } // end of if  
     //Game.repaint();
     
-    db.drawImage(textureImage,x,y,Game);
+    Game.getGraphics().drawImage(textureImage,x,y,Game);
     g.drawImage(dbImage,0,0,Game);
     System.out.println(x+" "+y);
     
