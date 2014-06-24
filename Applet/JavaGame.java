@@ -30,7 +30,7 @@ public class JavaGame extends Applet implements KeyListener {
     dbGraphics = dbImage.getGraphics();
     
     
-    player[1] = new Player(texture,texture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_SHIFT);
+    player[1] = new Player(texture,texture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_SHIFT);                // I'm in Space! SPACE!
     player[2] = new Player(texture,texture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_Q);
     
     try {
@@ -120,7 +120,7 @@ class Player extends Thread implements KeyListener  {
     } catch(IOException exeption) {
       
     }
-    db.drawImage(textureImage,x,y,Game);
+    
     
   }
   
@@ -128,21 +128,20 @@ class Player extends Thread implements KeyListener  {
   {
     if (firsttimepressed) {
       
-      
-      if (keys[right] && x<900) {                            // I'm in Space! SPACE!
+      if (keys[right] && x<900) {                              
         x +=5;
       } // end of if
       
-      if (keys[left] && x>0) {                               // I'm in Space! SPACE!
+      if (keys[left] && x>0) {                                 
         x -=5; 
       } // end of if
       
-      if (keys[jump] && y>0) {                                 // I'm in Space! SPACE!
+      if (keys[jump] && y>0) {                                 
         setJump(50); 
       } // end of if
       
-      if (keys[attack] && y<900) {                             // I'm in Space! SPACE!
-        y +=1; 
+      if (keys[attack] && y<900) {                             
+        y +=5; 
       } // end of if
     } // end of if  
     
@@ -154,18 +153,9 @@ class Player extends Thread implements KeyListener  {
   }
   
   public void run() {
-    while (true) { 
-      
-      //      System.out.println(x);
-      //      System.out.println(y);
-      updateKey(); 
-      try {
-        sleep(1);
-      }
-      catch(InterruptedException e) {
-      }
-      
-    } // end of while
+    
+    
+    
     
   }  
   
@@ -212,8 +202,55 @@ class Player extends Thread implements KeyListener  {
   }   
 }
 
+class Shot {
+  
+  int x,y;
+  JavaGame Game;
+  File shottexture;
+  BufferedImage textureImage = new BufferedImage(1000,1000,1);
+  
+  public Shot (File shottexture) {
+    this.shottexture = shottexture;
+    
+  }  
+  
+  public void laden(JavaGame Game, int x, int y) {
+    
+    this.Game = Game;
+    this.x = x;
+    this.y = y;
+    
+    try { 
+      textureImage = ImageIO.read(shottexture);
+    } catch(IOException exeption) {
+      
+    }
+    
+    
+  }
+  
+  public void updateShot() {
+    
+    
+    
+    
+    
+  }  
+}
 
-
+class damageLogig {
+  
+  public void registerShot() {
+    
+    
+  }
+  
+  public void updateDamage() {  
+    
+    
+  }  
+}  
+  
 /////////////////////////////////  Observable Classe für die Übergabe       
 
 class Erzaehler extends Observable { 
@@ -260,7 +297,7 @@ class GameRunner extends Thread {
       Game.dbImage.getGraphics().clearRect(0,0, (int)Game.getWidth(), (int)Game.getHeight());
       for (int counter=1;counter<player.length;counter++)
       { 
-        //System.out.println(counter);
+        
         player[counter].updateKey(); 
         
       }
