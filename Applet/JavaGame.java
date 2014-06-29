@@ -15,11 +15,11 @@ import java.net.*;
 
 public class JavaGame extends Applet implements KeyListener {
   
-  String appletpfad = (System.getProperty("user.dir")+"\texture\test.png");
+  File appletpfad = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
   boolean notrunning = true;
-  //File texture = new File(appletpfad);
   URL  PlayerTextureUrl;
   File texture = new File("K:\\test.png");
+  //File texture = new File(appletpfad, "\texture\test.png");
   File shottexture = new File("K:\\shot.png");
   Player player[] = new Player[3];
   Image dbImage;
@@ -32,8 +32,8 @@ public class JavaGame extends Applet implements KeyListener {
     dbGraphics = dbImage.getGraphics();
     
     
-    player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_SHIFT);                // I'm in Space! SPACE!
-    player[2] = new Player(texture,shottexture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_Q);
+    player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_SHIFT,10,10);                // I'm in Space! SPACE!
+    player[2] = new Player(texture,shottexture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_Q,120,10);
     
     try {
       PlayerTextureUrl = new URL("http://www.mariowiki.com/images/5/57/WaluigiMP8Official.png");
@@ -97,12 +97,12 @@ class Player extends Thread implements KeyListener  {
   Image dbImage;
   boolean characterInverted,firsttimepressed,freezeControls=false;
   int x,y=0;                                                                                                                  //Positionen
-  int left,right,jump,attack;                                                                                                 //Tasten
+  int schusssperre,left,right,jump,attack,xHealth,yHealth;                                                                                                 //Tasten
   int jumpup, jumpdown = 0;                                                                                                   //Jump Vars
   boolean[] keys = new boolean[1000];
   int health = 100;
   
-  public Player(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int attack) {
+  public Player(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int attack, int xHealth, int yHealth) {
     this.playertexture = playertexture;
     this.shottexture = shottexture;
     this.dbImage = dbImage;
@@ -110,8 +110,8 @@ class Player extends Thread implements KeyListener  {
     this.right = right;
     this.jump = jump;
     this.attack = attack;
-    
-    
+    this.xHealth = xHealth;
+    this.yHealth = yHealth;
   }  
   
   public void laden(JavaGame Game, Graphics db, Graphics g, int x, int y) {
@@ -176,16 +176,22 @@ class Player extends Thread implements KeyListener  {
       } // end of if
       
       if (keys[jump] && y>0) {                                 
-        setJump(50); 
+        setJump(80); 
       } // end of if
       
-      if (keys[attack] && y<900) {                             
+      if (keys[attack] && y<900 && schusssperre == 0) {                             
         Shot bullet = new Shot(shottexture,!characterInverted, 5, Game, this);
-        bullet.laden(x,y);
+        bullet.laden(x,y+50);
+        schusssperre = 10;
       } // end of if
     } // end of if  
     
     updateJump(10);
+    drawHealth();
+    if (schusssperre > 0) {
+      schusssperre--;
+    } // end of if
+    
     if (!characterInverted) {
       Game.dbImage.getGraphics().drawImage(textureImage,x,y,Game);
     } // end of if
@@ -195,6 +201,19 @@ class Player extends Thread implements KeyListener  {
     
     
   }
+  
+  public void move(boolean rechts, int amount)  {
+    
+    
+  }  
+  
+  public void drawHealth() {
+    Graphics gra = Game.dbImage.getGraphics();
+    gra.drawLine(xHealth,yHealth,xHealth+100,yHealth);
+    gra.drawLine(xHealth,yHealth+10,xHealth+100,yHealth+10);
+    gra.setColor(Color.red);
+    gra.fillRect(xHealth+1,yHealth,health,10);
+  }  
   
   public void run() {
   }
@@ -326,7 +345,8 @@ class damageLogig {
           yDistance = runner.shot[counterb].y - runner.player[counter].y ;
           
           if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100) ) {
-            runner.player[counter].setDamage(10);
+            runner.player[counter].setDamage(2);
+            runner.shot[counterb]=null;
           } // end of if
           
         } // end of if
