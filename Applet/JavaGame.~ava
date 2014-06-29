@@ -79,6 +79,12 @@ public class JavaGame extends Applet implements KeyListener {
   
 } // end of class JavaGame
 
+public void update(Graphics g) {
+  
+  paint(g);
+  
+}
+
 class Player extends Thread implements KeyListener  {
   
   File playertexture,shottexture;
