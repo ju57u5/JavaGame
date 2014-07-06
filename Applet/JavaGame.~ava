@@ -126,9 +126,10 @@ class Player extends Thread implements KeyListener  {
   JavaGame Game;
   Image dbImage;
   boolean justupdated,characterInverted,firsttimepressed,freezeControls=false;
-  int x,y=0;                                                                                                                  //Positionen
-  int schusssperre,left,right,jump,down,attack,xHealth,yHealth;                                                                                                 //Tasten
-  int jumpup, jumpdown = 0;                                                                                                   //Jump Vars
+  int x,y=0;
+  int stehenzahl = -1;                                                                                                    
+  int schusssperre,left,right,jump,down,attack,xHealth,yHealth;                                                                                             
+  int jumpup, jumpdown = 0;                                                                                                   
   boolean[] keys = new boolean[1000];
   int health = 100;
   // Ende Attribute1
@@ -200,21 +201,21 @@ class Player extends Thread implements KeyListener  {
   {
     if (firsttimepressed && !freezeControls) {
       
-      if (keys[right] && x<900) {                              
+      if (keys[right] ) {                              
         x +=5;
         characterInverted = false;
       } // end of if
       
-      if (keys[left] && x>0) {                                 
+      if (keys[left] ) {                                 
         x -=5;
         characterInverted = true; 
       } // end of if
       
-      if (keys[jump] && y>0) {                                 
+      if (keys[jump] ) {                                 
         setJump(200);
       } // end of if
       
-      if (keys[down] && y>0 && stehenzahl != 0 ) {                  // Stehenzahl 0: Player steht auf der Mainebene               
+      if (keys[down]  && stehenzahl != 0 ) {                  // Stehenzahl 0: Player steht auf der Mainebene               
         y -=1;
         justupdated = true;
       } // end of if
@@ -226,6 +227,10 @@ class Player extends Thread implements KeyListener  {
       } // end of if
     } // end of if  
     
+    
+    if (y + textureImage.getHeight() > Game.ebenen[0][2] + 200) {
+      health=0;
+    } // end of if
     updateJump(10);
     drawHealth();
     if (schusssperre > 0) {
@@ -299,7 +304,7 @@ class Player extends Thread implements KeyListener  {
     boolean ebene = false;
     boolean kannstehen = false;
     int zahl = -1;
-    int stehenzahl = -1;
+    stehenzahl = -1;
     int height = textureImage.getHeight();
     for (int counter=0;counter < Game.ebenen.length;counter++ ) {
       if (Game.ebenen[counter] != null ) {

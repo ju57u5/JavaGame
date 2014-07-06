@@ -40,8 +40,8 @@ public class JavaGame extends Applet implements KeyListener {
     ebenen[1][1]= 300;  //x2
     ebenen[1][2]= 480;  //y
     
-    ebenen[0][0]= 0;
-    ebenen[0][1]= 2000;       // Main Ebene: Kann nicht durchschrittenwerden indem down gedrückt wird
+    ebenen[0][0]= 0-67;
+    ebenen[0][1]= 900;       // Main Ebene: Kann nicht durchschrittenwerden indem down gedrückt wird
     ebenen[0][2]= 600;
     
     ebenen[2][0]= 500;
@@ -201,21 +201,21 @@ class Player extends Thread implements KeyListener  {
   {
     if (firsttimepressed && !freezeControls) {
       
-      if (keys[right] && x<900) {                              
+      if (keys[right] ) {                              
         x +=5;
         characterInverted = false;
       } // end of if
       
-      if (keys[left] && x>0) {                                 
+      if (keys[left] ) {                                 
         x -=5;
         characterInverted = true; 
       } // end of if
       
-      if (keys[jump] && y>0) {                                 
+      if (keys[jump] ) {                                 
         setJump(200);
       } // end of if
       
-      if (keys[down] && y>0 && stehenzahl != 0 ) {                  // Stehenzahl 0: Player steht auf der Mainebene               
+      if (keys[down]  && stehenzahl != 0 ) {                  // Stehenzahl 0: Player steht auf der Mainebene               
         y -=1;
         justupdated = true;
       } // end of if
@@ -227,6 +227,10 @@ class Player extends Thread implements KeyListener  {
       } // end of if
     } // end of if  
     
+    
+    if (y + textureImage.getHeight() > Game.ebenen[0][2] + 200) {
+      health=0;
+    } // end of if
     updateJump(10);
     drawHealth();
     if (schusssperre > 0) {
