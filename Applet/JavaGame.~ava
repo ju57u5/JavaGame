@@ -36,20 +36,20 @@ public class JavaGame extends Applet implements KeyListener {
     dbImage = createImage(1920,1080);
     dbGraphics = dbImage.getGraphics();
     
-    ebenen[1][0]= 100;  //x1
-    ebenen[1][1]= 300;  //x2
+    ebenen[1][0]= 200;  //x1
+    ebenen[1][1]= 400;  //x2
     ebenen[1][2]= 480;  //y
     
-    ebenen[0][0]= 0;
-    ebenen[0][1]= 2000;       // Main Ebene: Kann nicht durchschrittenwerden indem down gedrückt wird
+    ebenen[0][0]= 100-67;
+    ebenen[0][1]= 1000;       // Main Ebene: Kann nicht durchschrittenwerden indem down gedrückt wird
     ebenen[0][2]= 600;
     
-    ebenen[2][0]= 500;
-    ebenen[2][1]= 700;
+    ebenen[2][0]= 600;
+    ebenen[2][1]= 800;
     ebenen[2][2]= 480;
     
-    ebenen[3][0]= 300;
-    ebenen[3][1]= 500;
+    ebenen[3][0]= 400;
+    ebenen[3][1]= 600;
     ebenen[3][2]= 380;
     
     
@@ -89,8 +89,8 @@ public class JavaGame extends Applet implements KeyListener {
   public void paint (Graphics g) {
     
     if (notrunning) {
-      player[1].laden(this,dbGraphics,g,0,500);
-      player[2].laden(this,dbGraphics,g,300,500);
+      player[1].laden(this,dbGraphics,g,100,500);
+      player[2].laden(this,dbGraphics,g,200,500);
       player[3].laden(this,dbGraphics,g,300,500);
       this.addKeyListener(player[1]);
       this.addKeyListener(player[2]);
@@ -398,7 +398,32 @@ class Shot {
     
     Game.dbImage.getGraphics().drawImage(textureImage,x,y,Game);
     
-  }  
+  }
+  
+  public BufferedImage verticalflip(BufferedImage img) {
+    int w = img.getWidth();
+    int h = img.getHeight();
+    BufferedImage dimg = new BufferedImage(w, h, img.getType());
+    Graphics2D g = dimg.createGraphics();
+    /**
+    * img - the specified image to be drawn. This method does nothing if
+    * img is null. dx1 - the x coordinate of the first corner of the
+    * destination rectangle. dy1 - the y coordinate of the first corner of
+    * the destination rectangle. dx2 - the x coordinate of the second
+    * corner of the destination rectangle. dy2 - the y coordinate of the
+    * second corner of the destination rectangle. sx1 - the x coordinate of
+    * the first corner of the source rectangle. sy1 - the y coordinate of
+    * the first corner of the source rectangle. sx2 - the x coordinate of
+    * the second corner of the source rectangle. sy2 - the y coordinate of
+    * the second corner of the source rectangle. observer - object to be
+    * notified as more of the image is scaled and converted.
+    *
+    */
+    g.drawImage(img, 0, 0, w, h, w, 0, 0, h, null);
+    g.dispose();
+    return dimg;
+  }
+  
   // Ende Methoden2
 }
 
@@ -516,10 +541,10 @@ class GameRunner extends Thread {
         }
         Game.DamageLogig.updateDamage();
       } // end of if
-      Game.dbImage.getGraphics().fillRect(0,600,900,10);
-      Game.dbImage.getGraphics().drawLine(100,480,300,480);
-      Game.dbImage.getGraphics().drawLine(500,480,700,480);
-      Game.dbImage.getGraphics().drawLine(300,380,500,380);
+      Game.dbImage.getGraphics().fillRect(100,600,900,10);
+      Game.dbImage.getGraphics().drawLine(200,480,400,480);
+      Game.dbImage.getGraphics().drawLine(600,480,800,480);
+      Game.dbImage.getGraphics().drawLine(400,380,600,380);
       
       Game.getGraphics().drawImage(Game.dbImage,0,0,Game);  
     } // end of while
