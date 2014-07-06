@@ -36,13 +36,13 @@ public class JavaGame extends Applet implements KeyListener {
     dbImage = createImage(1920,1080);
     dbGraphics = dbImage.getGraphics();
     
-    ebenen[0][0]= 100;  //x1
-    ebenen[0][1]= 300;  //x2
-    ebenen[0][2]= 480;  //y
+    ebenen[1][0]= 100;  //x1
+    ebenen[1][1]= 300;  //x2
+    ebenen[1][2]= 480;  //y
     
-    ebenen[1][0]= 0;
-    ebenen[1][1]= 2000;
-    ebenen[1][2]= 600;
+    ebenen[0][0]= 0;
+    ebenen[0][1]= 2000;       // Main Ebene: Kann nicht durchschrittenwerden indem down gedrückt wird
+    ebenen[0][2]= 600;
     
     ebenen[2][0]= 500;
     ebenen[2][1]= 700;
@@ -53,9 +53,9 @@ public class JavaGame extends Applet implements KeyListener {
     ebenen[3][2]= 380;
     
     
-    player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_ENTER,10,10);                // I'm in Space! SPACE!
-    player[2] = new Player(texture,shottexture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_Q,120,10);
-    player[3] = new Player(texture,shottexture,dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_U,230,10);
+    player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,10,10);                // I'm in Space! SPACE!
+    player[2] = new Player(texture,shottexture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,10);
+    player[3] = new Player(texture,shottexture,dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10);
     
     
     
@@ -66,9 +66,7 @@ public class JavaGame extends Applet implements KeyListener {
       e.printStackTrace();
     } 
   } // end of init
-  // Anfang Komponenten
-  // Ende Komponenten
-  // Anfang Methoden
+  
   
   
   public void keyPressed(KeyEvent e) 
@@ -104,7 +102,6 @@ public class JavaGame extends Applet implements KeyListener {
       
       notrunning = false;
     } // end of if
-    //g.drawImage(dbImage,0,0,this); 
     
   }  
   
@@ -129,14 +126,15 @@ class Player extends Thread implements KeyListener  {
   JavaGame Game;
   Image dbImage;
   boolean justupdated,characterInverted,firsttimepressed,freezeControls=false;
-  int x,y=0;                                                                                                                  //Positionen
-  int schusssperre,left,right,jump,attack,xHealth,yHealth;                                                                                                 //Tasten
-  int jumpup, jumpdown = 0;                                                                                                   //Jump Vars
+  int x,y=0;
+  int stehenzahl = -1;                                                                                                    
+  int schusssperre,left,right,jump,down,attack,xHealth,yHealth;                                                                                             
+  int jumpup, jumpdown = 0;                                                                                                   
   boolean[] keys = new boolean[1000];
   int health = 100;
   // Ende Attribute1
   
-  public Player(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int attack, int xHealth, int yHealth) {
+  public Player(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int down, int attack, int xHealth, int yHealth) {
     this.playertexture = playertexture;
     this.shottexture = shottexture;
     this.dbImage = dbImage;
@@ -146,6 +144,7 @@ class Player extends Thread implements KeyListener  {
     this.attack = attack;
     this.xHealth = xHealth;
     this.yHealth = yHealth;
+    this.down = down;
   }  
   // Anfang Komponenten1
   // Ende Komponenten1
@@ -214,6 +213,11 @@ class Player extends Thread implements KeyListener  {
       
       if (keys[jump] && y>0) {                                 
         setJump(200);
+      } // end of if
+      
+      if (keys[down] && y>0 && stehenzahl != 0 ) {                  // Stehenzahl 0: Player steht auf der Mainebene               
+        y -=1;
+        justupdated = true;
       } // end of if
       
       if (keys[attack] && y<900 && schusssperre == 0) {                             
@@ -294,7 +298,9 @@ class Player extends Thread implements KeyListener  {
   
   public void updateJump(int speed) {
     boolean ebene = false;
+    boolean kannstehen = false;
     int zahl = -1;
+    stehenzahl = -1;
     int height = textureImage.getHeight();
     for (int counter=0;counter < Game.ebenen.length;counter++ ) {
       if (Game.ebenen[counter] != null ) {
@@ -302,6 +308,13 @@ class Player extends Thread implements KeyListener  {
           if (x >= Game.ebenen[counter][0] && x <= Game.ebenen[counter][1]) {
             ebene = true;
             zahl = counter;
+          }
+        }
+        
+        if (y+height==Game.ebenen[counter][2]) {  
+          if (x >= Game.ebenen[counter][0] && x <= Game.ebenen[counter][1]) {
+            kannstehen = true;
+            stehenzahl = counter;
           }
         }
       }
@@ -322,7 +335,7 @@ class Player extends Thread implements KeyListener  {
       jumpup -= speed;
     } // end of if
     
-    else if (!ebene) {
+    else if (!kannstehen) {
       y += speed;
     } // end of if-else
     
