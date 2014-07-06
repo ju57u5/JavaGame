@@ -36,9 +36,21 @@ public class JavaGame extends Applet implements KeyListener {
     dbImage = createImage(1920,1080);
     dbGraphics = dbImage.getGraphics();
     
-    ebenen[0][0]= 100;
-    ebenen[0][1]= 300;
-    ebenen[0][2]= 480;
+    ebenen[0][0]= 100;  //x1
+    ebenen[0][1]= 300;  //x2
+    ebenen[0][2]= 480;  //y
+    
+    ebenen[1][0]= 0;
+    ebenen[1][1]= 2000;
+    ebenen[1][2]= 600;
+    
+    ebenen[2][0]= 500;
+    ebenen[2][1]= 700;
+    ebenen[2][2]= 480;
+    
+    ebenen[3][0]= 300;
+    ebenen[3][1]= 500;
+    ebenen[3][2]= 380;
     
     
     player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_ENTER,10,10);                // I'm in Space! SPACE!
@@ -116,7 +128,7 @@ class Player extends Thread implements KeyListener  {
   KeyEvent taste;
   JavaGame Game;
   Image dbImage;
-  boolean characterInverted,firsttimepressed,freezeControls=false;
+  boolean justupdated,characterInverted,firsttimepressed,freezeControls=false;
   int x,y=0;                                                                                                                  //Positionen
   int schusssperre,left,right,jump,attack,xHealth,yHealth;                                                                                                 //Tasten
   int jumpup, jumpdown = 0;                                                                                                   //Jump Vars
@@ -207,7 +219,7 @@ class Player extends Thread implements KeyListener  {
       if (keys[attack] && y<900 && schusssperre == 0) {                             
         Shot bullet = new Shot(shottexture,!characterInverted, 5, Game, this);
         bullet.laden(x,y+50);
-        schusssperre = 10;
+        schusssperre = 40;
       } // end of if
     } // end of if  
     
@@ -284,11 +296,10 @@ class Player extends Thread implements KeyListener  {
     boolean ebene = false;
     int zahl = -1;
     int height = textureImage.getHeight();
-    System.out.println(y-speed+height);
     for (int counter=0;counter < Game.ebenen.length;counter++ ) {
       if (Game.ebenen[counter] != null ) {
         if ( (y-speed+height)<=Game.ebenen[counter][2] && y+height>=Game.ebenen[counter][2]) {  
-          if (x > Game.ebenen[counter][0] && x < Game.ebenen[counter][1]) {
+          if (x >= Game.ebenen[counter][0] && x <= Game.ebenen[counter][1]) {
             ebene = true;
             zahl = counter;
           }
@@ -296,10 +307,14 @@ class Player extends Thread implements KeyListener  {
       }
     } // end of for
     
-    if (ebene && !justupdated) {          // Beim losspringen soll nichts erkannt werden
+    if (ebene && !justupdated) {
+      jumpdown = 0; 
+    } // end of if
+    
+    if (ebene && !justupdated && jumpup<=0) {          // Beim losspringen soll nichts erkannt werden
       y = Game.ebenen[zahl][2]-height;
       jumpup = 0;
-      jumpdown = 0;
+      
     }
     
     else if (jumpup>0) {
@@ -307,10 +322,10 @@ class Player extends Thread implements KeyListener  {
       jumpup -= speed;
     } // end of if
     
-    else if (jumpdown>0) {
+    else if (!ebene) {
       y += speed;
-      jumpdown -= speed;
     } // end of if-else
+    
     justupdated = false; //Setjump ist mindestens ein update her
   }   
   // Ende Methoden1
@@ -376,7 +391,6 @@ class damageLogig {
   GameRunner runner;
   int counter = 0;
   int xDistance,yDistance;
-  // Ende Attribute3
   
   public damageLogig(GameRunner runner) {
     this.runner = runner;
@@ -487,6 +501,9 @@ class GameRunner extends Thread {
       } // end of if
       Game.dbImage.getGraphics().fillRect(0,600,900,10);
       Game.dbImage.getGraphics().drawLine(100,480,300,480);
+      Game.dbImage.getGraphics().drawLine(500,480,700,480);
+      Game.dbImage.getGraphics().drawLine(300,380,500,380);
+      
       Game.getGraphics().drawImage(Game.dbImage,0,0,Game);  
     } // end of while
     
