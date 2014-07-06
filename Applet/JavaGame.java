@@ -15,25 +15,38 @@ import java.net.*;
 
 public class JavaGame extends Applet implements KeyListener {
   
+  // Anfang Attribute
   File appletpfad = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
   boolean notrunning = true;
   URL  PlayerTextureUrl;
   File texture = new File("K:\\test.png");
   //File texture = new File(appletpfad, "\texture\test.png");
   File shottexture = new File("K:\\shot.png");
-  Player player[] = new Player[3];
+  Player player[] = new Player[4];
   Image dbImage;
   Graphics dbGraphics;
   damageLogig DamageLogig;
+  int[][] ebenen = new int[100][3] ;
+  // Ende Attribute
+  
+  
   //Erzaehler erz = new Erzaehler(player1, player2);
   
   public void init() {
     dbImage = createImage(1920,1080);
     dbGraphics = dbImage.getGraphics();
     
+    ebenen[0][0]= 100;
+    ebenen[0][1]= 300;
+    ebenen[0][2]= 480;
     
-    player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_SHIFT,10,10);                // I'm in Space! SPACE!
+    
+    player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_ENTER,10,10);                // I'm in Space! SPACE!
     player[2] = new Player(texture,shottexture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_Q,120,10);
+    player[3] = new Player(texture,shottexture,dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_U,230,10);
+    
+    
+    
     
     try {
       PlayerTextureUrl = new URL("http://www.mariowiki.com/images/5/57/WaluigiMP8Official.png");
@@ -41,6 +54,9 @@ public class JavaGame extends Applet implements KeyListener {
       e.printStackTrace();
     } 
   } // end of init
+  // Anfang Komponenten
+  // Ende Komponenten
+  // Anfang Methoden
   
   
   public void keyPressed(KeyEvent e) 
@@ -63,10 +79,13 @@ public class JavaGame extends Applet implements KeyListener {
   public void paint (Graphics g) {
     
     if (notrunning) {
-      player[1].laden(this,dbGraphics,g,0,100);
-      player[2].laden(this,dbGraphics,g,300,100);    
+      player[1].laden(this,dbGraphics,g,0,500);
+      player[2].laden(this,dbGraphics,g,300,500);
+      player[3].laden(this,dbGraphics,g,300,500);
       this.addKeyListener(player[1]);
       this.addKeyListener(player[2]);
+      this.addKeyListener(player[3]);
+      
       
       GameRunner gamerunner = new GameRunner(player,this);
       DamageLogig = new damageLogig (gamerunner);
@@ -82,12 +101,14 @@ public class JavaGame extends Applet implements KeyListener {
     paint(g);
     
   }
+  // Ende Methoden
 } // end of class JavaGame
 
 
 
 class Player extends Thread implements KeyListener  {
   
+  // Anfang Attribute1
   File playertexture,shottexture;
   BufferedImage textureImage, textureImageb = new BufferedImage(1000,1000,1);
   
@@ -95,12 +116,13 @@ class Player extends Thread implements KeyListener  {
   KeyEvent taste;
   JavaGame Game;
   Image dbImage;
-  boolean characterInverted,firsttimepressed,freezeControls=false;
+  boolean justupdated,characterInverted,firsttimepressed,freezeControls=false;
   int x,y=0;                                                                                                                  //Positionen
   int schusssperre,left,right,jump,attack,xHealth,yHealth;                                                                                                 //Tasten
   int jumpup, jumpdown = 0;                                                                                                   //Jump Vars
   boolean[] keys = new boolean[1000];
   int health = 100;
+  // Ende Attribute1
   
   public Player(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int attack, int xHealth, int yHealth) {
     this.playertexture = playertexture;
@@ -113,6 +135,9 @@ class Player extends Thread implements KeyListener  {
     this.xHealth = xHealth;
     this.yHealth = yHealth;
   }  
+  // Anfang Komponenten1
+  // Ende Komponenten1
+  // Anfang Methoden1
   
   public void laden(JavaGame Game, Graphics db, Graphics g, int x, int y) {
     
@@ -176,7 +201,7 @@ class Player extends Thread implements KeyListener  {
       } // end of if
       
       if (keys[jump] && y>0) {                                 
-        setJump(80); 
+        setJump(200);
       } // end of if
       
       if (keys[attack] && y<900 && schusssperre == 0) {                             
@@ -192,10 +217,10 @@ class Player extends Thread implements KeyListener  {
       schusssperre--;
     } // end of if
     
-    if (!characterInverted) {
+    if (!characterInverted && health>0) {
       Game.dbImage.getGraphics().drawImage(textureImage,x,y,Game);
     } // end of if
-    else {
+    else if (characterInverted && health>0){
       Game.dbImage.getGraphics().drawImage(textureImageb,x,y,Game);
     } // end of if-else
     
@@ -250,12 +275,34 @@ class Player extends Thread implements KeyListener  {
     if (jumpup == 0 && jumpdown == 0) {
       jumpup += heigth;
       jumpdown += heigth;
+      justupdated = true;
     } // end of if
     
   } 
   
   public void updateJump(int speed) {
-    if (jumpup>0) {
+    boolean ebene = false;
+    int zahl = -1;
+    int height = textureImage.getHeight();
+    System.out.println(y-speed+height);
+    for (int counter=0;counter < Game.ebenen.length;counter++ ) {
+      if (Game.ebenen[counter] != null ) {
+        if ( (y-speed+height)<=Game.ebenen[counter][2] && y+height>=Game.ebenen[counter][2]) {  
+          if (x > Game.ebenen[counter][0] && x < Game.ebenen[counter][1]) {
+            ebene = true;
+            zahl = counter;
+          }
+        }
+      }
+    } // end of for
+    
+    if (ebene && !justupdated) {          // Beim losspringen soll nichts erkannt werden
+      y = Game.ebenen[zahl][2]-height;
+      jumpup = 0;
+      jumpdown = 0;
+    }
+    
+    else if (jumpup>0) {
       y -= speed;
       jumpup -= speed;
     } // end of if
@@ -264,18 +311,21 @@ class Player extends Thread implements KeyListener  {
       y += speed;
       jumpdown -= speed;
     } // end of if-else
-    
+    justupdated = false; //Setjump ist mindestens ein update her
   }   
+  // Ende Methoden1
 }
 
 class Shot {
   
+  // Anfang Attribute2
   int x,y,speed;
   JavaGame Game;
   File shottexture;
   Player owner;
   boolean rechts;
   BufferedImage textureImage = new BufferedImage(1000,1000,1);
+  // Ende Attribute2
   
   
   public Shot (File shottexture, boolean rechts, int speed, JavaGame Game, Player owner) {
@@ -285,6 +335,9 @@ class Shot {
     this.rechts = rechts;
     this.owner = owner;
   }  
+  // Anfang Komponenten2
+  // Ende Komponenten2
+  // Anfang Methoden2
   
   public void laden(int x, int y) {
     
@@ -314,13 +367,16 @@ class Shot {
     Game.dbImage.getGraphics().drawImage(textureImage,x,y,Game);
     
   }  
+  // Ende Methoden2
 }
 
 class damageLogig {
-  Shot shot[] = new Shot[100];
+  // Anfang Attribute3
+  Shot shot[] = new Shot[1000];
   GameRunner runner;
   int counter = 0;
   int xDistance,yDistance;
+  // Ende Attribute3
   
   public damageLogig(GameRunner runner) {
     this.runner = runner;
@@ -339,7 +395,7 @@ class damageLogig {
     
     for (int counter=1;counter < runner.player.length;counter++ ) {
       for (int counterb = 0;counterb < runner.shot.length;counterb++) {
-        if (runner.shot[counterb] != null && runner.shot[counterb].owner != runner.player[counter]) {
+        if (runner.shot[counterb] != null && runner.shot[counterb].owner != runner.player[counter] && !runner.player[counter].freezeControls) {
           
           xDistance = runner.shot[counterb].x - runner.player[counter].x;
           yDistance = runner.shot[counterb].y - runner.player[counter].y ;
@@ -354,11 +410,14 @@ class damageLogig {
     } // end of for
     
   }  
+  // Ende Methoden3
 }  
   
 /////////////////////////////////  Observable Classe für die Übergabe       
 
 class Erzaehler extends Observable { 
+  // Anfang Attribute4
+  // Ende Attribute4
   
   public Erzaehler(Player p1, Player p2){ 
     //this.addObserver(p1);
@@ -366,6 +425,9 @@ class Erzaehler extends Observable {
     
     
   } 
+  // Anfang Komponenten4
+  // Ende Komponenten4
+  // Anfang Methoden4
   
   
   public void tell(KeyEvent info){ 
@@ -374,6 +436,7 @@ class Erzaehler extends Observable {
       notifyObservers(info); 
     } 
   } 
+  // Ende Methoden4
   
   
 } 
@@ -382,16 +445,21 @@ class Erzaehler extends Observable {
 ////// Standart Thread für das aktualisieren aller Komponenten
 
 class GameRunner extends Thread {
+  // Anfang Attribute5
   Player player[] = null;
-  Shot shot[] = new Shot[100];
+  Shot shot[] = new Shot[1000];
   JavaGame Game ;
   boolean isthereshot = false;
+  // Ende Attribute5
   
   public GameRunner (Player[] player, JavaGame Game) {
     this.player = player;
     this.Game = Game;
     this.start();
   }  
+  // Anfang Komponenten5
+  // Ende Komponenten5
+  // Anfang Methoden5
   
   public void run() {
     while (true) { 
@@ -417,11 +485,13 @@ class GameRunner extends Thread {
         }
         Game.DamageLogig.updateDamage();
       } // end of if
-      
+      Game.dbImage.getGraphics().fillRect(0,600,900,10);
+      Game.dbImage.getGraphics().drawLine(100,480,300,480);
       Game.getGraphics().drawImage(Game.dbImage,0,0,Game);  
     } // end of while
     
   }  
+  // Ende Methoden5
 }  
 
 
