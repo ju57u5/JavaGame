@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.applet.Applet;
+import java.applet.*;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -21,6 +22,7 @@ public class JavaGame extends Applet implements KeyListener {
   URL  PlayerTextureUrl;
   File texture = new File("K:\\test.png");
   //File texture = new File(appletpfad, "\texture\test.png");
+  File sound = new File("K:\\sound.wav");
   File shottexture = new File("K:\\shot.png");
   Player player[] = new Player[4];
   Image dbImage;
@@ -33,6 +35,15 @@ public class JavaGame extends Applet implements KeyListener {
   //Erzaehler erz = new Erzaehler(player1, player2);
   
   public void init() {
+    try { 
+      PlayerTextureUrl = sound.toURI().toURL();
+    } catch(MalformedURLException urlexception) {
+      
+    } 
+    
+    AudioClip ac = getAudioClip(PlayerTextureUrl);
+    ac.loop();
+    
     dbImage = createImage(1920,1080);
     dbGraphics = dbImage.getGraphics();
     
@@ -53,9 +64,9 @@ public class JavaGame extends Applet implements KeyListener {
     ebenen[3][2]= 380;
     
     
-    player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,10,10);                // I'm in Space! SPACE!
-    player[2] = new Player(texture,shottexture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,10);
-    player[3] = new Player(texture,shottexture,dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10);
+    player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,10,10,"Justus");                // I'm in Space! SPACE!
+    player[2] = new Player(texture,shottexture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,10,"Christian");
+    player[3] = new Player(texture,shottexture,dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10,"Tjorben");
     
     
     
@@ -132,9 +143,10 @@ class Player extends Thread implements KeyListener  {
   int jumpup, jumpdown = 0;                                                                                                   
   boolean[] keys = new boolean[1000];
   int health = 100;
+  String name;
   // Ende Attribute1
   
-  public Player(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int down, int attack, int xHealth, int yHealth) {
+  public Player(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int down, int attack, int xHealth, int yHealth, String name) {
     this.playertexture = playertexture;
     this.shottexture = shottexture;
     this.dbImage = dbImage;
@@ -145,6 +157,7 @@ class Player extends Thread implements KeyListener  {
     this.xHealth = xHealth;
     this.yHealth = yHealth;
     this.down = down;
+    this.name = name;
   }  
   // Anfang Komponenten1
   // Ende Komponenten1
@@ -221,7 +234,7 @@ class Player extends Thread implements KeyListener  {
       } // end of if
       
       if (keys[attack] && y<900 && schusssperre == 0) {                             
-        Shot bullet = new Shot(shottexture,!characterInverted, 5, Game, this);
+        Shot bullet = new Shot(shottexture,!characterInverted, 10, Game, this);
         bullet.laden(x,y+50);
         schusssperre = 40;
       } // end of if
@@ -236,6 +249,8 @@ class Player extends Thread implements KeyListener  {
     if (schusssperre > 0) {
       schusssperre--;
     } // end of if
+    
+    Game.dbImage.getGraphics().drawString(name,x+33,y-10);
     
     if (!characterInverted && health>0) {
       Game.dbImage.getGraphics().drawImage(textureImage,x,y,Game);
@@ -258,6 +273,8 @@ class Player extends Thread implements KeyListener  {
     gra.drawLine(xHealth,yHealth+10,xHealth+100,yHealth+10);
     gra.setColor(Color.red);
     gra.fillRect(xHealth+1,yHealth,health,10);
+    gra.setColor(Color.black);
+    gra.drawString(name,xHealth,yHealth+20);
   }  
   
   public void run() {
@@ -367,13 +384,9 @@ class Shot {
     this.rechts = rechts;
     this.owner = owner;
   }  
-  // Anfang Komponenten2
-  // Ende Komponenten2
-  // Anfang Methoden2
   
   public void laden(int x, int y) {
     
-    // this.Game = Game;
     this.x = x;
     this.y = y;
     
@@ -383,6 +396,9 @@ class Shot {
       
     }
     
+    if (rechts) {
+      textureImage = verticalflip(textureImage);
+    } // end of if
     Game.DamageLogig.registerShot(this);            //Registrierung
   }
   
@@ -405,20 +421,6 @@ class Shot {
     int h = img.getHeight();
     BufferedImage dimg = new BufferedImage(w, h, img.getType());
     Graphics2D g = dimg.createGraphics();
-    /**
-    * img - the specified image to be drawn. This method does nothing if
-    * img is null. dx1 - the x coordinate of the first corner of the
-    * destination rectangle. dy1 - the y coordinate of the first corner of
-    * the destination rectangle. dx2 - the x coordinate of the second
-    * corner of the destination rectangle. dy2 - the y coordinate of the
-    * second corner of the destination rectangle. sx1 - the x coordinate of
-    * the first corner of the source rectangle. sy1 - the y coordinate of
-    * the first corner of the source rectangle. sx2 - the x coordinate of
-    * the second corner of the source rectangle. sy2 - the y coordinate of
-    * the second corner of the source rectangle. observer - object to be
-    * notified as more of the image is scaled and converted.
-    *
-    */
     g.drawImage(img, 0, 0, w, h, w, 0, 0, h, null);
     g.dispose();
     return dimg;
@@ -457,7 +459,7 @@ class damageLogig {
           yDistance = runner.shot[counterb].y - runner.player[counter].y ;
           
           if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100) ) {
-            runner.player[counter].setDamage(2);
+            runner.player[counter].setDamage(10);
             runner.shot[counterb]=null;
           } // end of if
           
@@ -542,9 +544,12 @@ class GameRunner extends Thread {
         Game.DamageLogig.updateDamage();
       } // end of if
       Game.dbImage.getGraphics().fillRect(100,600,900,10);
-      Game.dbImage.getGraphics().drawLine(200,480,400,480);
-      Game.dbImage.getGraphics().drawLine(600,480,800,480);
-      Game.dbImage.getGraphics().drawLine(400,380,600,380);
+      
+      for (int c = 1;c<Game.ebenen.length;c++) {
+        if (Game.ebenen[c] != null) {
+          Game.dbImage.getGraphics().drawLine(Game.ebenen[c][0],Game.ebenen[c][2],Game.ebenen[c][1],Game.ebenen[c][2]);
+        } // end of if
+      } // end of for
       
       Game.getGraphics().drawImage(Game.dbImage,0,0,Game);  
     } // end of while
