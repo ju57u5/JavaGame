@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.Observable; 
 import java.util.Observer;
 import java.net.*; 
-
+import javax.sound.sampled.FloatControl;
 
 //                           Interfaces
   
@@ -29,6 +29,10 @@ public class JavaGame extends Applet implements KeyListener {
   Graphics dbGraphics;
   damageLogig DamageLogig;
   int[][] ebenen = new int[100][3] ;
+  GameRunner gamerunner;
+  float vol;
+  AudioClip ac;
+  //FloatControl volume;
   // Ende Attribute
   
   
@@ -41,8 +45,11 @@ public class JavaGame extends Applet implements KeyListener {
       
     } 
     
-    AudioClip ac = getAudioClip(PlayerTextureUrl);
+    ac = getAudioClip(PlayerTextureUrl);
     ac.loop();
+    
+    //volume = (FloatControl) ac.getControl(FloatControl.Type.MASTER_GAIN);
+    //vol = volume.getValue();
     
     dbImage = createImage(1920,1080);
     dbGraphics = dbImage.getGraphics();
@@ -82,7 +89,20 @@ public class JavaGame extends Applet implements KeyListener {
   
   public void keyPressed(KeyEvent e) 
   {
+    if (e.getKeyCode()==KeyEvent.VK_ESCAPE && gamerunner.running) {
+      Graphics gr = this.getGraphics();
+      gr.setFont(new Font("TimesRoman", Font.PLAIN, 40)); 
+      gr.drawString("PAUSE", (int) this.getWidth()/2, this.getHeight()/2);
+      gamerunner.running=false;
+      ac.stop();
+      //volume.setValue(vol);
+    }
     
+    else if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {
+      gamerunner.running=true;
+      ac.loop();
+      //volume.setValue(vol-0.5);
+    } // end of if-else
   }
   
   public void keyReleased(KeyEvent e) 
@@ -90,12 +110,10 @@ public class JavaGame extends Applet implements KeyListener {
     
   }
   
-  public void keyTyped(KeyEvent e) 
+  public void keyTyped(KeyEvent e)
   {
     
-  }
-  
-  
+  }   
   
   public void paint (Graphics g) {
     
@@ -106,9 +124,10 @@ public class JavaGame extends Applet implements KeyListener {
       this.addKeyListener(player[1]);
       this.addKeyListener(player[2]);
       this.addKeyListener(player[3]);
+      this.addKeyListener(this);
       
       
-      GameRunner gamerunner = new GameRunner(player,this);
+      gamerunner = new GameRunner(player,this);
       DamageLogig = new damageLogig (gamerunner);
       
       notrunning = false;
@@ -250,12 +269,13 @@ class Player extends Thread implements KeyListener  {
       schusssperre--;
     } // end of if
     
-    Game.dbImage.getGraphics().drawString(name,x+33,y-10);
     
     if (!characterInverted && health>0) {
+      Game.dbImage.getGraphics().drawString(name,x+33,y-10);
       Game.dbImage.getGraphics().drawImage(textureImage,x,y,Game);
     } // end of if
     else if (characterInverted && health>0){
+      Game.dbImage.getGraphics().drawString(name,x+33,y-10);
       Game.dbImage.getGraphics().drawImage(textureImageb,x,y,Game);
     } // end of if-else
     
@@ -508,6 +528,7 @@ class GameRunner extends Thread {
   Shot shot[] = new Shot[1000];
   JavaGame Game ;
   boolean isthereshot = false;
+  boolean running = true;
   // Ende Attribute5
   
   public GameRunner (Player[] player, JavaGame Game) {
@@ -520,42 +541,48 @@ class GameRunner extends Thread {
   // Anfang Methoden5
   
   public void run() {
-    while (true) { 
-      try {
-        sleep(33);
-      }
-      catch(InterruptedException e) {
-      }
-      Game.repaint();
-      Game.dbImage.getGraphics().clearRect(0,0, (int)Game.getWidth(), (int)Game.getHeight());
-      for (int counter=1;counter<player.length;counter++)
-      { 
-        
-        player[counter].updateKey(); 
-        
-      }
-      if (isthereshot) {
-        for (int counter=0;counter<shot.length;counter++)
-        { 
-          if (shot[counter] != null) {
-            shot[counter].updateShot();  
-          } // end of if
+    while (true) {
+      synchronized(getClass()) { 
+        try {
+          sleep(33);
         }
-        Game.DamageLogig.updateDamage();
+        catch(InterruptedException e) {
+        }
+        if (running) {
+          Game.repaint();
+          Game.dbImage.getGraphics().clearRect(0,0, (int)Game.getWidth(), (int)Game.getHeight());
+          for (int counter=1;counter<player.length;counter++)
+          { 
+            
+            player[counter].updateKey(); 
+            
+          }
+          if (isthereshot) {
+            for (int counter=0;counter<shot.length;counter++)
+            { 
+              if (shot[counter] != null) {
+                shot[counter].updateShot();  
+              } // end of if
+            }
+            Game.DamageLogig.updateDamage();
+          } // end of if
+          Game.dbImage.getGraphics().fillRect(100,600,900,10);
+          
+          for (int c = 1;c<Game.ebenen.length;c++) {
+            if (Game.ebenen[c] != null) {
+              Game.dbImage.getGraphics().drawLine(Game.ebenen[c][0],Game.ebenen[c][2],Game.ebenen[c][1],Game.ebenen[c][2]);
+            } // end of if
+          } // end of for
+          
+          Game.getGraphics().drawImage(Game.dbImage,0,0,Game);
+        }
+        
       } // end of if
-      Game.dbImage.getGraphics().fillRect(100,600,900,10);
       
-      for (int c = 1;c<Game.ebenen.length;c++) {
-        if (Game.ebenen[c] != null) {
-          Game.dbImage.getGraphics().drawLine(Game.ebenen[c][0],Game.ebenen[c][2],Game.ebenen[c][1],Game.ebenen[c][2]);
-        } // end of if
-      } // end of for
-      
-      Game.getGraphics().drawImage(Game.dbImage,0,0,Game);  
     } // end of while
     
   }  
   // Ende Methoden5
 }  
-
-
+  
+  
