@@ -269,12 +269,13 @@ class Player extends Thread implements KeyListener  {
       schusssperre--;
     } // end of if
     
-    Game.dbImage.getGraphics().drawString(name,x+33,y-10);
     
     if (!characterInverted && health>0) {
+      Game.dbImage.getGraphics().drawString(name,x+33,y-10);
       Game.dbImage.getGraphics().drawImage(textureImage,x,y,Game);
     } // end of if
     else if (characterInverted && health>0){
+      Game.dbImage.getGraphics().drawString(name,x+33,y-10);
       Game.dbImage.getGraphics().drawImage(textureImageb,x,y,Game);
     } // end of if-else
     
@@ -566,6 +567,7 @@ class GameRunner extends Thread {
             Game.DamageLogig.updateDamage();
           } // end of if
           Game.dbImage.getGraphics().fillRect(100,600,900,10);
+          Game.dbImage.getGraphics().drawString("Music: Early Riser Kevin MacLeod (incompetech.com)", Game.getWidth()-320, Game.getHeight()-20);
           
           for (int c = 1;c<Game.ebenen.length;c++) {
             if (Game.ebenen[c] != null) {

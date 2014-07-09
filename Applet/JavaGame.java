@@ -73,7 +73,7 @@ public class JavaGame extends Applet implements KeyListener {
     
     player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,10,10,"Justus");                // I'm in Space! SPACE!
     player[2] = new Player(texture,shottexture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,10,"Christian");
-    player[3] = new Player(texture,shottexture,dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10,"Tjorben");
+    player[3] = new Player(texture,shottexture,dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10,"Bent der Lutscher");
     
     
     
@@ -567,6 +567,7 @@ class GameRunner extends Thread {
             Game.DamageLogig.updateDamage();
           } // end of if
           Game.dbImage.getGraphics().fillRect(100,600,900,10);
+          Game.dbImage.getGraphics().drawString("Music: Early Riser Kevin MacLeod (incompetech.com)", Game.getWidth()-320, Game.getHeight()-20);
           
           for (int c = 1;c<Game.ebenen.length;c++) {
             if (Game.ebenen[c] != null) {
