@@ -164,6 +164,8 @@ class Player extends Thread implements KeyListener  {
   int health = 100;
   String name;
   int jumpheigth = 200;
+  int speed=5;
+  int boomUp,boomLeft,boomRight;
   
   // Ende Attribute1
   
@@ -191,6 +193,11 @@ class Player extends Thread implements KeyListener  {
     this.db = db;
     this.x = x;
     this.y = y;
+    
+    boomUp=0;
+    boomRight=0;
+    boomLeft=0;
+    
     
     for (int c=0;c<keys.length;c++ ) {
       keys[c]=false;
@@ -236,12 +243,12 @@ class Player extends Thread implements KeyListener  {
     if (firsttimepressed && !freezeControls) {
       
       if (keys[right] ) {                              
-        x +=5;
+        x +=speed;
         characterInverted = false;
       } // end of if
       
       if (keys[left] ) {                                 
-        x -=5;
+        x -=speed;
         characterInverted = true; 
       } // end of if
       
@@ -266,6 +273,7 @@ class Player extends Thread implements KeyListener  {
       health=0;
     } // end of if
     updateJump(10);
+    updateBoom(15);
     drawHealth();
     if (schusssperre > 0) {
       schusssperre--;
@@ -302,11 +310,52 @@ class Player extends Thread implements KeyListener  {
   public void run() {
   }
   
-  public void setDamage(int damage) {
+  public void setDamage(int damage, boolean inverted) {
     health -= damage;
+    boomUp = boomUp+(100-health)*10;
+    
+    if (inverted) {
+      boomRight = boomRight+(100-health)*10;
+    } // end of if
+    else {
+      boomLeft = boomLeft+(100-health)*10;
+    } // end of if-else
+    
     if (health < 0) {
       freezeControls = true;
     } // end of if
+  }  
+  
+  public void updateBoom(int speed) {
+    if (boomUp<0) {
+      boomUp = 0;
+    } // end of if
+    
+    if (boomUp>0) {
+      y -= speed;
+      boomUp -= speed;
+    } // end of if
+    
+    
+    if (boomLeft<0) {
+      boomLeft = 0;
+    } // end of if
+    
+    if (boomLeft>0) {
+      x -= speed;
+      boomLeft -= speed;
+    } // end of if
+    
+    
+    if (boomRight<0) {
+      boomRight = 0;
+    } // end of if
+    
+    if (boomRight>0) {
+      x += speed;
+      boomRight -= speed;
+    } // end of if
+    
   }  
   
   public void keyPressed(KeyEvent e) 
@@ -481,7 +530,13 @@ class damageLogig {
           yDistance = runner.shot[counterb].y - runner.player[counter].y ;
           
           if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100) ) {
-            runner.player[counter].setDamage(10);
+            if (xDistance < 0) {
+              runner.player[counter].setDamage(10,true);
+            } // end of if
+            else {
+              runner.player[counter].setDamage(10,false);
+            } // end of if
+            
             runner.shot[counterb]=null;
           } // end of if
           
@@ -571,7 +626,7 @@ class perks extends Thread
             Game.player[counter].jumpheigth=200;
             break;
             case 3: 
-            Game.player[counter].jumpheigth=150;
+            Game.player[counter].speed=10;
             break;
             
           }
