@@ -289,7 +289,13 @@ class Player extends Thread implements KeyListener  {
       Game.dbImage.getGraphics().drawImage(textureImageb,x,y,Game);
     } // end of if-else
     
+    if (x-textureImage.getWidth<0) {
+      Game.dbImage.getGraphics().drawPolygon();
+    } // end of if
     
+    if (x>Game.getWidth()) {
+      Game.dbImage.getGraphics().drawPolygon();
+    } // end of if
   }
   
   public void move(boolean rechts, int amount)  {
@@ -310,15 +316,15 @@ class Player extends Thread implements KeyListener  {
   public void run() {
   }
   
-  public void setDamage(int damage) {
+  public void setDamage(int damage, boolean inverted) {
     health -= damage;
-    boomUp = boomUp+damage*10;
+    boomUp = boomUp+(100-health)*10;
     
-    if (characterInverted) {
-      boomRight = boomRight+damage*10;
+    if (inverted) {
+      boomRight = boomRight+(100-health)*10;
     } // end of if
     else {
-      boomLeft = boomLeft+damage*10;
+      boomLeft = boomLeft+(100-health)*10;
     } // end of if-else
     
     if (health < 0) {
@@ -530,7 +536,13 @@ class damageLogig {
           yDistance = runner.shot[counterb].y - runner.player[counter].y ;
           
           if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100) ) {
-            runner.player[counter].setDamage(10);
+            if (xDistance < 0) {
+              runner.player[counter].setDamage(10,true);
+            } // end of if
+            else {
+              runner.player[counter].setDamage(10,false);
+            } // end of if
+            
             runner.shot[counterb]=null;
           } // end of if
           

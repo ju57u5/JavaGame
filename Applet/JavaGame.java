@@ -289,6 +289,23 @@ class Player extends Thread implements KeyListener  {
       Game.dbImage.getGraphics().drawImage(textureImageb,x,y,Game);
     } // end of if-else
     
+    if (x+textureImage.getWidth()<0) {                                               
+      int xpoints[] = {0,10,10};
+      int ypoints[] = {y,y+10,y-10};
+      Game.dbImage.getGraphics().drawPolygon(xpoints,ypoints,3);
+    } // end of if
+    
+    if (x>Game.getWidth()) {
+      int xpoints[] = {Game.getWidth(),Game.getWidth()-10,Game.getWidth()-10};
+      int ypoints[] = {y,y+10,y-10};
+      Game.dbImage.getGraphics().drawPolygon(xpoints,ypoints,3);
+    } // end of if
+    
+    if (y+textureImage.getHeight()<0) {
+      int xpoints[] = {x,x-10,x+10};
+      int ypoints[] = {0,10,10};
+      Game.dbImage.getGraphics().drawPolygon(xpoints,ypoints,3);
+    } // end of if
     
   }
   
