@@ -73,7 +73,7 @@ public class JavaGame extends Applet implements KeyListener {
     
     player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,10,10,"Justus");                // I'm in Space! SPACE!
     player[2] = new Player(texture,shottexture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,10,"Christian");
-    player[3] = new Player(texture,shottexture,dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10,"Tjorben");
+    player[3] = new Player(texture,shottexture,dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10,"Bent der Lutscher");
     
     
     
@@ -163,6 +163,8 @@ class Player extends Thread implements KeyListener  {
   boolean[] keys = new boolean[1000];
   int health = 100;
   String name;
+  int jumpheigth = 200;
+  
   // Ende Attribute1
   
   public Player(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int down, int attack, int xHealth, int yHealth, String name) {
@@ -244,7 +246,7 @@ class Player extends Thread implements KeyListener  {
       } // end of if
       
       if (keys[jump] ) {                                 
-        setJump(200);
+        setJump(jumpheigth);
       } // end of if
       
       if (keys[down]  && stehenzahl != 0 ) {                  // Stehenzahl 0: Player steht auf der Mainebene               
@@ -519,6 +521,69 @@ class Erzaehler extends Observable {
   
 } 
 
+class perks extends Thread 
+{
+  int x,y,wert,perkx,perky;
+  File perktexture;
+  BufferedImage textureImage;
+  boolean rechts;
+  boolean active=true;
+  int speed;
+  JavaGame Game;
+  
+  public perks (File perktexture, boolean rechts, int speed, JavaGame Game, int perkx, int perky) {
+    this.perktexture = perktexture;
+    this.Game = Game;
+    this.speed = speed;
+    this.rechts = rechts;
+    this.x = x;
+    this.y = y;
+    this.perkx=perkx;
+    this.perky=perky;
+    
+    laden();
+  } 
+  public void laden() {
+    try { 
+      textureImage = ImageIO.read(perktexture);
+    } catch(IOException exeption) {
+      
+    }
+  }
+  
+  public void update() {
+
+    for (int counter = 0;counter<Game.player.length;counter++) {
+      if (Game.player[counter] != null) {
+        
+        int xDistance = perkx - Game.player[counter].x;
+        int yDistance = perky - Game.player[counter].y;
+        
+        
+        if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100)) {
+          active=false;
+          int perkw = (int) (Math.random()*3+1);
+          switch (perkw) {
+            case  1:
+            Game.player[counter].jumpheigth=300;
+            break;
+            case  2:
+            Game.player[counter].jumpheigth=200;
+            break;
+            case 3: 
+            Game.player[counter].jumpheigth=150;
+            break;
+            
+          }
+          this=null; 
+        } 
+        Game.dbImage.getGraphics().drawImage(textureImage,perkx,perky,Game);
+      } // end of if
+    } // end of if
+  } // end of for
+}
+
+
 
 ////// Standart Thread für das aktualisieren aller Komponenten
 
@@ -529,6 +594,9 @@ class GameRunner extends Thread {
   JavaGame Game ;
   boolean isthereshot = false;
   boolean running = true;
+  File perktexture = new File("K:\\perk.png");
+  perks perk[] = new perks[100000];
+  int count=0;
   // Ende Attribute5
   
   public GameRunner (Player[] player, JavaGame Game) {
@@ -551,6 +619,23 @@ class GameRunner extends Thread {
         if (running) {
           Game.repaint();
           Game.dbImage.getGraphics().clearRect(0,0, (int)Game.getWidth(), (int)Game.getHeight());
+          
+          int perkjn= (int) (Math.random()*3000+1);
+          if (perkjn<20) {
+            int perkx= (int) (Math.random()*1000+1);
+            int perky= (int) (Math.random()*400+100);
+            perk[count] = new perks(perktexture, false, 10, Game, perkx, perky); 
+            count++;
+            
+          } // end of if
+          
+          for (int counter=0;counter<perk.length;counter++)
+          { 
+            if (perk[counter] != null && perk[counter].active) {
+              perk[counter].update();  
+            } // end of if
+          }
+          
           for (int counter=1;counter<player.length;counter++)
           { 
             
@@ -577,6 +662,8 @@ class GameRunner extends Thread {
           
           Game.getGraphics().drawImage(Game.dbImage,0,0,Game);
         }
+        
+        
         
       } // end of if
       
