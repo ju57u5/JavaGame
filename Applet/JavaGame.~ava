@@ -21,6 +21,7 @@ public class JavaGame extends Applet implements KeyListener {
   // Anfang Attribute
   File appletpfad = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
   boolean notrunning = true;
+  boolean soundan=true;
   URL  PlayerTextureUrl;
   
   File basePath = new File("E:\\");
@@ -120,8 +121,9 @@ public class JavaGame extends Applet implements KeyListener {
     
     else if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {
       gamerunner.running=true;
-      ac.loop();
-      //volume.setValue(vol-0.5);
+      if (soundan) {
+        ac.loop();
+      } // end of if
     } // end of if-else
   }
   
@@ -655,7 +657,7 @@ class Menu extends Frame implements ActionListener {
   JavaGame Game;
   Button[] buttonSpieler = new Button[100] ;
   Button[] buttonSchuss = new Button[100] ;
-  
+  Button Sound,Restart;
   Choice SpielerAuswahl;
   
   public Menu (JavaGame Game) 
@@ -688,6 +690,17 @@ class Menu extends Frame implements ActionListener {
     SpielerAuswahl = new Choice();
     SpielerAuswahl.setBounds(50,50,300,30);
     
+    Sound = new Button("Sound aus");
+    Sound.setBounds(120,370,100,20);
+    Sound.addActionListener(this);
+    this.add(Sound);
+    
+    
+    Restart = new Button("Restart");
+    Restart.setBounds(120,400,100,20);
+    Restart.addActionListener(this);
+    this.add(Restart);
+    
     for (int c=1;c<Game.player.length;c++) {
       SpielerAuswahl.addItem("Spieler"+c);
     } // end of for
@@ -700,7 +713,9 @@ class Menu extends Frame implements ActionListener {
     public void windowClosing(WindowEvent e)
     {
       Game.gamerunner.running=true;
-      Game.ac.loop();
+      if (Game.soundan) {
+        Game.ac.loop();
+      } // end of if
       e.getWindow().dispose();                   // Fenster "killen"
     }           
   }
@@ -731,9 +746,6 @@ class Menu extends Frame implements ActionListener {
     } // end of for  
   }  
   
-  public void windowDeactivated(WindowEvent e) {
-    
-  }       
   
   public void actionPerformed(ActionEvent e) {
     for (int c=0;c<buttonSpieler.length;c++ ) {
@@ -741,25 +753,43 @@ class Menu extends Frame implements ActionListener {
         int spieler = SpielerAuswahl.getSelectedIndex()+1;
         try {
           BufferedImage Image = ImageIO.read(Game.texture[c]);
-          Game.player[spieler].textureImage = Image;
+          Game.player[spieler].textureImage  = Image;
+          Game.player[spieler].textureImageb = Game.player[spieler].verticalflip(Image);
         } 
         catch(IOException exeption) {
           
         }
-        
-        
       } // end of if
     }
+    
     for (int c=0;c<buttonSchuss.length;c++ ) {
       if (e.getSource()==buttonSchuss[c]) {
         int spieler = SpielerAuswahl.getSelectedIndex()+1;
         Game.player[spieler].shottexture = Game.shottexture[c];
-        
       } // end of if
     } // end of for
     
+    if (e.getSource()==Sound) {
+      if (Game.soundan) {
+        Game.soundan=false;
+        Sound.setLabel("Sound an");
+      } // end of if
+      else {
+        Game.soundan=true;
+        Sound.setLabel("Sound aus");
+      } // end of if-else
+    } // end of if
     
-    
+    if (e.getSource()==Restart) {
+      for (int c=1;c<Game.player.length;c++) {
+        Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
+        Game.player[c].y=(int) (Math.random()*Game.ebenen[0][2]);
+        Game.player[c].health=100;
+        Game.player[c].jumpheigth=200;
+        Game.player[c].speed=5;
+        Game.player[c].sperrzeit=40;
+      } // end of for
+    } // end of if
   }
   
   
