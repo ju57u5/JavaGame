@@ -10,6 +10,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.net.*; 
 import javax.sound.sampled.FloatControl;
+import javax.swing.*;
+
 
 //                           Interfaces
   
@@ -20,12 +22,14 @@ public class JavaGame extends Applet implements KeyListener {
   File appletpfad = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
   boolean notrunning = true;
   URL  PlayerTextureUrl;
-  File texture = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\test.png");
-  File backgroundTexture = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\hintergrund.jpg");
-  File textureb = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\testpinguin.png");
-  File texturec = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\testyoshi.png");
-  File sound = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\sound.wav");
-  File shottexture = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\shot.png");
+  
+  File basePath = new File("E:\\");
+  File backgroundTexture = new File(basePath,"/hintergrund.jpg");
+  File sound = new File(basePath,"/sound.wav");
+  
+  File[] texture = new File[3];
+  File[] shottexture = new File[3];
+  
   Player player[] = new Player[4];
   Image dbImage;
   Graphics dbGraphics;
@@ -63,8 +67,15 @@ public class JavaGame extends Applet implements KeyListener {
     dbImage = createImage(1920,1080);
     dbGraphics = dbImage.getGraphics();
     
+    texture[0] = new File(basePath,"/test.png");
+    texture[1] = new File(basePath,"/testpinguin.png");
+    texture[2] = new File(basePath,"/testyoshi.png");
     
-    ebenen[0][0]= 100-67;
+    shottexture[0] = new File(basePath,"/shot.png");
+    shottexture[1] = new File(basePath,"/Iceball.png");
+    shottexture[2] = new File(basePath,"/ei.png");
+    
+    ebenen[0][0]= 100;
     ebenen[0][1]= 1000;       // Main Ebene: Kann nicht durchschrittenwerden indem down gedrückt wird
     ebenen[0][2]= 590;
     
@@ -82,9 +93,9 @@ public class JavaGame extends Applet implements KeyListener {
     
     
     
-    player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,10,10,"Justus");                // I'm in Space! SPACE!
-    player[2] = new Player(textureb,shottexture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,10,"Christian");
-    player[3] = new Player(texturec,shottexture,dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10,"Tjorben");
+    player[1] = new Player(texture[0],shottexture[0],dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,10,10,"Justus");                // I'm in Space! SPACE!
+    player[2] = new Player(texture[1],shottexture[1],dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,10,"Christian");
+    player[3] = new Player(texture[2],shottexture[2],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10,"Tjorben");
     
     
     
@@ -97,11 +108,13 @@ public class JavaGame extends Applet implements KeyListener {
   public void keyPressed(KeyEvent e) 
   {
     if (e.getKeyCode()==KeyEvent.VK_ESCAPE && gamerunner.running) {
+      
       Graphics gr = this.getGraphics();
       gr.setFont(new Font("TimesRoman", Font.PLAIN, 40)); 
       gr.drawString("PAUSE", (int) this.getWidth()/2, this.getHeight()/2);
       gamerunner.running=false;
       ac.stop();
+      Menu menu = new Menu(this);
       //volume.setValue(vol);
     }
     
@@ -613,7 +626,7 @@ class perks extends Thread
         
         if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100)) {
           active=false;
-          int perkw = (int) (Math.random()*3+1);
+          int perkw = (int) (Math.random()*4+1);
           switch (perkw) {
             case  1:
             Game.player[counter].jumpheigth=300;
@@ -623,6 +636,9 @@ class perks extends Thread
             break;
             case 3: 
             Game.player[counter].speed=10;
+            break;
+            case 4: 
+            Game.player[counter].health += 10;
             break;
             
           }
@@ -634,10 +650,125 @@ class perks extends Thread
   } // end of for
 }
 
-
-
-////// Standart Thread für das aktualisieren aller Komponenten
-
+class Menu extends Frame implements ActionListener {
+  
+  JavaGame Game;
+  Button[] buttonSpieler = new Button[100] ;
+  Button[] buttonSchuss = new Button[100] ;
+  
+  Choice SpielerAuswahl;
+  
+  public Menu (JavaGame Game) 
+  {
+    this.Game = Game;
+    this.setLayout(null);
+    setTitle("Menu");  // Fenstertitel setzen
+    setSize(240+71*Game.texture.length,900);                            // Fenstergröße einstellen  
+    addWindowListener(new TestWindowListener()); // EventListener für das Fenster hinzufügen
+    setVisible(true);                            // Fenster (inkl. Inhalt) sichtbar machen
+    
+    for (int c=0;c<Game.texture.length;c++) {
+      
+      buttonSpieler[c] = new Button("Auswählen");
+      buttonSpieler[c].setBounds(120+71*c,250,67,20);
+      buttonSpieler[c].addActionListener(this);
+      this.add(buttonSpieler[c]);
+      
+    } // end of for
+    
+    for (int c=0;c<Game.shottexture.length;c++) {
+      
+      buttonSchuss[c] = new Button("Auswählen");
+      buttonSchuss[c].setBounds(120+71*c,330,67,20);
+      buttonSchuss[c].addActionListener(this);
+      this.add(buttonSchuss[c]);
+      
+    } // end of for 
+    
+    SpielerAuswahl = new Choice();
+    SpielerAuswahl.setBounds(50,50,300,30);
+    
+    for (int c=1;c<Game.player.length;c++) {
+      SpielerAuswahl.addItem("Spieler"+c);
+    } // end of for
+    
+    this.add(SpielerAuswahl);
+  }
+  
+  class TestWindowListener extends WindowAdapter
+  {
+    public void windowClosing(WindowEvent e)
+    {
+      Game.gamerunner.running=true;
+      Game.ac.loop();
+      e.getWindow().dispose();                   // Fenster "killen"
+    }           
+  }
+  
+  public void paint(Graphics g)  
+  {  
+    super.paint(g);  
+    for (int c=0;c<Game.texture.length;c++) {
+      
+      try {
+        BufferedImage Image = ImageIO.read(Game.texture[c]);
+        this.getGraphics().drawImage(Image,120+71*c,140,this);
+      } catch(IOException exeption) {
+        
+      }
+      
+    } // end of for
+    
+    for (int c=0;c<Game.shottexture.length;c++) {
+      
+      try {
+        BufferedImage Image = ImageIO.read(Game.shottexture[c]);
+        this.getGraphics().drawImage(Image,120+71*c,280,this);
+      } catch(IOException exeption) {
+        
+      }
+      
+    } // end of for  
+  }  
+  
+  public void windowDeactivated(WindowEvent e) {
+    
+  }       
+  
+  public void actionPerformed(ActionEvent e) {
+    for (int c=0;c<buttonSpieler.length;c++ ) {
+      if (e.getSource()==buttonSpieler[c]) {
+        int spieler = SpielerAuswahl.getSelectedIndex()+1;
+        try {
+          BufferedImage Image = ImageIO.read(Game.texture[c]);
+          Game.player[spieler].textureImage  = Image;
+          Game.player[spieler].textureImageb = Game.player[spieler].verticalflip(Image);
+        } 
+        catch(IOException exeption) {
+          
+        }
+      } // end of if
+    }
+    for (int c=0;c<buttonSchuss.length;c++ ) {
+      if (e.getSource()==buttonSchuss[c]) {
+        int spieler = SpielerAuswahl.getSelectedIndex()+1;
+        Game.player[spieler].shottexture = Game.shottexture[c];
+      } // end of if
+    } // end of for
+    
+    
+    
+  }
+  
+  
+  public void update(Graphics g) {
+    
+  }  
+  
+}
+  
+  ////// Standart Thread für das aktualisieren aller Komponenten
+  
 class GameRunner extends Thread {
   // Anfang Attribute5
   Player player[] = null;
@@ -645,7 +776,7 @@ class GameRunner extends Thread {
   JavaGame Game ;
   boolean isthereshot = false;
   boolean running = true;
-  File perktexture = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\perk.png");
+  File perktexture ;
   perks perk[] = new perks[100000];
   int count=0;
   // Ende Attribute5
@@ -653,6 +784,7 @@ class GameRunner extends Thread {
   public GameRunner (Player[] player, JavaGame Game) {
     this.player = player;
     this.Game = Game;
+    perktexture = new File(Game.basePath,"/perk.png");
     this.start();
   }  
   // Anfang Komponenten5
