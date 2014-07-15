@@ -20,10 +20,12 @@ public class JavaGame extends Applet implements KeyListener {
   File appletpfad = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
   boolean notrunning = true;
   URL  PlayerTextureUrl;
-  File texture = new File("K:\\test.png");
-  //File texture = new File(appletpfad, "\texture\test.png");
-  File sound = new File("K:\\sound.wav");
-  File shottexture = new File("K:\\shot.png");
+  File texture = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\test.png");
+  File backgroundTexture = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\hintergrund.jpg");
+  File textureb = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\testpinguin.png");
+  File texturec = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\testyoshi.png");
+  File sound = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\sound.wav");
+  File shottexture = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\shot.png");
   Player player[] = new Player[4];
   Image dbImage;
   Graphics dbGraphics;
@@ -32,6 +34,7 @@ public class JavaGame extends Applet implements KeyListener {
   GameRunner gamerunner;
   float vol;
   AudioClip ac;
+  BufferedImage backgroundImage;
   //FloatControl volume;
   // Ende Attribute
   
@@ -45,6 +48,12 @@ public class JavaGame extends Applet implements KeyListener {
       
     } 
     
+    try {
+      backgroundImage = ImageIO.read(backgroundTexture);
+    } catch(IOException exeption) {
+      
+    }
+    
     ac = getAudioClip(PlayerTextureUrl);
     ac.loop();
     
@@ -54,35 +63,33 @@ public class JavaGame extends Applet implements KeyListener {
     dbImage = createImage(1920,1080);
     dbGraphics = dbImage.getGraphics();
     
-    ebenen[1][0]= 200;  //x1
-    ebenen[1][1]= 400;  //x2
-    ebenen[1][2]= 480;  //y
     
     ebenen[0][0]= 100-67;
     ebenen[0][1]= 1000;       // Main Ebene: Kann nicht durchschrittenwerden indem down gedrückt wird
-    ebenen[0][2]= 600;
+    ebenen[0][2]= 590;
     
-    ebenen[2][0]= 600;
-    ebenen[2][1]= 800;
-    ebenen[2][2]= 480;
+    ebenen[1][0]= 430;  //x1
+    ebenen[1][1]= 500;  //x2
+    ebenen[1][2]= 480;  //y
     
-    ebenen[3][0]= 400;
-    ebenen[3][1]= 600;
-    ebenen[3][2]= 380;
+    ebenen[2][0]= 530;
+    ebenen[2][1]= 655;
+    ebenen[2][2]= 377;
+    
+    ebenen[3][0]= 250;
+    ebenen[3][1]= 375;
+    ebenen[3][2]= 377;
+    
     
     
     player[1] = new Player(texture,shottexture,dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,10,10,"Justus");                // I'm in Space! SPACE!
-    player[2] = new Player(texture,shottexture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,10,"Christian");
-    player[3] = new Player(texture,shottexture,dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10,"Bent der Lutscher");
+    player[2] = new Player(textureb,shottexture,dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,10,"Christian");
+    player[3] = new Player(texturec,shottexture,dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10,"Tjorben");
     
     
     
     
-    try {
-      PlayerTextureUrl = new URL("http://www.mariowiki.com/images/5/57/WaluigiMP8Official.png");
-    } catch(Exception e) {
-      e.printStackTrace();
-    } 
+    
   } // end of init
   
   
@@ -118,9 +125,9 @@ public class JavaGame extends Applet implements KeyListener {
   public void paint (Graphics g) {
     
     if (notrunning) {
-      player[1].laden(this,dbGraphics,g,100,500);
-      player[2].laden(this,dbGraphics,g,200,500);
-      player[3].laden(this,dbGraphics,g,300,500);
+      player[1].laden(this,100,400);
+      player[2].laden(this,200,400);
+      player[3].laden(this,300,400);
       this.addKeyListener(player[1]);
       this.addKeyListener(player[2]);
       this.addKeyListener(player[3]);
@@ -166,6 +173,8 @@ class Player extends Thread implements KeyListener  {
   int jumpheigth = 200;
   int speed=5;
   int boomUp,boomLeft,boomRight;
+  int jumpupdate=10;
+  int sperrzeit=40;
   
   // Ende Attribute1
   
@@ -186,11 +195,10 @@ class Player extends Thread implements KeyListener  {
   // Ende Komponenten1
   // Anfang Methoden1
   
-  public void laden(JavaGame Game, Graphics db, Graphics g, int x, int y) {
+  public void laden(JavaGame Game, int x, int y) {
     
     this.Game = Game;
-    this.g = g;
-    this.db = db;
+    
     this.x = x;
     this.y = y;
     
@@ -217,20 +225,7 @@ class Player extends Thread implements KeyListener  {
     int h = img.getHeight();
     BufferedImage dimg = new BufferedImage(w, h, img.getType());
     Graphics2D g = dimg.createGraphics();
-    /**
-    * img - the specified image to be drawn. This method does nothing if
-    * img is null. dx1 - the x coordinate of the first corner of the
-    * destination rectangle. dy1 - the y coordinate of the first corner of
-    * the destination rectangle. dx2 - the x coordinate of the second
-    * corner of the destination rectangle. dy2 - the y coordinate of the
-    * second corner of the destination rectangle. sx1 - the x coordinate of
-    * the first corner of the source rectangle. sy1 - the y coordinate of
-    * the first corner of the source rectangle. sx2 - the x coordinate of
-    * the second corner of the source rectangle. sy2 - the y coordinate of
-    * the second corner of the source rectangle. observer - object to be
-    * notified as more of the image is scaled and converted.
-    *
-    */
+    
     g.drawImage(img, 0, 0, w, h, w, 0, 0, h, null);
     g.dispose();
     return dimg;
@@ -257,14 +252,19 @@ class Player extends Thread implements KeyListener  {
       } // end of if
       
       if (keys[down]  && stehenzahl != 0 ) {                  // Stehenzahl 0: Player steht auf der Mainebene               
+        jumpupdate = 20;
         y -=1;
         justupdated = true;
+      } // end of if
+      if (!keys[down]) {                  // Stehenzahl 0: Player steht auf der Mainebene
+        jumpupdate = 10;
+        
       } // end of if
       
       if (keys[attack] && y<900 && schusssperre == 0) {                             
         Shot bullet = new Shot(shottexture,!characterInverted, 10, Game, this);
         bullet.laden(x,y+50);
-        schusssperre = 40;
+        schusssperre = sperrzeit;
       } // end of if
     } // end of if  
     
@@ -272,7 +272,7 @@ class Player extends Thread implements KeyListener  {
     if (y + textureImage.getHeight() > Game.ebenen[0][2] + 200) {
       health=0;
     } // end of if
-    updateJump(10);
+    updateJump(jumpupdate);
     updateBoom(15);
     drawHealth();
     if (schusssperre > 0) {
@@ -304,7 +304,11 @@ class Player extends Thread implements KeyListener  {
     if (y+textureImage.getHeight()<0) {
       int xpoints[] = {x,x-10,x+10};
       int ypoints[] = {0,10,10};
-      Game.dbImage.getGraphics().drawPolygon(xpoints,ypoints,3);
+      Game.dbImage.getGraphics().drawPolygon(xpoints,ypoints,3); 
+    } // end of if
+    
+    if (health <= 0) {
+      freezeControls=true;
     } // end of if
     
   }
@@ -414,14 +418,14 @@ class Player extends Thread implements KeyListener  {
     for (int counter=0;counter < Game.ebenen.length;counter++ ) {
       if (Game.ebenen[counter] != null ) {
         if ( (y-speed+height)<=Game.ebenen[counter][2] && y+height>=Game.ebenen[counter][2]) {  
-          if (x >= Game.ebenen[counter][0] && x <= Game.ebenen[counter][1]) {
+          if (x+67 >= Game.ebenen[counter][0] && x <= Game.ebenen[counter][1]) {
             ebene = true;
             zahl = counter;
           }
         }
         
         if (y+height==Game.ebenen[counter][2]) {  
-          if (x >= Game.ebenen[counter][0] && x <= Game.ebenen[counter][1]) {
+          if (x+67 >= Game.ebenen[counter][0] && x <= Game.ebenen[counter][1]) {
             kannstehen = true;
             stehenzahl = counter;
           }
@@ -567,31 +571,6 @@ class damageLogig {
   
 /////////////////////////////////  Observable Classe für die Übergabe       
 
-class Erzaehler extends Observable { 
-  // Anfang Attribute4
-  // Ende Attribute4
-  
-  public Erzaehler(Player p1, Player p2){ 
-    //this.addObserver(p1);
-    //this.addObserver(p2); 
-    
-    
-  } 
-  // Anfang Komponenten4
-  // Ende Komponenten4
-  // Anfang Methoden4
-  
-  
-  public void tell(KeyEvent info){ 
-    if(countObservers()>0){ 
-      setChanged(); 
-      notifyObservers(info); 
-    } 
-  } 
-  // Ende Methoden4
-  
-  
-} 
 
 class perks extends Thread 
 {
@@ -640,7 +619,7 @@ class perks extends Thread
             Game.player[counter].jumpheigth=300;
             break;
             case  2:
-            Game.player[counter].jumpheigth=200;
+            Game.player[counter].sperrzeit=25;
             break;
             case 3: 
             Game.player[counter].speed=10;
@@ -666,7 +645,7 @@ class GameRunner extends Thread {
   JavaGame Game ;
   boolean isthereshot = false;
   boolean running = true;
-  File perktexture = new File("K:\\perk.png");
+  File perktexture = new File("G:\\Tauschverzeichnis\\Jung\\Informatik 10\\Spiel\\perk.png");
   perks perk[] = new perks[100000];
   int count=0;
   // Ende Attribute5
@@ -692,8 +671,10 @@ class GameRunner extends Thread {
           Game.repaint();
           Game.dbImage.getGraphics().clearRect(0,0, (int)Game.getWidth(), (int)Game.getHeight());
           
+          Game.dbImage.getGraphics().drawImage(Game.backgroundImage,100,200-67,Game);
+          
           int perkjn= (int) (Math.random()*3000+1);
-          if (perkjn<20) {
+          if (perkjn<5) {
             int perkx= (int) (Math.random()*1000+1);
             int perky= (int) (Math.random()*400+100);
             perk[count] = new perks(perktexture, false, 10, Game, perkx, perky); 
@@ -727,7 +708,7 @@ class GameRunner extends Thread {
             }
             Game.DamageLogig.updateDamage();
           } // end of if
-          Game.dbImage.getGraphics().fillRect(100,600,900,10);
+          // Game.dbImage.getGraphics().fillRect(100,600,900,10);
           Game.dbImage.getGraphics().drawString("Music: Early Riser Kevin MacLeod (incompetech.com)", Game.getWidth()-320, Game.getHeight()-20);
           
           for (int c = 1;c<Game.ebenen.length;c++) {
