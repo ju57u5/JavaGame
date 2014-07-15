@@ -21,7 +21,7 @@ public class JavaGame extends Applet implements KeyListener {
   // Anfang Attribute
   File appletpfad = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
   boolean notrunning = true;
-  boolean soundan=true;
+  boolean soundan=false;
   boolean fpsan=false;
   URL  PlayerTextureUrl;
   
@@ -29,8 +29,8 @@ public class JavaGame extends Applet implements KeyListener {
   File backgroundTexture = new File(basePath,"/hintergrund.jpg");
   File sound = new File(basePath,"/sound.wav");
   
-  File[] texture = new File[5];
-  File[] shottexture = new File[3];
+  File[] texture = new File[7];
+  File[] shottexture = new File[5];
   
   Player player[] = new Player[4];
   Image dbImage;
@@ -61,10 +61,10 @@ public class JavaGame extends Applet implements KeyListener {
     }
     
     ac = getAudioClip(PlayerTextureUrl);
-    ac.loop();
+    if (soundan) {
+      ac.loop();
+    } // end of if
     
-    //volume = (FloatControl) ac.getControl(FloatControl.Type.MASTER_GAIN);
-    //vol = volume.getValue();
     
     dbImage = createImage(1920,1080);
     dbGraphics = dbImage.getGraphics();
@@ -74,10 +74,14 @@ public class JavaGame extends Applet implements KeyListener {
     texture[2] = new File(basePath,"/testyoshi.png");
     texture[3] = new File(basePath,"/testluigi.png");
     texture[4] = new File(basePath,"/testtoad.png");
+    texture[5] = new File(basePath,"/testpoketrainer.png");
+    texture[6] = new File(basePath,"/testfalko.png");
     
     shottexture[0] = new File(basePath,"/shot.png");
     shottexture[1] = new File(basePath,"/Iceball.png");
     shottexture[2] = new File(basePath,"/ei.png");
+    shottexture[3] = new File(basePath,"/roterpanzer.png");
+    shottexture[4] = new File(basePath,"/pokeball.png");
     
     ebenen[0][0]= 100;
     ebenen[0][1]= 1000;       // Main Ebene: Kann nicht durchschrittenwerden indem down gedrückt wird
