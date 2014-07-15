@@ -22,6 +22,7 @@ public class JavaGame extends Applet implements KeyListener {
   File appletpfad = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
   boolean notrunning = true;
   boolean soundan=true;
+  boolean fpsan=false;
   URL  PlayerTextureUrl;
   
   File basePath = new File("E:\\");
@@ -639,8 +640,10 @@ class perks extends Thread
             case 3: 
             Game.player[counter].speed=10;
             break;
-            case 4: 
-            Game.player[counter].health += 10;
+            case 4:
+            if (Game.player[counter].health<=90) {
+              Game.player[counter].health += 10;
+            } // end of if
             break;
             
           }
@@ -657,7 +660,7 @@ class Menu extends Frame implements ActionListener {
   JavaGame Game;
   Button[] buttonSpieler = new Button[100] ;
   Button[] buttonSchuss = new Button[100] ;
-  Button Sound,Restart;
+  Button Sound,Restart,Fps;
   Choice SpielerAuswahl;
   
   public Menu (JavaGame Game) 
@@ -666,8 +669,8 @@ class Menu extends Frame implements ActionListener {
     this.setLayout(null);
     setTitle("Menu");  // Fenstertitel setzen
     setSize(240+71*Game.texture.length,900);                            // Fenstergröße einstellen  
-    addWindowListener(new TestWindowListener()); // EventListener für das Fenster hinzufügen
-    setVisible(true);                            // Fenster (inkl. Inhalt) sichtbar machen
+    addWindowListener(new TestWindowListener());                        // EventListener für das Fenster hinzufügen
+    setVisible(true);                                                   // Fenster (inkl. Inhalt) sichtbar machen
     
     for (int c=0;c<Game.texture.length;c++) {
       
@@ -695,9 +698,13 @@ class Menu extends Frame implements ActionListener {
     Sound.addActionListener(this);
     this.add(Sound);
     
+    Fps = new Button("FPS anzeigen");
+    Fps.setBounds(120,400,100,20);
+    Fps.addActionListener(this);
+    this.add(Fps);
     
     Restart = new Button("Restart");
-    Restart.setBounds(120,400,100,20);
+    Restart.setBounds(120,430,100,20);
     Restart.addActionListener(this);
     this.add(Restart);
     
@@ -780,15 +787,34 @@ class Menu extends Frame implements ActionListener {
       } // end of if-else
     } // end of if
     
+    if (e.getSource()==Fps) {
+      if (Game.fpsan) {
+        Game.fpsan=false;
+        Fps.setLabel("FPS anzeigen");
+      } // end of if
+      else {
+        Game.fpsan=true;
+        Fps.setLabel("FPS ausblenden");
+      } // end of if-else
+    } // end of if
+    
     if (e.getSource()==Restart) {
       for (int c=1;c<Game.player.length;c++) {
         Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
-        Game.player[c].y=(int) (Math.random()*Game.ebenen[0][2]);
+        Game.player[c].y=0;
         Game.player[c].health=100;
         Game.player[c].jumpheigth=200;
         Game.player[c].speed=5;
         Game.player[c].sperrzeit=40;
+        Game.player[c].freezeControls=false;
       } // end of for
+      
+      for (int c=0;c<Game.gamerunner.shot.length;c++) {
+        Game.gamerunner.shot[c]=null;
+        Game.DamageLogig.shot[c]=null;
+      } // end of for
+      Game.DamageLogig.counter=0;
+      
     } // end of if
   }
   
@@ -811,6 +837,7 @@ class GameRunner extends Thread {
   File perktexture ;
   perks perk[] = new perks[100000];
   int count=0;
+  int time =(int) System.currentTimeMillis()*1000;
   // Ende Attribute5
   
   public GameRunner (Player[] player, JavaGame Game) {
@@ -874,6 +901,13 @@ class GameRunner extends Thread {
           } // end of if
           // Game.dbImage.getGraphics().fillRect(100,600,900,10);
           Game.dbImage.getGraphics().drawString("Music: Early Riser Kevin MacLeod (incompetech.com)", Game.getWidth()-320, Game.getHeight()-20);
+          
+          int timediff = ((int) System.currentTimeMillis()-time);
+          if (Game.fpsan) {
+            //System.out.println("FPS: " + 1000/timediff);
+            Game.dbImage.getGraphics().drawString("FPS: "+ 1000/timediff, Game.getWidth()-380, Game.getHeight()-20);
+          } // end of if
+          time =(int) System.currentTimeMillis();
           
           for (int c = 1;c<Game.ebenen.length;c++) {
             if (Game.ebenen[c] != null) {
