@@ -25,7 +25,7 @@ public class JavaGame extends Applet implements KeyListener {
   boolean fpsan=false;
   URL  PlayerTextureUrl;
   
-  File basePath = new File("E:\\");
+  File basePath = new File("E:\\"); //Pfad zu den Resourcen
   File backgroundTexture = new File(basePath,"/hintergrund.jpg");
   File sound = new File(basePath,"/sound.wav");
   
@@ -69,6 +69,8 @@ public class JavaGame extends Applet implements KeyListener {
     dbImage = createImage(1920,1080);
     dbGraphics = dbImage.getGraphics();
     
+    // Texturen Liste
+    
     texture[0] = new File(basePath,"/test.png");
     texture[1] = new File(basePath,"/testpinguin.png");
     texture[2] = new File(basePath,"/testyoshi.png");
@@ -82,6 +84,8 @@ public class JavaGame extends Applet implements KeyListener {
     shottexture[2] = new File(basePath,"/ei.png");
     shottexture[3] = new File(basePath,"/roterpanzer.png");
     shottexture[4] = new File(basePath,"/pokeball.png");
+    
+    //Ebenen Liste
     
     ebenen[0][0]= 100;
     ebenen[0][1]= 1000;       // Main Ebene: Kann nicht durchschrittenwerden indem down gedrückt wird
@@ -99,14 +103,11 @@ public class JavaGame extends Applet implements KeyListener {
     ebenen[3][1]= 375;
     ebenen[3][2]= 377;
     
-    
+    // Spieler
     
     player[1] = new Player(texture[0],shottexture[0],dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,10,10,"Justus");                // I'm in Space! SPACE!
     player[2] = new Player(texture[1],shottexture[1],dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,10,"Christian");
     player[3] = new Player(texture[2],shottexture[2],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10,"Tjorben");
-    
-    
-    
     
     
   } // end of init
@@ -668,7 +669,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
   Button[] buttonSchuss = new Button[100] ;
   Button Sound,Restart,Fps;
   Choice SpielerAuswahl;
-  TextField Name;
+  TextField Name,maxFps;
   
   public Menu (JavaGame Game) 
   {
@@ -709,7 +710,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     Name.addKeyListener(this);
     this.add(Name);
     
-    
     Sound = new Button("Sound aus");
     Sound.setBounds(120,370,100,20);
     Sound.addActionListener(this);
@@ -727,6 +727,11 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     Restart.addActionListener(this);
     Restart.addKeyListener(this);
     this.add(Restart);
+    
+    maxFps = new TextField(Game.gamerunner.maxFPS+"");
+    maxFps.setBounds(230,400,100,20);
+    maxFps.addKeyListener(this);
+    this.add(maxFps);
     
     for (int c=1;c<Game.player.length;c++) {
       SpielerAuswahl.addItem("Spieler "+c);
@@ -755,7 +760,12 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
   public void keyPressed(KeyEvent e)
   {
     Game.player[SpielerAuswahl.getSelectedIndex()+1].name=Name.getText();
-    if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {
+    if (isNumeric(maxFps.getText())) {
+      if (Integer.parseInt(maxFps.getText())<=1000 && Integer.parseInt(maxFps.getText())>0) {
+        Game.gamerunner.maxFPS=Integer.parseInt(maxFps.getText());
+      } // end of if
+    } // end of if
+    if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {              //Zurückkehren zum Spiel
       Game.gamerunner.running=true;
       if (Game.soundan) {
         Game.ac.loop();
@@ -763,6 +773,19 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
       this.dispose(); 
     }   
   }  
+  
+  public static boolean isNumeric(String str)  
+  {  
+    try  
+    {  
+      double d = Double.parseDouble(str);  
+    }  
+    catch(NumberFormatException nfe)  
+    {  
+      return false;  
+    }  
+    return true;  
+  }
   
   class TestWindowListener extends WindowAdapter
   {
@@ -889,6 +912,8 @@ class GameRunner extends Thread {
   perks perk[] = new perks[100000];
   int count=0;
   int time =(int) System.currentTimeMillis()*1000;
+  int maxFPS = 30;
+  
   // Ende Attribute5
   
   public GameRunner (Player[] player, JavaGame Game) {
@@ -905,7 +930,7 @@ class GameRunner extends Thread {
     while (true) {
       synchronized(getClass()) { 
         try {
-          sleep(33);
+          sleep(1000/maxFPS);
         }
         catch(InterruptedException e) {
         }
