@@ -661,18 +661,20 @@ class perks extends Thread
   } // end of for
 }
 
-class Menu extends Frame implements ActionListener {
+class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
   
   JavaGame Game;
   Button[] buttonSpieler = new Button[100] ;
   Button[] buttonSchuss = new Button[100] ;
   Button Sound,Restart,Fps;
   Choice SpielerAuswahl;
+  TextField Name;
   
   public Menu (JavaGame Game) 
   {
     this.Game = Game;
     this.setLayout(null);
+    this.addKeyListener(this);
     setTitle("Menu");  // Fenstertitel setzen
     setSize(240+71*Game.texture.length,900);                            // Fenstergröße einstellen  
     addWindowListener(new TestWindowListener());                        // EventListener für das Fenster hinzufügen
@@ -683,6 +685,7 @@ class Menu extends Frame implements ActionListener {
       buttonSpieler[c] = new Button("Auswählen");
       buttonSpieler[c].setBounds(120+71*c,250,67,20);
       buttonSpieler[c].addActionListener(this);
+      buttonSpieler[c].addKeyListener(this);
       this.add(buttonSpieler[c]);
       
     } // end of for
@@ -692,34 +695,74 @@ class Menu extends Frame implements ActionListener {
       buttonSchuss[c] = new Button("Auswählen");
       buttonSchuss[c].setBounds(120+71*c,330,67,20);
       buttonSchuss[c].addActionListener(this);
+      buttonSchuss[c].addKeyListener(this);
       this.add(buttonSchuss[c]);
       
     } // end of for 
     
     SpielerAuswahl = new Choice();
-    SpielerAuswahl.setBounds(50,50,300,30);
+    SpielerAuswahl.addKeyListener(this);
+    SpielerAuswahl.setBounds(120,50,300,30);
+    
+    Name = new TextField(Game.player[1].name);
+    Name.setBounds(120,90,300,20);
+    Name.addKeyListener(this);
+    this.add(Name);
+    
     
     Sound = new Button("Sound aus");
     Sound.setBounds(120,370,100,20);
     Sound.addActionListener(this);
+    Sound.addKeyListener(this);
     this.add(Sound);
     
     Fps = new Button("FPS anzeigen");
     Fps.setBounds(120,400,100,20);
     Fps.addActionListener(this);
+    Fps.addKeyListener(this);
     this.add(Fps);
     
     Restart = new Button("Restart");
     Restart.setBounds(120,430,100,20);
     Restart.addActionListener(this);
+    Restart.addKeyListener(this);
     this.add(Restart);
     
     for (int c=1;c<Game.player.length;c++) {
       SpielerAuswahl.addItem("Spieler "+c);
     } // end of for
+    SpielerAuswahl.addItemListener(this);
     
     this.add(SpielerAuswahl);
   }
+  
+  
+  public void itemStateChanged(ItemEvent ie)
+  {
+    Name.setText(Game.player[SpielerAuswahl.getSelectedIndex()+1].name);
+  }
+  
+  public void keyReleased(KeyEvent e) 
+  {
+    
+  }
+  
+  public void keyTyped(KeyEvent e)
+  {
+    
+  }   
+  
+  public void keyPressed(KeyEvent e)
+  {
+    Game.player[SpielerAuswahl.getSelectedIndex()+1].name=Name.getText();
+    if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {
+      Game.gamerunner.running=true;
+      if (Game.soundan) {
+        Game.ac.loop();
+      } // end of if
+      this.dispose(); 
+    }   
+  }  
   
   class TestWindowListener extends WindowAdapter
   {
@@ -821,7 +864,9 @@ class Menu extends Frame implements ActionListener {
       } // end of for
       Game.DamageLogig.counter=0;
       
-    } // end of if
+    } // end of if   
+    
+    
   }
   
   
