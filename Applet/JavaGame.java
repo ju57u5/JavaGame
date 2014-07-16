@@ -179,7 +179,7 @@ class Player extends Thread implements KeyListener  {
   
   // Anfang Attribute1
   File playertexture,shottexture;
-  BufferedImage textureImage, textureImageb = new BufferedImage(1000,1000,1);
+  BufferedImage textureImage,boomImage, textureImageb = new BufferedImage(1000,1000,1);
   
   Graphics g,db;
   KeyEvent taste;
@@ -198,6 +198,8 @@ class Player extends Thread implements KeyListener  {
   int boomUp,boomLeft,boomRight;
   int jumpupdate=10;
   int sperrzeit=40;
+  int perkzählerjump,perkzählerrun,perkzählershoot,perkw,drawboom=20,boomx,boomy;
+  File boomtexture; 
   
   // Ende Attribute1
   
@@ -228,7 +230,7 @@ class Player extends Thread implements KeyListener  {
     boomUp=0;
     boomRight=0;
     boomLeft=0;
-    
+    boomtexture = new File(Game.basePath, "/boom.png");
     
     for (int c=0;c<keys.length;c++ ) {
       keys[c]=false;
@@ -236,9 +238,11 @@ class Player extends Thread implements KeyListener  {
     
     try { 
       textureImage = ImageIO.read(playertexture);
-    } catch(IOException exeption) {
-      
-    }
+    } catch(IOException exeption) {}
+    
+    try { 
+      boomImage = ImageIO.read(boomtexture);
+    } catch(IOException exeption) {}
     
     textureImageb = verticalflip(textureImage);
   }
@@ -332,6 +336,41 @@ class Player extends Thread implements KeyListener  {
     
     if (health <= 0) {
       freezeControls=true;
+    } // end of if
+    
+    //Perk begrenzen
+    //perks anzeigen
+    if (jumpheigth==300) {
+      Game.dbImage.getGraphics().drawString("Springen "+perkzählerjump/10,xHealth,70);
+      perkzählerjump=perkzählerjump-1;
+    } // end of if
+    if (sperrzeit==25) {
+      Game.dbImage.getGraphics().drawString("Schießen "+perkzählershoot/10,xHealth,85);
+      perkzählershoot=perkzählershoot-1;
+    } // end of if
+    if (speed==10) {
+      Game.dbImage.getGraphics().drawString("Rennen   "+perkzählerrun/10,xHealth,100);
+      perkzählerrun=perkzählerrun-1;
+    } // end of if
+    //perks anzeigen Ende
+    
+    //perks zurücksetzen
+    if (perkzählerjump<0) {
+      jumpheigth=200;
+    } // end of if
+    if (perkzählerrun<0) {
+      speed=5;
+    } // end of if
+    if (perkzählershoot<0) {
+      sperrzeit=40;
+    } // end of if
+    //perks zurücksetzen Ende
+    
+    //Perk begrenzen Ende
+    drawboom=drawboom+1;
+    
+    if (drawboom<15) {
+      Game.dbImage.getGraphics().drawImage(boomImage,boomx,boomy,Game);
     } // end of if
     
   }
@@ -636,21 +675,32 @@ class perks extends Thread
         
         if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100)) {
           active=false;
-          int perkw = (int) (Math.random()*4+1);
+          int perkw = (int) (Math.random()*5+1);
           switch (perkw) {
             case  1:
             Game.player[counter].jumpheigth=300;
+            Game.player[counter].perkzählerjump=600;
             break;
             case  2:
             Game.player[counter].sperrzeit=25;
+            Game.player[counter].perkzählershoot=600;
             break;
             case 3: 
             Game.player[counter].speed=10;
+            Game.player[counter].perkzählerrun=600;
             break;
             case 4:
             if (Game.player[counter].health<=90) {
               Game.player[counter].health += 10;
             } // end of if
+            break;
+            case 5:
+            Game.player[counter].drawboom=0;
+            
+            Game.player[counter].boomx = perkx;
+            Game.player[counter].boomy = perky;
+            Game.player[counter].health -= 10;
+            Game.player[counter].boomUp += 600;
             break;
             
           }
