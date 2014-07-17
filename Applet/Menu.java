@@ -62,13 +62,23 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     Name.addKeyListener(this);
     this.add(Name);
     
-    Sound = new Button("Sound aus");
+    if (Game.soundan) {
+      Sound = new Button("Sound aus");
+    } // end of if
+    else {
+      Sound = new Button("Sound an");
+    } // end of if-else
     Sound.setBounds(120,370,100,20);
     Sound.addActionListener(this);
     Sound.addKeyListener(this);
     this.add(Sound);
     
-    Fps = new Button("FPS anzeigen");
+    if (Game.fpsan) {
+      Fps = new Button("FPS ausblenden");
+    } // end of if
+    else {
+      Fps = new Button("FPS anzeigen");
+    } // end of if-else
     Fps.setBounds(120,400,100,20);
     Fps.addActionListener(this);
     Fps.addKeyListener(this);
@@ -231,6 +241,12 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
         Game.player[c].speed=5;
         Game.player[c].sperrzeit=40;
         Game.player[c].freezeControls=false;
+        
+        Game.gamerunner.running=true;           //Schließen des Menüs
+        if (Game.soundan) {
+          Game.ac.loop(10);
+        } // end of if
+        this.dispose();    
       } // end of for
       
       for (int c=0;c<Game.gamerunner.shot.length;c++) {
