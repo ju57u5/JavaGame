@@ -30,11 +30,11 @@ public class JavaGame extends Frame implements KeyListener {
   boolean fpsan=false;
   URL  PlayerTextureUrl;
   
-  File basePath = new File("E:\\"); //Pfad zu den Resourcen
+  //File basePath = new File("/texture"); //Pfad zu den Resourcen
   //URL base ;
-  //File basePath ; //Pfad zu den Resourcen
-  File backgroundTexture = new File(basePath,"/hintergrund.jpg");
-  File sound = new File(basePath,"/sound.wav");
+  File basePath;// = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()); //Pfad zu den Resourcen
+  File backgroundTexture;// = new File(basePath,"/hintergrund.jpg");
+  File sound;// = new File(basePath,"/sound.wav");
   
   File[] texture = new File[7];
   File[] shottexture = new File[5];
@@ -74,6 +74,15 @@ public class JavaGame extends Frame implements KeyListener {
     setVisible(true);
     
     try{
+      /*URI Path = URLDecoder.decode(getClass().getClassLoader().getResource("texture").toURI();//, "UTF-8"); //Pfad zu den Resourcen
+      File F = new File(Path);
+      basePath = F;
+      System.out.println(basePath);
+      */
+      File File = new File((System.getenv("APPDATA")));
+      basePath = new File(File, "/texture");
+      backgroundTexture = new File(basePath,"/hintergrund.jpg");
+      sound = new File(basePath,"/sound.wav");
       Stream =AudioSystem.getAudioInputStream(sound);
       ac = AudioSystem.getClip();
       ac.open(Stream);

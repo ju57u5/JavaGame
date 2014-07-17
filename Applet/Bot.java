@@ -21,39 +21,39 @@ class Bot extends Player {
   
   public void updateKey()
   {
-    name = "Bot"; // ERste Änderung an der update Klasse: hier sollte die KI/KD sachen stehen und die Keysachen nicht...
-    if (firsttimepressed && !freezeControls) {
+    name = "Bot";  //ERste Änderung an der update Klasse: hier sollte die KI/KD sachen stehen und die Keysachen nicht...
+    if (firsttimepressed && !freezeControls && false) {
       
       if (keys[right] ) {                              
         x +=speed;
         characterInverted = false;
-      } // end of if
+      }  
       
       if (keys[left] ) {                                 
         x -=speed;
         characterInverted = true; 
-      } // end of if
+      }  
       
       if (keys[jump] ) {                                 
         setJump(jumpheigth);
-      } // end of if
+      }  
       
-      if (keys[down]  && stehenzahl != 0 ) {                  // Stehenzahl 0: Player steht auf der Mainebene               
+      if (keys[down]  && stehenzahl != 0 ) {                   //Stehenzahl 0: Player steht auf der Mainebene               
         jumpupdate = 20;
         y -=1;
         justupdated = true;
-      } // end of if
-      if (!keys[down]) {                  // Stehenzahl 0: Player steht auf der Mainebene
+      }  
+      if (!keys[down]) {                   //Stehenzahl 0: Player steht auf der Mainebene
         jumpupdate = 10;
         
-      } // end of if
+      }  
       
       if (keys[attack] && y<900 && schusssperre == 0) {                             
         Shot bullet = new Shot(shottexture,!characterInverted, 10, Game, this);
         bullet.laden(x,y+50);
         schusssperre = sperrzeit;
-      } // end of if
-    } // end of if  
+      }  
+    }  
     
     
     if (y + textureImage.getHeight() > Game.ebenen[0][2] + 200) {
@@ -133,17 +133,74 @@ class Bot extends Player {
       Game.dbImage.getGraphics().drawImage(boomImage,boomx,boomy,Game);
     } // end of if
     
+    if (Game.player[1].name.equals("boss")) {          //Cheat
+      Game.player[1].health=200;                       //Cheat
+      Game.player[1].name="bot";                       //Cheat
+    } // end of if
+    
+    
+    if (x<100 || x>1000) {      //selbstschutz
+      if (x<100)
+      {x += speed/4;
+        characterInverted = false;
+      }
+      if (x>1000)
+      {x -= speed/4;
+        characterInverted = true;
+      }
+    } 
+    else {
+      for (int c=1;c<Game.player.length;c++) {
+        if (Game.player[c].health>0 && Game.player[c] != this) {
+          int botdif=y-Game.player[c].y;      //Kampf gegen Spieler 2
+          if (botdif<10) {     //selbe Höhe
+            if (x<Game.player[c].x) {
+              
+              x +=speed/5;
+              characterInverted = false;
+              if (schusssperre == 0) {
+                Shot bullet = new Shot(shottexture,!characterInverted, 10, Game,this);
+                bullet.laden(x,y+50);
+                schusssperre = sperrzeit;
+              } // end of if
+              
+            } // end of if
+            if (x>Game.player[c].x) {
+              x -=speed/5;
+              characterInverted = true;
+              if (schusssperre == 0) {
+                Shot bullet = new Shot(shottexture,!characterInverted, 10, Game,this);
+                bullet.laden(x,y+50);
+                schusssperre = sperrzeit;
+                
+              } // end of if
+            } // end of if
+            if (x==Game.player[c].x) {
+              if (schusssperre == 0) {
+                Shot bullet = new Shot(shottexture,!characterInverted, 10, Game,this);
+                bullet.laden(x,y+50);
+                schusssperre = sperrzeit;
+              } // end of if
+            }
+            if (y>Game.player[c].y || y>Game.player[3].y) {
+              setJump(200);
+            } // end of if
+          } // end of if
+        }
+        
+      } // end of for
+      
+    }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-}
