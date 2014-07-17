@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.applet.Applet;
-import java.applet.*;
+//import java.applet.Applet;
+//import java.applet.*;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -16,10 +16,10 @@ import javax.swing.*;
 //                           Interfaces
   
 
-public class JavaGame extends Applet implements KeyListener {
+public class JavaGame extends Frame implements KeyListener {
   
   // Anfang Attribute
-  File appletpfad = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+  //File appletpfad = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
   boolean notrunning = true;
   boolean soundan=false;
   boolean fpsan=false;
@@ -39,15 +39,32 @@ public class JavaGame extends Applet implements KeyListener {
   int[][] ebenen = new int[100][3] ;
   GameRunner gamerunner;
   float vol;
-  AudioClip ac;
+  //AudioClip ac;
   BufferedImage backgroundImage;
   //FloatControl volume;
   // Ende Attribute
   
   
   //Erzaehler erz = new Erzaehler(player1, player2);
+  public static void main(String[] args) {
+    new JavaGame();
+  }
   
-  public void init() {
+  
+  class WindowListener extends WindowAdapter
+  {
+    public void windowClosing(WindowEvent e)
+    {
+      e.getWindow().dispose();                   // Fenster "killen"
+    }
+  }
+  
+  public JavaGame() {
+    setTitle("JavaGame");  // Fenstertitel setzen
+    setSize(1200,900);                            // Fenstergröße einstellen
+    addWindowListener(new WindowListener());
+    setLocationRelativeTo(null);                                        // EventListener für das Fenster hinzufügen
+    setVisible(true);
     try { 
       PlayerTextureUrl = sound.toURI().toURL();
     } catch(MalformedURLException urlexception) {
@@ -60,14 +77,14 @@ public class JavaGame extends Applet implements KeyListener {
       
     }
     
-    ac = getAudioClip(PlayerTextureUrl);
+    //ac = getAudioClip(PlayerTextureUrl);
     if (soundan) {
-      ac.loop();
+      //ac.loop();
     } // end of if
     
     
     dbImage = createImage(1920,1080);
-    dbGraphics = dbImage.getGraphics();
+    //dbGraphics = dbImage.getGraphics();
     
     // Texturen Liste
     
@@ -105,11 +122,21 @@ public class JavaGame extends Applet implements KeyListener {
     
     // Spieler
     
-    player[1] = new Player(texture[0],shottexture[0],dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,10,10,"Justus");                // I'm in Space! SPACE!
-    player[2] = new Player(texture[1],shottexture[1],dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,10,"Christian");
-    player[3] = new Player(texture[2],shottexture[2],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,10,"Tjorben");
+    player[1] = new Player(texture[0],shottexture[0],dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,10,35,"Justus");                // I'm in Space! SPACE!
+    player[2] = new Player(texture[1],shottexture[1],dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,35,"Christian");
+    player[3] = new Player(texture[2],shottexture[2],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,35,"Tjorben");
+    
+    player[1].laden(this,100,400);
+    player[2].laden(this,200,400);
+    player[3].laden(this,300,400);
+    this.addKeyListener(player[1]);
+    this.addKeyListener(player[2]);
+    this.addKeyListener(player[3]);
+    this.addKeyListener(this);
     
     
+    gamerunner = new GameRunner(player,this);
+    DamageLogig = new damageLogig (gamerunner);
   } // end of init
   
   
@@ -122,7 +149,7 @@ public class JavaGame extends Applet implements KeyListener {
       gr.setFont(new Font("TimesRoman", Font.PLAIN, 40)); 
       gr.drawString("PAUSE", (int) this.getWidth()/2, this.getHeight()/2);
       gamerunner.running=false;
-      ac.stop();
+      //ac.stop();
       Menu menu = new Menu(this);
       //volume.setValue(vol);
     }
@@ -130,7 +157,7 @@ public class JavaGame extends Applet implements KeyListener {
     else if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {
       gamerunner.running=true;
       if (soundan) {
-        ac.loop();
+        //ac.loop();
       } // end of if
     } // end of if-else
   }
@@ -146,19 +173,9 @@ public class JavaGame extends Applet implements KeyListener {
   }   
   
   public void paint (Graphics g) {
-    
+    super.paint(g);
     if (notrunning) {
-      player[1].laden(this,100,400);
-      player[2].laden(this,200,400);
-      player[3].laden(this,300,400);
-      this.addKeyListener(player[1]);
-      this.addKeyListener(player[2]);
-      this.addKeyListener(player[3]);
-      this.addKeyListener(this);
       
-      
-      gamerunner = new GameRunner(player,this);
-      DamageLogig = new damageLogig (gamerunner);
       
       notrunning = false;
     } // end of if
@@ -728,7 +745,8 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     this.addKeyListener(this);
     setTitle("Menu");  // Fenstertitel setzen
     setSize(240+71*Game.texture.length,900);                            // Fenstergröße einstellen  
-    addWindowListener(new TestWindowListener());                        // EventListener für das Fenster hinzufügen
+    addWindowListener(new TestWindowListener());
+    setLocationRelativeTo(null);                                        // EventListener für das Fenster hinzufügen
     setVisible(true);                                                   // Fenster (inkl. Inhalt) sichtbar machen
     
     for (int c=0;c<Game.texture.length;c++) {
@@ -818,7 +836,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {              //Zurückkehren zum Spiel
       Game.gamerunner.running=true;
       if (Game.soundan) {
-        Game.ac.loop();
+        //Game.ac.loop();
       } // end of if
       this.dispose(); 
     }   
@@ -843,7 +861,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     {
       Game.gamerunner.running=true;
       if (Game.soundan) {
-        Game.ac.loop();
+        //Game.ac.loop();
       } // end of if
       e.getWindow().dispose();                   // Fenster "killen"
     }           
