@@ -2,8 +2,6 @@ package Applet;
 
 import java.awt.*;
 import java.awt.event.*;
-//import java.applet.Applet;
-//import java.applet.*;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -13,6 +11,11 @@ import java.util.Observer;
 import java.net.*; 
 import javax.sound.sampled.FloatControl;
 import javax.swing.*; 
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import Applet.*;
 
 
@@ -22,7 +25,6 @@ import Applet.*;
 public class JavaGame extends Frame implements KeyListener {
   
   // Anfang Attribute
-  //File appletpfad = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
   boolean notrunning = true;
   boolean soundan=false;
   boolean fpsan=false;
@@ -44,8 +46,9 @@ public class JavaGame extends Frame implements KeyListener {
   int[][] ebenen = new int[100][3] ;
   GameRunner gamerunner;
   float vol;
-  //AudioClip ac;
   BufferedImage backgroundImage;
+  AudioInputStream Stream;
+  Clip ac;
   //FloatControl volume;
   // Ende Attribute
   
@@ -54,7 +57,6 @@ public class JavaGame extends Frame implements KeyListener {
   public static void main(String[] args) {
     new JavaGame();
   }
-  
   
   class WindowListener extends WindowAdapter
   {
@@ -70,6 +72,15 @@ public class JavaGame extends Frame implements KeyListener {
     addWindowListener(new WindowListener());
     setLocationRelativeTo(null);                                        // EventListener für das Fenster hinzufügen
     setVisible(true);
+    
+    try{
+      Stream =AudioSystem.getAudioInputStream(sound);
+      ac = AudioSystem.getClip();
+      ac.open(Stream);
+    }
+    catch(Exception ex)
+    {  }
+    
     try { 
       PlayerTextureUrl = sound.toURI().toURL();
     } catch(MalformedURLException urlexception) {
@@ -83,9 +94,9 @@ public class JavaGame extends Frame implements KeyListener {
       
     }
     
-    //ac = getAudioClip(PlayerTextureUrl);
+    
     if (soundan) {
-      //ac.loop();
+      ac.loop(10);
     } // end of if
     
     
@@ -155,7 +166,7 @@ public class JavaGame extends Frame implements KeyListener {
       gr.setFont(new Font("TimesRoman", Font.PLAIN, 40)); 
       gr.drawString("PAUSE", (int) this.getWidth()/2, this.getHeight()/2);
       gamerunner.running=false;
-      //ac.stop();
+      ac.stop();
       Menu menu = new Menu(this);
       //volume.setValue(vol);
     }
@@ -163,7 +174,7 @@ public class JavaGame extends Frame implements KeyListener {
     else if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {
       gamerunner.running=true;
       if (soundan) {
-        //ac.loop();
+        ac.loop(10);
       } // end of if
     } // end of if-else
   }
@@ -181,8 +192,6 @@ public class JavaGame extends Frame implements KeyListener {
   public void paint (Graphics g) {
     super.paint(g);
     if (notrunning) {
-      
-      
       notrunning = false;
     } // end of if
     

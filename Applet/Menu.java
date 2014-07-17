@@ -120,7 +120,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {              //Zurückkehren zum Spiel
       Game.gamerunner.running=true;
       if (Game.soundan) {
-        //Game.ac.loop();
+        Game.ac.loop(10);
       } // end of if
       this.dispose(); 
     }   
@@ -145,7 +145,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     {
       Game.gamerunner.running=true;
       if (Game.soundan) {
-        //Game.ac.loop();
+        Game.ac.loop(10);
       } // end of if
       e.getWindow().dispose();                   // Fenster "killen"
     }           
