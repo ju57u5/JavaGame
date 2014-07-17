@@ -358,15 +358,15 @@ class Player extends Thread implements KeyListener  {
     //Perk begrenzen
     //perks anzeigen
     if (jumpheigth==300) {
-      Game.dbImage.getGraphics().drawString("Springen "+perkz‰hlerjump/10,xHealth,70);
+      Game.dbImage.getGraphics().drawString("Springen "+perkz‰hlerjump/10,xHealth,yHealth+50);
       perkz‰hlerjump=perkz‰hlerjump-1;
     } // end of if
     if (sperrzeit==25) {
-      Game.dbImage.getGraphics().drawString("Schieﬂen "+perkz‰hlershoot/10,xHealth,85);
+      Game.dbImage.getGraphics().drawString("Schieﬂen "+perkz‰hlershoot/10,xHealth,yHealth+65);
       perkz‰hlershoot=perkz‰hlershoot-1;
     } // end of if
     if (speed==10) {
-      Game.dbImage.getGraphics().drawString("Rennen   "+perkz‰hlerrun/10,xHealth,100);
+      Game.dbImage.getGraphics().drawString("Rennen   "+perkz‰hlerrun/10,xHealth,yHealth+80);
       perkz‰hlerrun=perkz‰hlerrun-1;
     } // end of if
     //perks anzeigen Ende
