@@ -28,7 +28,7 @@ class GameRunner extends Thread {
   int time =(int) System.currentTimeMillis()*1000;
   int maxFPS = 30;
   int winner,neustart=-1;
-  boolean neu=false;
+  boolean neu=false,schonneu=false;
   int auftretenvonperks=9;
   
   // Ende Attribute5
@@ -129,6 +129,7 @@ class GameRunner extends Thread {
             if (!neu) {
               neustart=300;
               neu=true;
+              schonneu=false;
             } // end of if
             
             Game.dbImage.getGraphics().drawString("Neustart in "+neustart/10,500,135); 
@@ -138,6 +139,7 @@ class GameRunner extends Thread {
             if (!neu) {
               neustart=300;
               neu=true;
+              schonneu=false;
             } // end of if
             Game.dbImage.getGraphics().drawString("Neustart in "+neustart/10,500,135);
           } // end of if
@@ -146,12 +148,13 @@ class GameRunner extends Thread {
             if (!neu) {
               neustart=300;
               neu=true;
+              schonneu=false;
             } // end of if
             Game.dbImage.getGraphics().drawString("Neustart in "+neustart/10,500,135);
           } // end of if
           
           neustart-=1;
-          if (neustart==0) {
+          if (neustart==0 && !schonneu) {
             for (int c=1;c<Game.player.length;c++) {
               Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
               Game.player[c].y=0;

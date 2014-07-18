@@ -222,6 +222,7 @@ public class JavaGame extends Frame implements KeyListener {
         player[c].sperrzeit=40;
         player[c].freezeControls=false;
         gamerunner.neu=false;
+        gamerunner.schonneu=true;
       } // end of for
     }
   }
