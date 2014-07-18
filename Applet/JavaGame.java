@@ -136,7 +136,7 @@ public class JavaGame extends Frame implements KeyListener {
     //dbGraphics = dbImage.getGraphics();
     
     // Texturen Liste
-    
+    /*
     texture[0] = new File(basePath,"/test.png");
     texture[1] = new File(basePath,"/testpinguin.png");
     texture[2] = new File(basePath,"/testyoshi.png");
@@ -151,7 +151,7 @@ public class JavaGame extends Frame implements KeyListener {
     shottexture[3] = new File(basePath,"/roterpanzer.png");
     shottexture[4] = new File(basePath,"/pokeball.png");
     shottexture[5] = new File(basePath,"/feuerball.png");
-    
+    */
     //Ebenen Liste
     
     ebenen[0][0]= 100;

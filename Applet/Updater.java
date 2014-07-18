@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.Observable; 
@@ -21,27 +22,48 @@ import Applet.*;
 
 class Updater {
   
+  int counter = 0;
+  int c=0; 
+  //Counter gibt die Art der Textur an:
+  //0: Schuss
+  //1: Character
+  //2: Alles andere
+  
   public Updater(JavaGame Game) {
     try {
       File folder = new File(System.getenv("APPDATA")+"\\texture");
       if (!folder.isDirectory()) {
         folder.mkdirs();
       } // end of if
-      for (int c=0;c<Game.textureS.length;c++) {
-        System.out.println("http://ju57u5v.tk/JavaGame" + Game.textureS[c]);
-        download("http://ju57u5v.tk/JavaGame" + Game.textureS[c], System.getenv("APPDATA")+"\\texture");
-      } // end of for
       
-      for (int c=0;c<Game.shottextureS.length;c++) {
-        download("http://ju57u5v.tk/JavaGame" + Game.shottextureS[c], System.getenv("APPDATA")+"\\texture");
-      } // end of for
-      download("http://ju57u5v.tk/JavaGame/hintergrund.jpg" , System.getenv("APPDATA")+"\\texture");
-      download("http://ju57u5v.tk/JavaGame/perk.png" , System.getenv("APPDATA")+"\\texture");
-      download("http://ju57u5v.tk/JavaGame/freeze.png" , System.getenv("APPDATA")+"\\texture");
-      download("http://ju57u5v.tk/JavaGame/boom.png" , System.getenv("APPDATA")+"\\texture");
-    } catch(IOException e) {
+      download("http://ju57u5v.tk/JavaGame/list.txt" , System.getenv("APPDATA")+"\\texture");
+      BufferedReader br = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\list.txt")));
+      String line;
+      String version = br.readLine();
+      while ((line = br.readLine()) != null) {
+        if (line.startsWith("!")) { 
+          counter += 1;
+          c=-1;
+        } // end of if
+        else {
+          download("http://ju57u5v.tk/JavaGame/" + line, System.getenv("APPDATA")+"\\texture");
+        } // end of if-else
+        if (counter==0 && !line.startsWith("!")) {
+          System.out.println(System.getenv("APPDATA")+"\\texture\\"+line+" "+c);
+          Game.shottexture[c] = new File(System.getenv("APPDATA")+"\\texture\\"+line);
+        } // end of if
+        if (counter==1 && !line.startsWith("!")) {
+          System.out.println(System.getenv("APPDATA")+"\\texture\\"+line+" "+c);
+          Game.texture[c] = new File(System.getenv("APPDATA")+"\\texture\\"+line);
+        } // end of if
+        
+        c++;
+      }
+      br.close();
+    } catch(Exception e) {
       
     } 
+    
     
     
   }  
@@ -73,11 +95,7 @@ class Updater {
     is.close();
   }  
   
-  public void getVersion() {
-    
-    
-    
-  }  
+  
 }
   
 
