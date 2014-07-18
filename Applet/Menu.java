@@ -33,23 +33,23 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     setVisible(true);                                                   // Fenster (inkl. Inhalt) sichtbar machen
     
     for (int c=0;c<Game.texture.length;c++) {
-      
-      buttonSpieler[c] = new Button("Auswählen");
-      buttonSpieler[c].setBounds(120+71*c,250,67,20);
-      buttonSpieler[c].addActionListener(this);
-      buttonSpieler[c].addKeyListener(this);
-      this.add(buttonSpieler[c]);
-      
+      if (Game.texture[c] != null) {
+        buttonSpieler[c] = new Button("Auswählen");
+        buttonSpieler[c].setBounds(120+71*c,250,67,20);
+        buttonSpieler[c].addActionListener(this);
+        buttonSpieler[c].addKeyListener(this);
+        this.add(buttonSpieler[c]);
+      } // end of if
     } // end of for
     
     for (int c=0;c<Game.shottexture.length;c++) {
-      
-      buttonSchuss[c] = new Button("Auswählen");
-      buttonSchuss[c].setBounds(120+71*c,330,67,20);
-      buttonSchuss[c].addActionListener(this);
-      buttonSchuss[c].addKeyListener(this);
-      this.add(buttonSchuss[c]);
-      
+      if (Game.shottexture[c] != null) {
+        buttonSchuss[c] = new Button("Auswählen");
+        buttonSchuss[c].setBounds(120+71*c,330,67,20);
+        buttonSchuss[c].addActionListener(this);
+        buttonSchuss[c].addKeyListener(this);
+        this.add(buttonSchuss[c]);
+      }  
     } // end of for 
     
     SpielerAuswahl = new Choice();
@@ -167,25 +167,25 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
   {  
     super.paint(g);  
     for (int c=0;c<Game.texture.length;c++) {
-      
-      try {
-        BufferedImage Image = ImageIO.read(Game.texture[c]);
-        this.getGraphics().drawImage(Image,120+71*c,140,this);
-      } catch(IOException exeption) {
-        
-      }
-      
+      if (Game.texture[c] != null) {
+        try {
+          BufferedImage Image = ImageIO.read(Game.texture[c]);
+          this.getGraphics().drawImage(Image,120+71*c,140,this);
+        } catch(IOException exeption) {
+          
+        }
+      }  
     } // end of for
     
     for (int c=0;c<Game.shottexture.length;c++) {
-      
-      try {
-        BufferedImage Image = ImageIO.read(Game.shottexture[c]);
-        this.getGraphics().drawImage(Image,120+71*c,280,this);
-      } catch(IOException exeption) {
-        
-      }
-      
+      if (Game.shottexture[c] != null) {
+        try {
+          BufferedImage Image = ImageIO.read(Game.shottexture[c]);
+          this.getGraphics().drawImage(Image,120+71*c,280,this);
+        } catch(IOException exeption) {
+          
+        }
+      }  
     } // end of for  
   }  
   

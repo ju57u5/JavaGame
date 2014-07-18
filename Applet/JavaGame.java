@@ -36,12 +36,8 @@ public class JavaGame extends Frame implements KeyListener {
   File backgroundTexture;// = new File(basePath,"/hintergrund.jpg");
   File sound;// = new File(basePath,"/sound.wav");
   
-  File[] texture = new File[7];
-  File[] shottexture = new File[6];
-  
-  String[] textureS = new String[7];
-  String[] shottextureS = new String[6];
-  
+  File[] texture = new File[100];
+  File[] shottexture = new File[100];
   
   Player player[] = new Player[4];
   Image dbImage;
@@ -71,21 +67,6 @@ public class JavaGame extends Frame implements KeyListener {
   }
   
   public JavaGame() {
-    
-    textureS[0] = "/test.png";
-    textureS[1] = "/testpinguin.png";
-    textureS[2] = "/testyoshi.png";
-    textureS[3] = "/testluigi.png";
-    textureS[4] = "/testtoad.png";
-    textureS[5] = "/testpoketrainer.png";
-    textureS[6] = "/testfalko.png";
-    
-    shottextureS[0] = "/shot.png";
-    shottextureS[1] = "/Iceball.png";
-    shottextureS[2] = "/ei.png";
-    shottextureS[3] = "/roterpanzer.png";
-    shottextureS[4] = "/pokeball.png";
-    shottextureS[5] = "/feuerball.png";
     
     Updater updater = new Updater(this);
     
@@ -136,22 +117,7 @@ public class JavaGame extends Frame implements KeyListener {
     //dbGraphics = dbImage.getGraphics();
     
     // Texturen Liste
-    /*
-    texture[0] = new File(basePath,"/test.png");
-    texture[1] = new File(basePath,"/testpinguin.png");
-    texture[2] = new File(basePath,"/testyoshi.png");
-    texture[3] = new File(basePath,"/testluigi.png");
-    texture[4] = new File(basePath,"/testtoad.png");
-    texture[5] = new File(basePath,"/testpoketrainer.png");
-    texture[6] = new File(basePath,"/testfalko.png");
     
-    shottexture[0] = new File(basePath,"/shot.png");
-    shottexture[1] = new File(basePath,"/Iceball.png");
-    shottexture[2] = new File(basePath,"/ei.png");
-    shottexture[3] = new File(basePath,"/roterpanzer.png");
-    shottexture[4] = new File(basePath,"/pokeball.png");
-    shottexture[5] = new File(basePath,"/feuerball.png");
-    */
     //Ebenen Liste
     
     ebenen[0][0]= 100;

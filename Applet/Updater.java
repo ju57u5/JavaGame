@@ -49,11 +49,9 @@ class Updater {
           download("http://ju57u5v.tk/JavaGame/" + line, System.getenv("APPDATA")+"\\texture");
         } // end of if-else
         if (counter==0 && !line.startsWith("!")) {
-          System.out.println(System.getenv("APPDATA")+"\\texture\\"+line+" "+c);
           Game.shottexture[c] = new File(System.getenv("APPDATA")+"\\texture\\"+line);
         } // end of if
         if (counter==1 && !line.startsWith("!")) {
-          System.out.println(System.getenv("APPDATA")+"\\texture\\"+line+" "+c);
           Game.texture[c] = new File(System.getenv("APPDATA")+"\\texture\\"+line);
         } // end of if
         
