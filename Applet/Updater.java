@@ -31,69 +31,84 @@ class Updater {
   //1: Character
   //2: Alles andere
   boolean firstrun = false;
+  String arg;
   
   public Updater(JavaGame Game) {
     try {
-      File folder = new File(System.getenv("APPDATA")+"\\texture");
-      if (!folder.isDirectory()) {
-        folder.mkdirs();
-      } // end of if
-      
-      download("http://ju57u5v.tk/JavaGame/list.txt" , System.getenv("APPDATA")+"\\texture");
-      
-      BufferedReader br = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\list.txt")));
-      
-      File filever = new File(System.getenv("APPDATA")+"\\texture\\version.txt");
-      
-      if (filever.exists()) {
-        BufferedReader brver = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\version.txt")));
-        String currentversion = brver.readLine();
-        currentver = Integer.parseInt(currentversion);
-      } // end of if
-      else {
-        firstrun = true;
-        currentver = -1;
-      } // end of if-else
-      
-      String line;
-      String version = br.readLine();
-      ver = Integer.parseInt(version);
-      
-      
-      while ((line = br.readLine()) != null) {
-        if (line.startsWith("!")) { 
-          counter += 1;
-          c=-1;
-        } // end of if
-        else {
-          System.out.println(firstrun +" "+ currentver);
-          if (currentver<ver || firstrun) {
-            download("http://ju57u5v.tk/JavaGame/" + line, System.getenv("APPDATA")+"\\texture");
-          }
-        } // end of if-else
-        if (counter==0 && !line.startsWith("!")) {
-          Game.shottexture[c] = new File(System.getenv("APPDATA")+"\\texture\\"+line);
-        } // end of if
-        if (counter==1 && !line.startsWith("!")) {
-          Game.texture[c] = new File(System.getenv("APPDATA")+"\\texture\\"+line);
-        } // end of if
-        
-        c++;
-      }
-      br.close();
+      arg = Game.args[0]  ;
     }
-    catch(Exception e) {
-      
+    catch (ArrayIndexOutOfBoundsException e){
     }
     
-    try {
-      PrintWriter writer = new PrintWriter(System.getenv("APPDATA")+"\\texture\\version.txt", "UTF-8");
-      writer.println(""+ver);
-      writer.println(" ");
-      writer.close();
-    } catch(Exception e) {
+    if (!arg.equals("dev")) {
+      try {
+        File folder = new File(System.getenv("APPDATA")+"\\texture");
+        if (!folder.isDirectory()) {
+          folder.mkdirs();
+        } // end of if
+        
+        download("http://ju57u5v.tk/JavaGame/list.txt" , System.getenv("APPDATA")+"\\texture");
+        
+        BufferedReader br = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\list.txt")));
+        
+        File filever = new File(System.getenv("APPDATA")+"\\texture\\version.txt");
+        
+        if (filever.exists()) {
+          BufferedReader brver = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\version.txt")));
+          String currentversion = brver.readLine();
+          currentver = Integer.parseInt(currentversion);
+        } // end of if
+        else {
+          firstrun = true;
+          currentver = -1;
+        } // end of if-else
+        
+        String line;
+        String version = br.readLine();
+        ver = Integer.parseInt(version);
+        
+        
+        while ((line = br.readLine()) != null) {
+          if (line.startsWith("!")) { 
+            counter += 1;
+            c=-1;
+          } // end of if
+          else {
+            if (currentver<ver || firstrun) {
+              download("http://ju57u5v.tk/JavaGame/" + line, System.getenv("APPDATA")+"\\texture");
+            }
+          } // end of if-else
+          if (counter==0 && !line.startsWith("!")) {
+            Game.shottexture[c] = new File(System.getenv("APPDATA")+"\\texture\\"+line);
+          } // end of if
+          if (counter==1 && !line.startsWith("!")) {
+            Game.texture[c] = new File(System.getenv("APPDATA")+"\\texture\\"+line);
+          } // end of if
+          
+          c++;
+        }
+        br.close();
+      }
+      catch(Exception e) {
+        
+      }
       
-    } 
+      try {
+        PrintWriter writer = new PrintWriter(System.getenv("APPDATA")+"\\texture\\version.txt", "UTF-8");
+        writer.println(""+ver);
+        writer.println(" ");
+        writer.close();
+      } catch(Exception e) {
+        
+      } 
+      
+      if (currentver<ver || firstrun) {
+        Game.dispose();
+        System.exit(0);
+      } // end of if
+    } // end of if
+    
+    
     
   } 
   

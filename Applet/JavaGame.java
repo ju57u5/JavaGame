@@ -49,13 +49,14 @@ public class JavaGame extends Frame implements KeyListener {
   BufferedImage backgroundImage;
   AudioInputStream Stream;
   Clip ac;
+  String[] args = new String[100];
   //FloatControl volume;
   // Ende Attribute
   
   
   //Erzaehler erz = new Erzaehler(player1, player2);
   public static void main(String[] args) {
-    new JavaGame();
+    new JavaGame(args);
   }
   
   class WindowListener extends WindowAdapter
@@ -66,8 +67,9 @@ public class JavaGame extends Frame implements KeyListener {
     }
   }
   
-  public JavaGame() {
-    
+  public JavaGame(String[] args) {
+    args[0]="";
+    this.args = args;
     Updater updater = new Updater(this);
     
     
