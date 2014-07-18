@@ -23,11 +23,14 @@ import Applet.*;
 class Updater {
   
   int counter = 0;
-  int c=0; 
+  int c=0;
+  int currentver=-1;
+  int ver= -1; 
   //Counter gibt die Art der Textur an:
   //0: Schuss
   //1: Character
   //2: Alles andere
+  boolean firstrun = false;
   
   public Updater(JavaGame Game) {
     try {
@@ -37,16 +40,36 @@ class Updater {
       } // end of if
       
       download("http://ju57u5v.tk/JavaGame/list.txt" , System.getenv("APPDATA")+"\\texture");
+      
       BufferedReader br = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\list.txt")));
+      
+      File filever = new File(System.getenv("APPDATA")+"\\texture\\version.txt");
+      
+      if (filever.exists()) {
+        BufferedReader brver = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\version.txt")));
+        String currentversion = brver.readLine();
+        currentver = Integer.parseInt(currentversion);
+      } // end of if
+      else {
+        firstrun = true;
+        currentver = -1;
+      } // end of if-else
+      
       String line;
       String version = br.readLine();
+      ver = Integer.parseInt(version);
+      
+      
       while ((line = br.readLine()) != null) {
         if (line.startsWith("!")) { 
           counter += 1;
           c=-1;
         } // end of if
         else {
-          download("http://ju57u5v.tk/JavaGame/" + line, System.getenv("APPDATA")+"\\texture");
+          System.out.println(firstrun +" "+ currentver);
+          if (currentver<ver || firstrun) {
+            download("http://ju57u5v.tk/JavaGame/" + line, System.getenv("APPDATA")+"\\texture");
+          }
         } // end of if-else
         if (counter==0 && !line.startsWith("!")) {
           Game.shottexture[c] = new File(System.getenv("APPDATA")+"\\texture\\"+line);
@@ -58,13 +81,21 @@ class Updater {
         c++;
       }
       br.close();
+    }
+    catch(Exception e) {
+      
+    }
+    
+    try {
+      PrintWriter writer = new PrintWriter(System.getenv("APPDATA")+"\\texture\\version.txt", "UTF-8");
+      writer.println(""+ver);
+      writer.println(" ");
+      writer.close();
     } catch(Exception e) {
       
     } 
     
-    
-    
-  }  
+  } 
   
   private void download(String fileURL, String destinationDirectory) throws IOException {
     // File name that is being downloaded
