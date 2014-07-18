@@ -23,7 +23,10 @@ class Updater {
   
   public Updater(JavaGame Game) {
     try {
-      System.out.println("hi");
+      File folder = new File(System.getenv("APPDATA")+"\\texture");
+      if (!folder.isDirectory()) {
+        folder.mkdirs();
+      } // end of if
       for (int c=0;c<Game.textureS.length;c++) {
         System.out.println("http://ju57u5v.tk/JavaGame" + Game.textureS[c]);
         download("http://ju57u5v.tk/JavaGame" + Game.textureS[c], System.getenv("APPDATA")+"\\texture");
