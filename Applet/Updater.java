@@ -34,6 +34,7 @@ class Updater {
       } // end of for
       download("http://ju57u5v.tk/JavaGame/hintergrund.jpg" , System.getenv("APPDATA")+"\\texture");
       download("http://ju57u5v.tk/JavaGame/perk.png" , System.getenv("APPDATA")+"\\texture");
+      download("http://ju57u5v.tk/JavaGame/freeze.png" , System.getenv("APPDATA")+"\\texture");
       download("http://ju57u5v.tk/JavaGame/boom.png" , System.getenv("APPDATA")+"\\texture");
     } catch(IOException e) {
       
