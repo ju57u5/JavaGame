@@ -37,7 +37,11 @@ public class JavaGame extends Frame implements KeyListener {
   File sound;// = new File(basePath,"/sound.wav");
   
   File[] texture = new File[7];
-  File[] shottexture = new File[5];
+  File[] shottexture = new File[6];
+  
+  String[] textureS = new String[7];
+  String[] shottextureS = new String[6];
+  
   
   Player player[] = new Player[4];
   Image dbImage;
@@ -67,6 +71,25 @@ public class JavaGame extends Frame implements KeyListener {
   }
   
   public JavaGame() {
+    
+    textureS[0] = "/test.png";
+    textureS[1] = "/testpinguin.png";
+    textureS[2] = "/testyoshi.png";
+    textureS[3] = "/testluigi.png";
+    textureS[4] = "/testtoad.png";
+    textureS[5] = "/testpoketrainer.png";
+    textureS[6] = "/testfalko.png";
+    
+    shottextureS[0] = "/shot.png";
+    shottextureS[1] = "/Iceball.png";
+    shottextureS[2] = "/ei.png";
+    shottextureS[3] = "/roterpanzer.png";
+    shottextureS[4] = "/pokeball.png";
+    shottextureS[5] = "/feuerball.png";
+    
+    Updater updater = new Updater(this);
+    
+    
     setTitle("JavaGame");  // Fenstertitel setzen
     setSize(1200,900);                            // Fenstergröße einstellen
     addWindowListener(new WindowListener());
@@ -127,6 +150,7 @@ public class JavaGame extends Frame implements KeyListener {
     shottexture[2] = new File(basePath,"/ei.png");
     shottexture[3] = new File(basePath,"/roterpanzer.png");
     shottexture[4] = new File(basePath,"/pokeball.png");
+    shottexture[5] = new File(basePath,"/feuerball.png");
     
     //Ebenen Liste
     
