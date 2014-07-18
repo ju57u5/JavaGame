@@ -28,8 +28,9 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     this.setLayout(null);
     this.addKeyListener(this);
     setTitle("Menu");  // Fenstertitel setzen
-    setSize(240+71*Game.texture.length,900);                            // Fenstergröße einstellen  
+    setSize(Game.getWidth(),Game.getHeight());                            // Fenstergröße einstellen  
     addWindowListener(new TestWindowListener());                        // EventListener für das Fenster hinzufügen
+    setLocationRelativeTo(null);
     setVisible(true);                                                   // Fenster (inkl. Inhalt) sichtbar machen
     
     for (int c=0;c<Game.texture.length;c++) {
@@ -71,13 +72,23 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     L1.addKeyListener(this);
     this.add(L1);
     
-    Sound = new Button("Sound aus");
+    if (Game.soundan) {
+      Sound = new Button("Sound aus");
+    } // end of if
+    else {
+      Sound = new Button("Sound an");
+    } // end of if-else
     Sound.setBounds(120,370,100,20);
     Sound.addActionListener(this);
     Sound.addKeyListener(this);
     this.add(Sound);
     
-    Fps = new Button("FPS anzeigen");
+    if (Game.fpsan) {
+      Fps = new Button("FPS ausblenden");
+    } // end of if
+    else {
+      Fps = new Button("FPS anzeigen");
+    } // end of if-else
     Fps.setBounds(120,400,100,20);
     Fps.addActionListener(this);
     Fps.addKeyListener(this);
@@ -121,9 +132,14 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
   public void keyPressed(KeyEvent e)
   {
     Game.player[SpielerAuswahl.getSelectedIndex()+1].name=Name.getText();
-    String s=perks.getText(); 
-    Game.gamerunner.auftretenvonperks=(int) Double.valueOf(s).doubleValue();
     
+    
+    if (isNumeric(perks.getText())) {
+      if (Integer.parseInt(perks.getText())<=1000 && Integer.parseInt(perks.getText())>0) {
+        Game.gamerunner.auftretenvonperks = Integer.parseInt(perks.getText());
+      } // end of if
+      
+    } // end of if
     if (isNumeric(maxFps.getText())) {
       if (Integer.parseInt(maxFps.getText())<=1000 && Integer.parseInt(maxFps.getText())>0) {
         Game.gamerunner.maxFPS=Integer.parseInt(maxFps.getText());
