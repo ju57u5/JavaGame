@@ -39,16 +39,15 @@ class Updater extends Frame{
     public void windowClosing(WindowEvent e)
     {
       e.getWindow().dispose();                   // Fenster "killen"
-      System.exit(0);
     }
   }
   
   public Updater(JavaGame Game) {
     
-    setTitle("JavaGame");  // Fenstertitel setzen
-    setSize(1200,900);                            // Fenstergröße einstellen
+    setTitle("JavaGame");  
+    setSize(1200,900);                            
     addWindowListener(new WindowListener());
-    setLocationRelativeTo(null);                                        // EventListener für das Fenster hinzufügen
+    setLocationRelativeTo(null);                                        
     setVisible(true);
     
     console = new TextArea("",1200,900,TextArea.SCROLLBARS_VERTICAL_ONLY);

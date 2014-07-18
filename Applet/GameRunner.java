@@ -30,6 +30,7 @@ class GameRunner extends Thread {
   int winner,neustart=-1;
   boolean neu=false,schonneu=false;
   int auftretenvonperks=9;
+  int totencounter=0;
   
   // Ende Attribute5
   
@@ -124,34 +125,28 @@ class GameRunner extends Thread {
           } // end of if
           } */
           
-          if (Game.player[1].health==0 && Game.player[2].health==0) {
-            Game.dbImage.getGraphics().drawString(Game.player[3].name+" hat gewonnen",500,120);    
-            if (!neu) {
-              neustart=300;
-              neu=true;
-              schonneu=false;
+          for (int c=1;c<Game.player.length;c++) {
+            if (Game.player[c].health<=0) {
+              totencounter++;
             } // end of if
-            
-            Game.dbImage.getGraphics().drawString("Neustart in "+neustart/10,500,135); 
-          } // end of if                            
-          if (Game.player[1].health==0 && Game.player[3].health==0) {
-            Game.dbImage.getGraphics().drawString(Game.player[2].name+" hat gewonnen",500,120);
-            if (!neu) {
-              neustart=300;
-              neu=true;
-              schonneu=false;
-            } // end of if
-            Game.dbImage.getGraphics().drawString("Neustart in "+neustart/10,500,135);
+          } // end of for
+          System.out.println(totencounter);
+          if (totencounter==Game.player.length-2) {
+            for (int c=1;c<Game.player.length;c++) {
+              if (Game.player[c].health>0) {
+                Game.dbImage.getGraphics().drawString(Game.player[c].name+" hat gewonnen",500,120);    
+                if (!neu) {
+                  neustart=300;
+                  neu=true;
+                  schonneu=false;
+                } // end of if
+                
+                Game.dbImage.getGraphics().drawString("Neustart in "+neustart/10,500,135);
+              } // end of if
+            } // end of for
           } // end of if
-          if (Game.player[2].health==0 && Game.player[3].health==0) {
-            Game.dbImage.getGraphics().drawString(Game.player[1].name+" hat gewonnen",500,120);
-            if (!neu) {
-              neustart=300;
-              neu=true;
-              schonneu=false;
-            } // end of if
-            Game.dbImage.getGraphics().drawString("Neustart in "+neustart/10,500,135);
-          } // end of if
+          totencounter=0;
+          
           
           neustart-=1;
           if (neustart==0 && !schonneu) {
