@@ -18,9 +18,9 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
   JavaGame Game;
   Button[] buttonSpieler = new Button[100] ;
   Button[] buttonSchuss = new Button[100] ;
-  Button Sound,Restart,Fps;
+  Button Sound,Restart,Fps,Bot;
   Choice SpielerAuswahl;
-  TextField Name,maxFps,perks;
+  TextField Name,maxFps,perks,Spieler;
   Label L1;
   public Menu (JavaGame Game) 
   {
@@ -94,6 +94,22 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     Fps.addKeyListener(this);
     this.add(Fps);
     
+    if (Game.fpsan) {
+      Bot = new Button("Bot aus");
+    } // end of if
+    else {
+      Bot = new Button("Bot an");
+    } // end of if-else
+    Bot.setBounds(120,460,100,20);
+    Bot.addActionListener(this);
+    Bot.addKeyListener(this);
+    this.add(Bot);
+    
+    Spieler = new TextField(Game.player.length-1+"");
+    Spieler.setBounds(490,400,100,20);
+    Spieler.addKeyListener(this);
+    this.add(Spieler);
+    
     Restart = new Button("Restart");
     Restart.setBounds(120,430,100,20);
     Restart.addActionListener(this);
@@ -140,11 +156,30 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
       } // end of if
       
     } // end of if
+    
+    if (isNumeric(Spieler.getText())) {
+      int anzahl = Integer.parseInt(Spieler.getText());
+      for (int c=1;c<Game.player.length;c++) {
+        if (c>anzahl) {
+          
+          Game.player[c] = null;
+          
+        } // end of if
+        else {
+          if (Game.player[c] == null) {
+            Game.player[c] = new Bot(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,35,"Spieler");
+            Game.player[c].laden(Game,100,400);
+          } // end of if
+        } // end of if-else
+      } // end of for
+    } // end of if
+    
     if (isNumeric(maxFps.getText())) {
       if (Integer.parseInt(maxFps.getText())<=1000 && Integer.parseInt(maxFps.getText())>0) {
         Game.gamerunner.maxFPS=Integer.parseInt(maxFps.getText());
       } // end of if
     } // end of if
+    
     if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {              //Zurückkehren zum Spiel
       Game.gamerunner.running=true;
       if (Game.soundan) {
@@ -252,14 +287,17 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     
     if (e.getSource()==Restart) {
       for (int c=1;c<Game.player.length;c++) {
-        Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
-        Game.player[c].y=0;
-        Game.player[c].health=100;
-        Game.player[c].jumpheigth=200;
-        Game.player[c].speed=5;
-        Game.player[c].sperrzeit=40;
-        Game.player[c].freezeControls=false;
-        Game.gamerunner.neu=false;
+        if (Game.player[c] != null) {
+          
+          Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
+          Game.player[c].y=0;
+          Game.player[c].health=100;
+          Game.player[c].jumpheigth=200;
+          Game.player[c].speed=5;
+          Game.player[c].sperrzeit=40;
+          Game.player[c].freezeControls=false;
+          Game.gamerunner.neu=false;  
+        } // end of if
       } // end of for
       
       for (int c=0;c<Game.gamerunner.shot.length;c++) {
@@ -272,7 +310,13 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
         Game.ac.loop(10);
       } // end of if
       this.dispose();
-    } // end of if   
+    } // end of if  
+    
+    if (e.getSource()==Bot) {
+      int spieler = SpielerAuswahl.getSelectedIndex()+1;
+      Game.player[spieler] = new Bot(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,0,0,0,0,0,Game.player[spieler].xHealth,Game.player[spieler].yHealth,Game.player[spieler].name);
+      
+    } // end of if
     
     
   }

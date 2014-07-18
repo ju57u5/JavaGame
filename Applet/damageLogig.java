@@ -39,25 +39,28 @@ class damageLogig {
   public void updateDamage() {  
     
     for (int counter=1;counter < runner.player.length;counter++ ) {
-      for (int counterb = 0;counterb < runner.shot.length;counterb++) {
-        if (runner.shot[counterb] != null && runner.shot[counterb].owner != runner.player[counter] && !runner.player[counter].freezeControls) {
-          
-          xDistance = runner.shot[counterb].x - runner.player[counter].x;
-          yDistance = runner.shot[counterb].y - runner.player[counter].y ;
-          
-          if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100) ) {
-            if (xDistance < 0) {
-              runner.player[counter].setDamage(10,true);
-            } // end of if
-            else {
-              runner.player[counter].setDamage(10,false);
+      if (runner.player[counter] != null) {
+        
+        for (int counterb = 0;counterb < runner.shot.length;counterb++) {
+          if (runner.shot[counterb] != null && runner.shot[counterb].owner != runner.player[counter] && !runner.player[counter].freezeControls) {
+            
+            xDistance = runner.shot[counterb].x - runner.player[counter].x;
+            yDistance = runner.shot[counterb].y - runner.player[counter].y ;
+            
+            if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100) ) {
+              if (xDistance < 0) {
+                runner.player[counter].setDamage(10,true);
+              } // end of if
+              else {
+                runner.player[counter].setDamage(10,false);
+              } // end of if
+              
+              runner.shot[counterb]=null;
             } // end of if
             
-            runner.shot[counterb]=null;
           } // end of if
-          
-        } // end of if
-      } // end of for
+        } // end of for
+      } // end of if  
     } // end of for
     
   }  

@@ -27,9 +27,6 @@ class Bot extends Player {
     name = "Bot";  //ERste Änderung an der update Klasse: hier sollte die KI/KD sachen stehen und die Keysachen nicht...
     
     
-    
-    
-    
     if (y + textureImage.getHeight() > Game.ebenen[0][2] + 200) {
       health=0;
     } // end of if
@@ -113,13 +110,14 @@ class Bot extends Player {
       } // end of if
       
       for (int c=1;c<Game.player.length;c++) {
-        dif=Game.player[c].x-x;
-        if (dif<min && Game.player[c].health>0 && Game.player[c] != this) {
-          min=dif;
-          angriffsziel=c;
-        } // end of if
-        
-      }
+        if (Game.player[c] != null) {
+          dif=Game.player[c].x-x;
+          if (dif<min && Game.player[c].health>0 && Game.player[c] != this) {
+            min=dif;
+            angriffsziel=c;
+          } // end of if
+        }
+      } // end of if
       if (Game.player[angriffsziel].health<=0) {
         min=1000000;  
       } // end of if

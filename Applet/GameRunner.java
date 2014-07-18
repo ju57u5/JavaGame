@@ -80,9 +80,9 @@ class GameRunner extends Thread {
           
           for (int counter=1;counter<player.length;counter++)
           { 
-            
-            player[counter].updateKey(); 
-            
+            if (Game.player[counter] != null) {
+              player[counter].updateKey();
+            } // end of if
           }
           if (isthereshot) {
             for (int counter=0;counter<shot.length;counter++)
@@ -126,52 +126,56 @@ class GameRunner extends Thread {
           } */
           
           for (int c=1;c<Game.player.length;c++) {
-            if (Game.player[c].health<=0) {
-              totencounter++;
+            if (Game.player[c] != null) {
+              if (Game.player[c].health<=0) {
+                totencounter++;
+              } // end of if
             } // end of if
           } // end of for
           System.out.println(totencounter);
           if (totencounter==Game.player.length-2) {
             for (int c=1;c<Game.player.length;c++) {
-              if (Game.player[c].health>0) {
-                Game.dbImage.getGraphics().drawString(Game.player[c].name+" hat gewonnen",500,120);    
-                if (!neu) {
-                  neustart=300;
-                  neu=true;
-                  schonneu=false;
+              if (Game.player[c] != null) {
+                if (Game.player[c].health>0) {
+                  Game.dbImage.getGraphics().drawString(Game.player[c].name+" hat gewonnen",500,120);    
+                  if (!neu) {
+                    neustart=300;
+                    neu=true;
+                    schonneu=false;
+                  } // end of if
+                  
+                  Game.dbImage.getGraphics().drawString("Neustart in "+neustart/10,500,135);
                 } // end of if
-                
-                Game.dbImage.getGraphics().drawString("Neustart in "+neustart/10,500,135);
-              } // end of if
-            } // end of for
-          } // end of if
-          totencounter=0;
+                }
+              } // end of for
+            } // end of if
+            totencounter=0;
+            
+            
+            neustart-=1;
+            if (neustart==0 && !schonneu) {
+              for (int c=1;c<Game.player.length;c++) {
+                Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
+                Game.player[c].y=0;
+                Game.player[c].health=100;
+                Game.player[c].jumpheigth=200;
+                Game.player[c].speed=5;
+                Game.player[c].sperrzeit=40;
+                Game.player[c].freezeControls=false;
+                neu=false;
+              } // end of for
+            } // end of if
+            
+            
+            Game.getGraphics().drawImage(Game.dbImage,0,0,Game);
+          }
           
           
-          neustart-=1;
-          if (neustart==0 && !schonneu) {
-            for (int c=1;c<Game.player.length;c++) {
-              Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
-              Game.player[c].y=0;
-              Game.player[c].health=100;
-              Game.player[c].jumpheigth=200;
-              Game.player[c].speed=5;
-              Game.player[c].sperrzeit=40;
-              Game.player[c].freezeControls=false;
-              neu=false;
-            } // end of for
-          } // end of if
           
-          
-          Game.getGraphics().drawImage(Game.dbImage,0,0,Game);
-        }
+        } // end of if
         
-        
-        
-      } // end of if
+      } // end of while
       
-    } // end of while
-    
+    }  
+    // Ende Methoden5
   }  
-  // Ende Methoden5
-}  

@@ -39,7 +39,7 @@ public class JavaGame extends Frame implements KeyListener {
   File[] texture = new File[100];
   File[] shottexture = new File[100];
   
-  Player player[] = new Player[5];
+  Player player[] = new Player[100];
   Image dbImage;
   Graphics dbGraphics;
   damageLogig DamageLogig;
