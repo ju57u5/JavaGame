@@ -53,7 +53,7 @@ public class JavaGame extends Frame implements KeyListener {
   //FloatControl volume;
   // Ende Attribute
   
-  
+                          
   //Erzaehler erz = new Erzaehler(player1, player2);
   public static void main(String[] args) {
     new JavaGame(args);

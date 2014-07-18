@@ -20,7 +20,7 @@ import javax.sound.sampled.Clip;
 
 import Applet.*;
 
-class Updater {
+class Updater extends Frame{
   
   int counter = 0;
   int c=0;
@@ -32,8 +32,27 @@ class Updater {
   //2: Alles andere
   boolean firstrun = false;
   String arg;
+  TextArea console;
+  
+  class WindowListener extends WindowAdapter
+  {
+    public void windowClosing(WindowEvent e)
+    {
+      e.getWindow().dispose();                   // Fenster "killen"
+      System.exit(0);
+    }
+  }
   
   public Updater(JavaGame Game) {
+    
+    setTitle("JavaGame");  // Fenstertitel setzen
+    setSize(1200,900);                            // Fenstergröße einstellen
+    addWindowListener(new WindowListener());
+    setLocationRelativeTo(null);                                        // EventListener für das Fenster hinzufügen
+    setVisible(true);
+    
+    console = new TextArea("",1200,900,TextArea.SCROLLBARS_VERTICAL_ONLY);
+    add(console);
     try {
       arg = Game.args[0]  ;
     }
@@ -103,10 +122,16 @@ class Updater {
       } 
       
       if (currentver<ver || firstrun) {
-        Game.dispose();
-        System.exit(0);
+        console.append("\nPlease start the Game again, to load the update.");
+        while (true) { 
+          try {
+            Thread.sleep( 2000 );
+          } catch (InterruptedException e) {}
+          console.append(".");
+        } // end of while
       } // end of if
     } // end of if
+    this.dispose();
     
     
     
@@ -126,12 +151,12 @@ class Updater {
     byte[] buffer = new byte[4096];
     int bytesRead = 0;
     
-    System.out.print("Downloading " + downloadedFileName);
+    console.append("\nDownloading " + downloadedFileName);
     while ((bytesRead = is.read(buffer)) != -1) {
-      System.out.print(".");  // Progress bar :)
+      console.append(".");  // Progress bar :)
       fos.write(buffer,0,bytesRead);
     }
-    System.out.println("done!");
+    console.append("done!");
     
     // Close destination stream
     fos.close();
