@@ -200,6 +200,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
   {
     Game.player[SpielerAuswahl.getSelectedIndex()+1].name=Name.getText();
     if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {              //Zurückkehren zum Spiel
+      playerCount();
       Game.gamerunner.running=true;
       if (Game.soundan) {
         Game.ac.loop(10);
@@ -231,6 +232,9 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
       Game.player[SpielerAuswahl.getSelectedIndex()+1].attack = e.getKeyCode();
       Shot.setLabel(""+e.getKeyChar());
     } // end of if
+    else {
+      playerCount();
+    } // end of if-else
     
     if (isNumeric(perks.getText()) && e.getKeyCode()!=KeyEvent.VK_ESCAPE) {
       if (Integer.parseInt(perks.getText())<=1000 && Integer.parseInt(perks.getText())>0) {
@@ -239,36 +243,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
       
     } // end of if
     
-    if (isNumeric(Spieler.getText()) && e.getKeyCode()!=KeyEvent.VK_ESCAPE) {
-      int anzahl = Integer.parseInt(Spieler.getText());
-      int textureAnzahl=0;
-      int shottextureAnzahl=0;
-      for (int cou=0;cou<Game.texture.length;cou++) {
-        if (Game.texture[cou] != null) {
-          textureAnzahl++;
-        } // end of if
-      } // end of for
-      for (int cou=0;cou<Game.shottexture.length;cou++) {
-        if (Game.shottexture[cou] != null) {
-          shottextureAnzahl++;
-        } // end of if
-      } // end of for
-      
-      for (int c=1;c<Game.player.length;c++) {
-        if (c>anzahl) {
-          
-          Game.player[c] = null;
-          
-        } // end of if
-        else {
-          if (Game.player[c] == null) {
-            Game.player[c] = new Bot(Game.texture[(int) (Math.random()*textureAnzahl)],Game.shottexture[(int) (Math.random()*shottextureAnzahl)],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Spieler");
-            Game.player[c].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);
-          } // end of if
-        } // end of if-else
-      } // end of for
-      Game.restartGame();
-    } // end of if
+    
     
     if (isNumeric(maxFps.getText()) && e.getKeyCode()!=KeyEvent.VK_ESCAPE) {
       if (Integer.parseInt(maxFps.getText())<=1000 && Integer.parseInt(maxFps.getText())>0) {
@@ -292,10 +267,52 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     return true;  
   }
   
+  public void playerCount() {
+    if (isNumeric(Spieler.getText()) ) {
+      int anzahl = Integer.parseInt(Spieler.getText());
+      if (anzahl>1 && anzahl<Game.player.length) {
+        int textureAnzahl=0;
+        int shottextureAnzahl=0;
+        for (int cou=0;cou<Game.texture.length;cou++) {
+          if (Game.texture[cou] != null) {
+            textureAnzahl++;
+          } // end of if
+        } // end of for
+        for (int cou=0;cou<Game.shottexture.length;cou++) {
+          if (Game.shottexture[cou] != null) {
+            shottextureAnzahl++;
+          } // end of if
+        } // end of for
+        
+        for (int c=1;c<Game.player.length;c++) {
+          if (c>anzahl) {
+            Game.player[c] = null;
+          } // end of if
+          
+          else if(Game.player[c]==null) {
+            
+            Game.player[c] = new Bot(Game.texture[(int) (Math.random()*textureAnzahl)],Game.shottexture[(int) (Math.random()*shottextureAnzahl)],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Spieler");
+            Game.player[c].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);
+            
+          } // end of if-else
+        } // end of for
+        SpielerAuswahl.removeAll();
+        for (int c=1;c<Game.player.length;c++) {
+          if (Game.player[c] != null) {
+            SpielerAuswahl.addItem("Spieler "+c);
+          } // end of if
+        } // end of for
+        Game.restartGame();
+        
+      } // end of if
+    } // end of if
+  }
+  
   class TestWindowListener extends WindowAdapter
   {
     public void windowClosing(WindowEvent e)
     {
+      playerCount();
       Game.gamerunner.running=true;
       if (Game.soundan) {
         Game.ac.loop(10);
@@ -376,6 +393,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     } // end of if
     
     if (e.getSource()==Restart) {
+      playerCount();
       Game.restartGame();
       if (Game.soundan) {
         Game.ac.loop(10);
