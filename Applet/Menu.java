@@ -94,18 +94,21 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     Fps.addKeyListener(this);
     this.add(Fps);
     
-    if (Game.fpsan) {
-      Bot = new Button("Bot aus");
-    } // end of if
-    else {
-      Bot = new Button("Bot an");
-    } // end of if-else
-    Bot.setBounds(120,460,100,20);
+    
+    Bot = new Button("Bot an");
+    Bot.setBounds(490,460,100,20);
     Bot.addActionListener(this);
     Bot.addKeyListener(this);
     this.add(Bot);
     
-    Spieler = new TextField(Game.player.length-1+"");
+    int spielerAnzahl=0;
+    for (int c=1;c<Game.player.length;c++) {
+      if (Game.player[c] != null) {
+        spielerAnzahl++;
+      } // end of if
+    } // end of for
+    
+    Spieler = new TextField(spielerAnzahl+"");
     Spieler.setBounds(490,400,100,20);
     Spieler.addKeyListener(this);
     this.add(Spieler);
@@ -159,6 +162,19 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     
     if (isNumeric(Spieler.getText())) {
       int anzahl = Integer.parseInt(Spieler.getText());
+      int textureAnzahl=0;
+      int shottextureAnzahl=0;
+      for (int cou=0;cou<Game.texture.length;cou++) {
+        if (Game.texture[cou] != null) {
+          textureAnzahl++;
+        } // end of if
+      } // end of for
+      for (int cou=0;cou<Game.shottexture.length;cou++) {
+        if (Game.shottexture[cou] != null) {
+          shottextureAnzahl++;
+        } // end of if
+      } // end of for
+      
       for (int c=1;c<Game.player.length;c++) {
         if (c>anzahl) {
           
@@ -167,11 +183,12 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
         } // end of if
         else {
           if (Game.player[c] == null) {
-            Game.player[c] = new Bot(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,35,"Spieler");
-            Game.player[c].laden(Game,100,400);
+            Game.player[c] = new Bot(Game.texture[(int) (Math.random()*textureAnzahl)],Game.shottexture[(int) (Math.random()*shottextureAnzahl)],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Spieler");
+            Game.player[c].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);
           } // end of if
         } // end of if-else
       } // end of for
+      Game.restartGame();
     } // end of if
     
     if (isNumeric(maxFps.getText())) {
@@ -286,36 +303,18 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     } // end of if
     
     if (e.getSource()==Restart) {
-      for (int c=1;c<Game.player.length;c++) {
-        if (Game.player[c] != null) {
-          
-          Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
-          Game.player[c].y=0;
-          Game.player[c].health=100;
-          Game.player[c].jumpheigth=200;
-          Game.player[c].speed=5;
-          Game.player[c].sperrzeit=40;
-          Game.player[c].freezeControls=false;
-          Game.gamerunner.neu=false;  
-        } // end of if
-      } // end of for
-      
-      for (int c=0;c<Game.gamerunner.shot.length;c++) {
-        Game.gamerunner.shot[c]=null;
-        Game.DamageLogig.shot[c]=null;
-      } // end of for
-      Game.DamageLogig.counter=0;
-      Game.gamerunner.running=true;
+      Game.restartGame();
       if (Game.soundan) {
         Game.ac.loop(10);
       } // end of if
       this.dispose();
+      Game.gamerunner.running=true;
     } // end of if  
     
     if (e.getSource()==Bot) {
       int spieler = SpielerAuswahl.getSelectedIndex()+1;
-      Game.player[spieler] = new Bot(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,0,0,0,0,0,Game.player[spieler].xHealth,Game.player[spieler].yHealth,Game.player[spieler].name);
-      
+      Game.player[spieler] = new Bot(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,0,0,0,0,0,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
+      Game.player[spieler].laden(Game,Game.player[spieler].x,Game.player[spieler].y);
     } // end of if
     
     

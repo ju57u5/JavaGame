@@ -140,10 +140,10 @@ public class JavaGame extends Frame implements KeyListener {
     
     // Spieler
     
-    player[1] = new Bot(texture[0],shottexture[0],dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,10,35,"Justus");                // I'm in Space! SPACE!
-    player[2] = new Player(texture[1],shottexture[1],dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,120,35,"Christian");
-    player[3] = new Bot(texture[2],shottexture[2],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,35,"Tjorben");
-    player[4] = new Bot(texture[3],shottexture[3],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,230,35,"abc");
+    player[1] = new Bot(texture[0],shottexture[0],dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,1,35,"Justus");                // I'm in Space! SPACE!
+    player[2] = new Player(texture[1],shottexture[1],dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,2,35,"Christian");
+    player[3] = new Bot(texture[2],shottexture[2],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,3,35,"Tjorben");
+    player[4] = new Bot(texture[3],shottexture[3],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,4,35,"abc");
     
     
     player[1].laden(this,100,400);
@@ -186,17 +186,7 @@ public class JavaGame extends Frame implements KeyListener {
     } // end of if-else
     
     else if (e.getKeyCode()==KeyEvent.VK_R) {
-      for (int c=1;c<player.length;c++) {
-        player[c].x=(int) (Math.random()*(ebenen[0][1]-ebenen[0][0])+ebenen[0][0]);
-        player[c].y=0;
-        player[c].health=100;
-        player[c].jumpheigth=200;
-        player[c].speed=5;
-        player[c].sperrzeit=40;
-        player[c].freezeControls=false;
-        gamerunner.neu=false;
-        gamerunner.schonneu=true;
-      } // end of for
+      restartGame();
     }
   }
   
@@ -209,6 +199,28 @@ public class JavaGame extends Frame implements KeyListener {
   {
     
   }   
+  
+  public void restartGame() {
+    for (int c=1;c<player.length;c++) {
+      if (player[c] != null) {
+        player[c].x=(int) (Math.random()*(ebenen[0][1]-ebenen[0][0])+ebenen[0][0]);
+        player[c].y=0;
+        player[c].health=100;
+        player[c].jumpheigth=200;
+        player[c].speed=5;
+        player[c].sperrzeit=40;
+        player[c].freezeControls=false;
+        gamerunner.neu=false;
+        gamerunner.schonneu=true;
+      } // end of if
+    } // end of for
+    
+    for (int c=0;c<gamerunner.shot.length;c++) {
+      gamerunner.shot[c]=null;
+      DamageLogig.shot[c]=null;
+    } // end of for
+    DamageLogig.counter=0;
+  }  
   
   public void paint (Graphics g) {
     super.paint(g);

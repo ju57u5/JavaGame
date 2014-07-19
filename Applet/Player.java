@@ -52,7 +52,7 @@ class Player extends Thread implements KeyListener  {
     this.right = right;
     this.jump = jump;
     this.attack = attack;
-    this.xHealth = xHealth;
+    this.xHealth = (xHealth-1)*110+10;
     this.yHealth = yHealth;
     this.down = down;
     this.name = name;

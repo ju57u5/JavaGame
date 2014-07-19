@@ -93,7 +93,7 @@ class GameRunner extends Thread {
             }
             Game.DamageLogig.updateDamage();
           } // end of if
-          // Game.dbImage.getGraphics().fillRect(100,600,900,10);
+          
           Game.dbImage.getGraphics().drawString("Music: Early Riser Kevin MacLeod (incompetech.com)", Game.getWidth()-320, Game.getHeight()-20);
           
           int timediff = ((int) System.currentTimeMillis()-time);
@@ -110,30 +110,19 @@ class GameRunner extends Thread {
           } // end of for
           
           
-          /*for (int c = 1;c<Game.player.length;c++) {
-          if (Game.player[counter].health=0) {
-          if (platz1==100) {
-          platz1=counter;
-          } // end of if                                             ///Platzierungen
-          if (platz1!=100 && platz2==100) {
-          platz2=counter;
-          } // end of if
-          if (platz2!=100 && platz3==100) {
-          platz3=counter;
-          } // end of 
           
-          } // end of if
-          } */
-          
+          int anzahl=0;
           for (int c=1;c<Game.player.length;c++) {
             if (Game.player[c] != null) {
+              anzahl++;
               if (Game.player[c].health<=0) {
                 totencounter++;
               } // end of if
             } // end of if
           } // end of for
-          System.out.println(totencounter);
-          if (totencounter==Game.player.length-2) {
+          
+          
+          if (totencounter==anzahl-1) {
             for (int c=1;c<Game.player.length;c++) {
               if (Game.player[c] != null) {
                 if (Game.player[c].health>0) {
@@ -146,15 +135,16 @@ class GameRunner extends Thread {
                   
                   Game.dbImage.getGraphics().drawString("Neustart in "+neustart/10,500,135);
                 } // end of if
-                }
-              } // end of for
-            } // end of if
-            totencounter=0;
-            
-            
-            neustart-=1;
-            if (neustart==0 && !schonneu) {
-              for (int c=1;c<Game.player.length;c++) {
+              }
+            } // end of for
+          } // end of if
+          totencounter=0;
+          
+          
+          neustart-=1;
+          if (neustart==0 && !schonneu) {
+            for (int c=1;c<Game.player.length;c++) {
+              if (Game.player[c] != null) {
                 Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
                 Game.player[c].y=0;
                 Game.player[c].health=100;
@@ -163,19 +153,21 @@ class GameRunner extends Thread {
                 Game.player[c].sperrzeit=40;
                 Game.player[c].freezeControls=false;
                 neu=false;
-              } // end of for
-            } // end of if
-            
-            
-            Game.getGraphics().drawImage(Game.dbImage,0,0,Game);
-          }
+                
+              } // end of if
+            } // end of for
+          } // end of if
           
           
-          
-        } // end of if
+          Game.getGraphics().drawImage(Game.dbImage,0,0,Game);
+        }
         
-      } // end of while
+        
+        
+      } // end of if
       
-    }  
-    // Ende Methoden5
+    } // end of while
+    
   }  
+  // Ende Methoden5
+}  
