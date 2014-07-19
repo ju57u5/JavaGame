@@ -39,6 +39,7 @@ class Updater extends Frame{
     public void windowClosing(WindowEvent e)
     {
       e.getWindow().dispose();                   // Fenster "killen"
+      System.exit(0);
     }
   }
   
@@ -122,6 +123,7 @@ class Updater extends Frame{
       
       if (currentver<ver || firstrun) {
         console.append("\nPlease start the Game again, to load the update.");
+        
         while (true) { 
           try {
             Thread.sleep( 2000 );
