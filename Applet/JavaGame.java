@@ -30,11 +30,10 @@ public class JavaGame extends Frame implements KeyListener {
   boolean fpsan=false;
   URL  PlayerTextureUrl;
   
-  //File basePath = new File("/texture"); //Pfad zu den Resourcen
-  //URL base ;
-  File basePath;// = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()); //Pfad zu den Resourcen
-  File backgroundTexture;// = new File(basePath,"/hintergrund.jpg");
-  File sound;// = new File(basePath,"/sound.wav");
+  
+  File basePath;//Pfad zu den Resourcen
+  File backgroundTexture;
+  File sound;
   
   File[] texture = new File[100];
   File[] shottexture = new File[100];

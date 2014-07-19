@@ -18,8 +18,10 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
   JavaGame Game;
   Button[] buttonSpieler = new Button[100] ;
   Button[] buttonSchuss = new Button[100] ;
-  Button Sound,Restart,Fps,Bot;
+  Button Sound,Restart,Fps,Bot,bPlayer;
   Choice SpielerAuswahl;
+  Button Right,Left,Up,Down,Shot;
+  boolean bRight,bLeft,bUp,bDown,bShot;
   TextField Name,maxFps,perks,Spieler;
   Label L1;
   public Menu (JavaGame Game) 
@@ -96,10 +98,17 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     
     
     Bot = new Button("Bot an");
-    Bot.setBounds(490,460,100,20);
+    Bot.setBounds(490,400,100,20);
     Bot.addActionListener(this);
     Bot.addKeyListener(this);
     this.add(Bot);
+    
+    bPlayer = new Button("Spieler an");
+    bPlayer.setBounds(490,430,100,20);
+    bPlayer.addActionListener(this);
+    bPlayer.addKeyListener(this);
+    this.add(bPlayer);
+    
     
     int spielerAnzahl=0;
     for (int c=1;c<Game.player.length;c++) {
@@ -109,7 +118,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     } // end of for
     
     Spieler = new TextField(spielerAnzahl+"");
-    Spieler.setBounds(490,400,100,20);
+    Spieler.setBounds(490,370,100,20);
     Spieler.addKeyListener(this);
     this.add(Spieler);
     
@@ -119,13 +128,45 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     Restart.addKeyListener(this);
     this.add(Restart);
     
+    Left = new Button("Left");
+    Left.setBounds(120,570,100,20);
+    Left.addActionListener(this);
+    Left.addKeyListener(this);
+    this.add(Left);
+    
+    Right = new Button("Right");
+    Right.setBounds(350,570,100,20);
+    Right.addActionListener(this);
+    Right.addKeyListener(this);
+    this.add(Right);
+    
+    Up = new Button("Up");
+    Up.setBounds(240,540,100,20);
+    Up.addActionListener(this);
+    Up.addKeyListener(this);
+    this.add(Up);
+    
+    Down = new Button("Down");
+    Down.setBounds(240,570,100,20);
+    Down.addActionListener(this);
+    Down.addKeyListener(this);
+    this.add(Down);
+    
+    Shot = new Button("Shot");
+    Shot.setBounds(120,540,100,20);
+    Shot.addActionListener(this);
+    Shot.addKeyListener(this);
+    this.add(Shot);
+    
     maxFps = new TextField(Game.gamerunner.maxFPS+"");
     maxFps.setBounds(230,400,100,20);
     maxFps.addKeyListener(this);
     this.add(maxFps);
     
     for (int c=1;c<Game.player.length;c++) {
-      SpielerAuswahl.addItem("Spieler "+c);
+      if (Game.player[c] != null) {
+        SpielerAuswahl.addItem("Spieler "+c);
+      } // end of if
     } // end of for
     SpielerAuswahl.addItemListener(this);
     
@@ -135,7 +176,14 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
   
   public void itemStateChanged(ItemEvent ie)
   {
-    Name.setText(Game.player[SpielerAuswahl.getSelectedIndex()+1].name);
+    if (Game.player[SpielerAuswahl.getSelectedIndex()+1] != null) {
+      Name.setText(Game.player[SpielerAuswahl.getSelectedIndex()+1].name);
+      Left.setLabel(KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].left));
+      Right.setLabel(KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].right));
+      Up.setLabel(KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].jump));
+      Down.setLabel(KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].down));
+      Shot.setLabel(KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].attack));
+    } // end of if
   }
   
   public void keyReleased(KeyEvent e) 
@@ -151,16 +199,47 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
   public void keyPressed(KeyEvent e)
   {
     Game.player[SpielerAuswahl.getSelectedIndex()+1].name=Name.getText();
+    if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {              //Zurückkehren zum Spiel
+      Game.gamerunner.running=true;
+      if (Game.soundan) {
+        Game.ac.loop(10);
+      } // end of if
+      this.dispose(); 
+    }   
+    else if (bLeft) {
+      bLeft=false;
+      Game.player[SpielerAuswahl.getSelectedIndex()+1].left = e.getKeyCode();
+      Left.setLabel(""+e.getKeyChar());
+    } // end of if
+    else if (bRight) {
+      bRight=false;
+      Game.player[SpielerAuswahl.getSelectedIndex()+1].right = e.getKeyCode();
+      Right.setLabel(""+e.getKeyChar());
+    } // end of if
+    else if (bUp) {
+      bUp=false;
+      Game.player[SpielerAuswahl.getSelectedIndex()+1].jump = e.getKeyCode();
+      Up.setLabel(""+e.getKeyChar());
+    } // end of if
+    else if (bDown) {
+      bDown=false;
+      Game.player[SpielerAuswahl.getSelectedIndex()+1].down = e.getKeyCode();
+      Down.setLabel(""+e.getKeyChar());
+    } // end of if
+    else if (bShot) {
+      bShot=false;
+      Game.player[SpielerAuswahl.getSelectedIndex()+1].attack = e.getKeyCode();
+      Shot.setLabel(""+e.getKeyChar());
+    } // end of if
     
-    
-    if (isNumeric(perks.getText())) {
+    if (isNumeric(perks.getText()) && e.getKeyCode()!=KeyEvent.VK_ESCAPE) {
       if (Integer.parseInt(perks.getText())<=1000 && Integer.parseInt(perks.getText())>0) {
         Game.gamerunner.auftretenvonperks = Integer.parseInt(perks.getText());
       } // end of if
       
     } // end of if
     
-    if (isNumeric(Spieler.getText())) {
+    if (isNumeric(Spieler.getText()) && e.getKeyCode()!=KeyEvent.VK_ESCAPE) {
       int anzahl = Integer.parseInt(Spieler.getText());
       int textureAnzahl=0;
       int shottextureAnzahl=0;
@@ -191,19 +270,13 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
       Game.restartGame();
     } // end of if
     
-    if (isNumeric(maxFps.getText())) {
+    if (isNumeric(maxFps.getText()) && e.getKeyCode()!=KeyEvent.VK_ESCAPE) {
       if (Integer.parseInt(maxFps.getText())<=1000 && Integer.parseInt(maxFps.getText())>0) {
         Game.gamerunner.maxFPS=Integer.parseInt(maxFps.getText());
       } // end of if
     } // end of if
     
-    if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {              //Zurückkehren zum Spiel
-      Game.gamerunner.running=true;
-      if (Game.soundan) {
-        Game.ac.loop(10);
-      } // end of if
-      this.dispose(); 
-    }   
+    
   }  
   
   public static boolean isNumeric(String str)  
@@ -313,10 +386,32 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     
     if (e.getSource()==Bot) {
       int spieler = SpielerAuswahl.getSelectedIndex()+1;
-      Game.player[spieler] = new Bot(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,0,0,0,0,0,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
+      Game.player[spieler] = new Bot(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
       Game.player[spieler].laden(Game,Game.player[spieler].x,Game.player[spieler].y);
     } // end of if
     
+    if (e.getSource()==bPlayer) {
+      int spieler = SpielerAuswahl.getSelectedIndex()+1;
+      Game.player[spieler] = new Player(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
+      Game.player[spieler].laden(Game,Game.player[spieler].x,Game.player[spieler].y);
+      Game.addKeyListener(Game.player[spieler]);
+    } // end of if
+    
+    if (e.getSource()==Left) {
+      bLeft=true;
+    } // end of if
+    if (e.getSource()==Right) {
+      bRight=true;
+    } // end of if
+    if (e.getSource()==Up) {
+      bUp=true;
+    } // end of if
+    if (e.getSource()==Down) {
+      bDown=true;
+    } // end of if
+    if (e.getSource()==Shot) {
+      bShot=true;
+    } // end of if
     
   }
   
