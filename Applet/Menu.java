@@ -270,7 +270,13 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
   public void playerCount() {
     if (isNumeric(Spieler.getText()) ) {
       int anzahl = Integer.parseInt(Spieler.getText());
-      if (anzahl>1 && anzahl<Game.player.length) {
+      int spielerAnzahl=0;
+      for (int c=1;c<Game.player.length;c++) {
+        if (Game.player[c] != null) {
+          spielerAnzahl++;
+        } // end of if
+      } // end of for
+      if (anzahl>1 && anzahl<Game.player.length && anzahl != spielerAnzahl) {
         int textureAnzahl=0;
         int shottextureAnzahl=0;
         for (int cou=0;cou<Game.texture.length;cou++) {
