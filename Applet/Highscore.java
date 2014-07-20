@@ -35,13 +35,14 @@ class Highscore {
       
       String[] lines = new String [Game.player.length];
       int cou = 1;
-      while ((lines[cou] = br.readLine()) != null) {
-        cou++;
+      
+      while (((lines[cou] = br.readLine()) != null )&& cou<lines.length-1) {
+        cou += 1;
       } 
       br.close(); 
       PrintWriter writer = new PrintWriter(System.getenv("APPDATA")+"\\texture\\names.txt", "UTF-8");
       for (int c = 1;c<Game.player.length;c++) {
-        if (Game.player[c] != null && !Game.player[c].name.equals("Bot")) {
+        if (Game.player[c] != null && !Game.player[c].name.equals("Bot") && !Game.player[c].name.equals("Spieler "+c)) {
           lines[c]=Game.player[c].name;
         } // end of if
       } // end of for
@@ -54,7 +55,7 @@ class Highscore {
       
       writer.close();
     } catch(Exception e) {
-      
+      e.printStackTrace();
     } 
     
     
