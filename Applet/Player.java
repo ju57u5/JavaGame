@@ -225,7 +225,7 @@ class Player extends Thread implements KeyListener  {
     if (gefroren>0) {
       freezeControls=true;
       Game.dbImage.getGraphics().drawImage(freezeImage,x-5,y,Game);
-      Game.dbImage.getGraphics().drawString("Gefroren   "+gefroren/10,xHealth,115);
+      Game.dbImage.getGraphics().drawString("Gefroren   "+gefroren/10,xHealth,yHealth+115);
       
     } // end of if
     gefroren-=1;
