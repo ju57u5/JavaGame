@@ -438,8 +438,15 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       Game.player[spieler] = new Player(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
       Game.player[spieler].laden(Game,Game.player[spieler].x,Game.player[spieler].y);
       Game.addKeyListener(Game.player[spieler]);
-      Game.player[spieler].name="Spieler "+spieler;
-      Name.setText("Spieler "+spieler);
+      String playername = Game.highscore.getName(spieler);
+      if (playername != null && !playername.equals("Bot")) {
+        Game.player[spieler].name=playername;
+      } // end of if
+      else {
+        playername = "Spieler "+spieler;
+        Game.player[spieler].name="Spieler "+spieler;
+      } // end of if-else
+      Name.setText(playername);
     } // end of if
     
     if (e.getSource()==Left) {

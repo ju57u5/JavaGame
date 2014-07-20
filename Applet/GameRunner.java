@@ -158,6 +158,8 @@ class GameRunner extends Thread {
             } // end of for
           } // end of if
           
+          Game.highscore.saveNames();
+          
           
           Game.getGraphics().drawImage(Game.dbImage,0,0,Game);
         }
