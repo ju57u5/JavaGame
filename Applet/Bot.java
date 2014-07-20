@@ -104,7 +104,7 @@ class Bot extends Player {
         Game.dbImage.getGraphics().drawImage(boomImage,boomx,boomy,Game);
       } // end of if
       
-       min=1000000;  
+      min=1000000;  
       for (int c=1;c<Game.player.length;c++) {
         if (Game.player[c] != null) {
           dif=Game.player[c].x-x;
@@ -115,7 +115,7 @@ class Bot extends Player {
         }
       } // end of if
       
-       
+      
       
       
       
@@ -144,7 +144,14 @@ class Bot extends Player {
             characterInverted = true; 
           } // end of if 
           
-          if (x==Game.player[angriffsziel].x) {
+          if (x==Game.player[angriffsziel].x && y<Game.player[angriffsziel].y) {
+            y -=1;
+            justupdated = true;
+            aufeinerebeneüberjemandem=false;                              /////Runterfallen
+          } // end of if
+          
+          
+          if (x==Game.player[angriffsziel].x && botdif<80 && botdif>-80) {
             if (schusssperre == 0) {
               Shot bullet = new Shot(shottexture,!characterInverted, 10, Game,this);
               bullet.laden(x,y+50);
@@ -158,6 +165,11 @@ class Bot extends Player {
               bullet.laden(x,y+50);
               schusssperre = sperrzeit;
             } // end of if
+            
+          } // end of if
+          
+          if (y==Game.player[angriffsziel].y && x==Game.player[angriffsziel].x) {
+            aufeinerebeneüberjemandem=true;
           } // end of if
           
           if (y>Game.player[angriffsziel].y) {
