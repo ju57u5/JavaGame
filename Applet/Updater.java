@@ -33,6 +33,7 @@ class Updater extends Frame{
   boolean firstrun = false;
   String arg;
   TextArea console;
+  JavaGame Game;
   
   class WindowListener extends WindowAdapter
   {
@@ -44,6 +45,7 @@ class Updater extends Frame{
   }
   
   public Updater(JavaGame Game) {
+    this.Game = Game;
     
     setTitle("JavaGame");  
     setSize(1200,900);                            
@@ -76,6 +78,7 @@ class Updater extends Frame{
           BufferedReader brver = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\version.txt")));
           String currentversion = brver.readLine();
           currentver = Integer.parseInt(currentversion);
+          brver.close();
         } // end of if
         else {
           firstrun = true;
@@ -93,7 +96,8 @@ class Updater extends Frame{
             c=-1;
           } // end of if
           else {
-            if (currentver<ver || firstrun) {
+            if ((currentver<ver || firstrun) && testInet("ju57u5v.tk")) {
+              System.out.println(testInet("ju57u5v.tk"));
               download("http://ju57u5v.tk/JavaGame/" + line, System.getenv("APPDATA")+"\\texture");
             }
           } // end of if-else
@@ -109,7 +113,7 @@ class Updater extends Frame{
         br.close();
       }
       catch(Exception e) {
-        
+        offlineUpdate();  //onlineVerbindung ist schiefgegangen
       }
       
       try {
@@ -165,22 +169,67 @@ class Updater extends Frame{
     is.close();
   }  
   
+  public static boolean testInet(String site) {
+    Socket sock = new Socket();
+    InetSocketAddress addr = new InetSocketAddress(site,80);
+    try {
+      sock.connect(addr,3000);
+      return true;
+    } catch (IOException e) {
+      return false;
+    } finally {
+      try {sock.close();}
+      catch (IOException e) {}
+    }
+  }
   
+  public void offlineUpdate() {
+    try {
+      
+      File folder = new File(System.getenv("APPDATA")+"\\texture");
+      if (!folder.isDirectory()) {
+        folder.mkdirs();
+      } // end of if
+      
+      BufferedReader br = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\list.txt")));
+      File filever = new File(System.getenv("APPDATA")+"\\texture\\version.txt");
+      
+      if (filever.exists()) {
+        BufferedReader brver = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\version.txt")));
+        String currentversion = brver.readLine();
+        currentver = Integer.parseInt(currentversion);
+        brver.close();
+      } // end of if
+      else {
+        firstrun = true;
+        currentver = -1;
+      } // end of if-else
+      
+      String line;
+      String version = br.readLine();
+      ver = Integer.parseInt(version);
+      
+      while ((line = br.readLine()) != null) {
+        if (line.startsWith("!")) { 
+          counter += 1;
+          c=-1;
+        } // end of if
+        if (counter==0 && !line.startsWith("!")) {
+          Game.shottexture[c] = new File(System.getenv("APPDATA")+"\\texture\\"+line);
+        } // end of if
+        if (counter==1 && !line.startsWith("!")) {
+          Game.texture[c] = new File(System.getenv("APPDATA")+"\\texture\\"+line);
+        } // end of if
+        c++;
+      }
+      br.close();
+    } catch(Exception ex) {
+      
+    }
+    
+  }
 }
   
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
