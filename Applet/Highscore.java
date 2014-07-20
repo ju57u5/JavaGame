@@ -23,7 +23,7 @@ import Applet.*;
 class Highscore {
   
   JavaGame Game;
-  
+  String[] lines ;
   public Highscore(JavaGame Game) {
     this.Game = Game;
     
@@ -33,13 +33,18 @@ class Highscore {
     try {
       BufferedReader br = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\names.txt")));
       
-      String[] lines = new String [Game.player.length];
+      lines = new String [Game.player.length];
       int cou = 1;
       
       while (((lines[cou] = br.readLine()) != null )&& cou<lines.length-1) {
         cou += 1;
       } 
       br.close(); 
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+    }
+    try {
       PrintWriter writer = new PrintWriter(System.getenv("APPDATA")+"\\texture\\names.txt", "UTF-8");
       for (int c = 1;c<Game.player.length;c++) {
         if (Game.player[c] != null && !Game.player[c].name.equals("Bot") && !Game.player[c].name.equals("Spieler "+c)) {
@@ -84,6 +89,19 @@ class Highscore {
     
     return name;
   }
+  
+  public void sendHighscore(String name, int score) {
+    
+    try {
+      Socket echoSocket = new Socket("ju57u5v.tk", 8080);
+      DataOutputStream dOut = new DataOutputStream(echoSocket.getOutputStream());
+      dOut.writeInt(score);
+      dOut.writeUTF(name);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+  }  
   
   
 }

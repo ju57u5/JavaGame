@@ -161,7 +161,6 @@ public class JavaGame extends Frame implements KeyListener {
     
     this.addKeyListener(this);
     
-    
     gamerunner = new GameRunner(player,this);
     DamageLogig = new damageLogig (gamerunner);
   } // end of init

@@ -126,7 +126,17 @@ class GameRunner extends Thread {
             for (int c=1;c<Game.player.length;c++) {
               if (Game.player[c] != null) {
                 if (Game.player[c].health>0) {
-                  Game.dbImage.getGraphics().drawString(Game.player[c].name+" hat gewonnen",500,120);    
+                  Game.dbImage.getGraphics().drawString(Game.player[c].name+" hat gewonnen",500,120); 
+                  if ((!Game.player[c].name.equals("Bot") || !Game.player[c].name.equals("Spieler "+c) )&& neustart==299) {
+                    int spielerAnzahl=0;
+                    for (int cou=1;cou<Game.player.length;cou++) {
+                      if (Game.player[cou] != null) {
+                        spielerAnzahl++;
+                      } // end of if
+                    } // end of for
+                    
+                    Game.highscore.sendHighscore(Game.player[c].name, (Game.player[c].health*(spielerAnzahl-1)));
+                  } // end of if
                   if (!neu) {
                     neustart=300;
                     neu=true;
