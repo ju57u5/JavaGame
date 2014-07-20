@@ -40,7 +40,8 @@ class Player extends Thread implements KeyListener  {
    File boomtexture,freezetexture;
   int gefroren=0;
   boolean freeze,aufeinerebeneüberjemandem=true;
-  int min=1000000000,dif,angriffsziel; 
+  int min=1000000000,dif,angriffsziel;
+  Player murderer; 
   
   // Ende Attribute1
   
@@ -250,10 +251,10 @@ class Player extends Thread implements KeyListener  {
   public void run() {
   }
   
-  public void setDamage(int damage, boolean inverted) {
+  public void setDamage(int damage, boolean inverted, Player murderer) {
     health -= damage;
     boomUp = boomUp+(100-health)*10;
-    
+    this.murderer=murderer;
     if (inverted) {
       boomRight = boomRight+(100-health)*10;
     } // end of if

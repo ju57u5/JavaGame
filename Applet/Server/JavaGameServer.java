@@ -40,20 +40,41 @@ public class JavaGameServer {
         int score = dIn.readInt();
         String name = dIn.readUTF();
         
-        BufferedReader brver = new BufferedReader(new FileReader(new File("score.txt")));
-        String currentscore = brver.readLine();
-        int currentIScore = Integer.parseInt(currentscore);
-        String currentname = brver.readLine();
-        brver.close();
-        System.out.println("Aktueller Score: "+currentIScore);
-        System.out.println("Gesendeter Score: "+score);
-        if (score > currentIScore) {
-          System.out.println("Neuer Score!!!!!!!!!:"+score);
-          PrintWriter writer = new PrintWriter("score.txt", "UTF-8");
-          writer.println(""+score);
-          writer.println(name);
-          writer.close();
-        } // end of if
+        for (int c=1;c<=10;c++) {
+          BufferedReader brver = new BufferedReader(new FileReader(new File(c+".txt")));
+          String currentscore = brver.readLine();
+          int currentIScore = Integer.parseInt(currentscore);
+          String currentname = brver.readLine();
+          brver.close();
+          System.out.println("Aktueller Score: "+currentIScore+" Platz:"+c);
+          if (score > currentIScore) {
+            for (int cou=c;cou<=10;cou++ ) {
+              System.out.println("Gesendeter Score: "+score+" Platz:"+cou);
+              
+              BufferedReader br = new BufferedReader(new FileReader(new File(cou+".txt")));
+              String altscore = br.readLine();
+              int altIScore = Integer.parseInt(currentscore);
+              String altname = br.readLine();
+              brver.close();
+              
+              PrintWriter writer = new PrintWriter((cou+1)+".txt", "UTF-8");
+              writer.println(""+altIScore);
+              writer.println(altname);
+              writer.close();
+              
+            } // end of for
+            
+            System.out.println("Neuer Score!!!!!!!!!:"+score+" Auf Platz:"+c);
+            PrintWriter writer = new PrintWriter(c+".txt", "UTF-8");
+            writer.println(""+score);
+            writer.println(name);
+            writer.close();
+            
+            
+            break;
+          } // end of if
+          
+        } // end of for
         
         
       } catch(Exception e) {

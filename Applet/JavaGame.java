@@ -174,7 +174,9 @@ public class JavaGame extends Frame implements KeyListener {
       gr.setFont(new Font("TimesRoman", Font.PLAIN, 40)); 
       gr.drawString("PAUSE", (int) this.getWidth()/2, this.getHeight()/2);
       gamerunner.running=false;
-      ac.stop();
+      if (soundan) {
+        ac.stop();
+      } // end of if
       Menu menu = new Menu(this);
       //volume.setValue(vol);
     }

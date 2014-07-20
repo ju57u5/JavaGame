@@ -49,10 +49,10 @@ class damageLogig {
             
             if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100) ) {
               if (xDistance < 0) {
-                runner.player[counter].setDamage(10,true);
+                runner.player[counter].setDamage(10,true,runner.shot[counterb].owner);
               } // end of if
               else {
-                runner.player[counter].setDamage(10,false);
+                runner.player[counter].setDamage(10,false,runner.shot[counterb].owner);
               } // end of if
               
               runner.shot[counterb]=null;
