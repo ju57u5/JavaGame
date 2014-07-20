@@ -31,12 +31,25 @@ class Highscore {
   }
   public void saveNames() {
     try {
+      BufferedReader br = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\names.txt")));
+      
+      String[] lines = new String [Game.player.length];
+      int cou = 1;
+      while ((lines[cou] = br.readLine()) != null) {
+        cou++;
+      } 
+      br.close(); 
       PrintWriter writer = new PrintWriter(System.getenv("APPDATA")+"\\texture\\names.txt", "UTF-8");
+      for (int c = 1;c<Game.player.length;c++) {
+        if (Game.player[c] != null && !Game.player[c].name.equals("Bot")) {
+          lines[c]=Game.player[c].name;
+        } // end of if
+      } // end of for
       
       for (int c = 1;c<Game.player.length;c++) {
-        if (Game.player[c] != null) {
-          writer.println(Game.player[c].name+"\n");
-        } // end of if
+        if (lines[c] != null) {
+          writer.println(lines[c]);
+        }  
       } // end of for
       
       writer.close();
