@@ -13,18 +13,20 @@ import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import Applet.*;
 
-class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
+class Menu extends Frame implements ActionListener,ItemListener,KeyListener,AdjustmentListener {
   
   JavaGame Game;
   Button[] buttonSpieler = new Button[100] ;
   Button[] buttonSchuss = new Button[100] ;
-  Button Sound,Restart,Fps,Bot,bPlayer;
+  Button Sound,Restart,Fps,Bot,bPlayer,Weiter;
   Choice SpielerAuswahl;
   Button Right,Left,Up,Down,Shot;
   boolean bRight,bLeft,bUp,bDown,bShot;
-  TextField Name,maxFps,perks,Spieler;
-  Label L1;
+  TextField Name,maxFps,Spieler;
+  Label L1,L2;
+  Scrollbar perks;
   public Menu (JavaGame Game) 
+  
   {
     this.Game = Game;
     this.setLayout(null);
@@ -57,17 +59,19 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     
     SpielerAuswahl = new Choice();
     SpielerAuswahl.addKeyListener(this);
-    SpielerAuswahl.setBounds(120,50,300,30);
+    SpielerAuswahl.setBounds(120,50,200,30);
     
     Name = new TextField(Game.player[1].name);
-    Name.setBounds(120,90,300,20);
+    Name.setBounds(120,90,200,20);
     Name.addKeyListener(this);
     this.add(Name);
     
-    perks = new TextField(Game.gamerunner.auftretenvonperks);
-    perks.setBounds(210,460,30,20);
+    
+    perks=new Scrollbar(Scrollbar.HORIZONTAL,10,5,1,100);
     perks.addKeyListener(this);
+    perks.addAdjustmentListener(this);
     this.add(perks);
+    perks.setBounds(210,460,200,20);
     
     L1=new Label("Perkhäufigkeit:");
     L1.setBounds(120,460,90,20);
@@ -98,13 +102,13 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     
     
     Bot = new Button("Bot an");
-    Bot.setBounds(490,400,100,20);
+    Bot.setBounds(320,100,100,20);
     Bot.addActionListener(this);
     Bot.addKeyListener(this);
     this.add(Bot);
     
     bPlayer = new Button("Spieler an");
-    bPlayer.setBounds(490,430,100,20);
+    bPlayer.setBounds(320,80,100,20);
     bPlayer.addActionListener(this);
     bPlayer.addKeyListener(this);
     this.add(bPlayer);
@@ -116,9 +120,13 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
         spielerAnzahl++;
       } // end of if
     } // end of for
+    L1=new Label("Spieleranzahl :");
+    L1.setBounds(400,50,90,20);
+    L1.addKeyListener(this);
+    this.add(L1);
     
     Spieler = new TextField(spielerAnzahl+"");
-    Spieler.setBounds(490,370,100,20);
+    Spieler.setBounds(490,50,100,20);
     Spieler.addKeyListener(this);
     this.add(Spieler);
     
@@ -127,6 +135,12 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     Restart.addActionListener(this);
     Restart.addKeyListener(this);
     this.add(Restart);
+    
+    Weiter = new Button("Weiterspielen");
+    Weiter.setBounds(230,430,100,20);
+    Weiter.addActionListener(this);
+    Weiter.addKeyListener(this);
+    this.add(Weiter);
     
     Left = new Button("Left");
     Left.setBounds(120,570,100,20);
@@ -173,7 +187,10 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
     this.add(SpielerAuswahl);
   }
   
-  
+  public void adjustmentValueChanged(AdjustmentEvent e) {
+    
+    Game.gamerunner.auftretenvonperks=perks.getValue();
+  }
   public void itemStateChanged(ItemEvent ie)
   {
     if (Game.player[SpielerAuswahl.getSelectedIndex()+1] != null) {
@@ -236,15 +253,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
       playerCount();
     } // end of if-else
     
-    if (isNumeric(perks.getText()) && e.getKeyCode()!=KeyEvent.VK_ESCAPE) {
-      if (Integer.parseInt(perks.getText())<=1000 && Integer.parseInt(perks.getText())>0) {
-        Game.gamerunner.auftretenvonperks = Integer.parseInt(perks.getText());
-      } // end of if
-      
-    } // end of if
-    
-    
-    
     if (isNumeric(maxFps.getText()) && e.getKeyCode()!=KeyEvent.VK_ESCAPE) {
       if (Integer.parseInt(maxFps.getText())<=1000 && Integer.parseInt(maxFps.getText())>0) {
         Game.gamerunner.maxFPS=Integer.parseInt(maxFps.getText());
@@ -297,7 +305,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
           
           else if(Game.player[c]==null) {
             
-            Game.player[c] = new Bot(Game.texture[(int) (Math.random()*textureAnzahl)],Game.shottexture[(int) (Math.random()*shottextureAnzahl)],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Spieler");
+            Game.player[c] = new Bot(Game.texture[(int) (Math.random()*textureAnzahl)],Game.shottexture[(int) (Math.random()*shottextureAnzahl)],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Bot");
             Game.player[c].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);
             
           } // end of if-else
@@ -406,12 +414,23 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
       } // end of if
       this.dispose();
       Game.gamerunner.running=true;
+    } // end of if 
+    
+    if (e.getSource()==Weiter) {
+      playerCount();
+      Game.gamerunner.running=true;
+      if (Game.soundan) {
+        Game.ac.loop(10);
+      } // end of if
+      this.dispose();
     } // end of if  
     
     if (e.getSource()==Bot) {
       int spieler = SpielerAuswahl.getSelectedIndex()+1;
       Game.player[spieler] = new Bot(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
       Game.player[spieler].laden(Game,Game.player[spieler].x,Game.player[spieler].y);
+      Game.player[spieler].name="Bot ";
+      Name.setText("Bot");
     } // end of if
     
     if (e.getSource()==bPlayer) {
@@ -419,6 +438,8 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener {
       Game.player[spieler] = new Player(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
       Game.player[spieler].laden(Game,Game.player[spieler].x,Game.player[spieler].y);
       Game.addKeyListener(Game.player[spieler]);
+      Game.player[spieler].name="Spieler "+spieler;
+      Name.setText("Spieler "+spieler);
     } // end of if
     
     if (e.getSource()==Left) {

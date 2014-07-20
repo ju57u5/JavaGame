@@ -39,7 +39,7 @@ class Player extends Thread implements KeyListener  {
   int perkzählerjump,perkzählerrun,perkzählershoot,perkw,drawboom=20,boomx,boomy;
    File boomtexture,freezetexture;
   int gefroren=0;
-  boolean freeze;
+  boolean freeze,aufeinerebeneüberjemandem=true;
   int min=1000000000,dif,angriffsziel; 
   
   // Ende Attribute1
@@ -225,7 +225,7 @@ class Player extends Thread implements KeyListener  {
     if (gefroren>0) {
       freezeControls=true;
       Game.dbImage.getGraphics().drawImage(freezeImage,x-5,y,Game);
-      Game.dbImage.getGraphics().drawString("Gefroren   "+gefroren/10,xHealth,115);
+      Game.dbImage.getGraphics().drawString("Gefroren   "+gefroren/10,xHealth,yHealth+115);
       
     } // end of if
     gefroren-=1;
