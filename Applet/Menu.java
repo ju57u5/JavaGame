@@ -18,7 +18,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
   JavaGame Game;
   Button[] buttonSpieler = new Button[100] ;
   Button[] buttonSchuss = new Button[100] ;
-  Button Sound,Restart,Fps,Bot,bPlayer;
+  Button Sound,Restart,Fps,Bot,bPlayer,Weiter;
   Choice SpielerAuswahl;
   Button Right,Left,Up,Down,Shot;
   boolean bRight,bLeft,bUp,bDown,bShot;
@@ -67,7 +67,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     this.add(Name);
     
     
-    perks=new Scrollbar(Scrollbar.HORIZONTAL,1,5,1,100);
+    perks=new Scrollbar(Scrollbar.HORIZONTAL,10,5,1,100);
     perks.addKeyListener(this);
     perks.addAdjustmentListener(this);
     this.add(perks);
@@ -136,6 +136,12 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     Restart.addKeyListener(this);
     this.add(Restart);
     
+    Weiter = new Button("Weiterspielen");
+    Weiter.setBounds(230,430,100,20);
+    Weiter.addActionListener(this);
+    Weiter.addKeyListener(this);
+    this.add(Weiter);
+    
     Left = new Button("Left");
     Left.setBounds(120,570,100,20);
     Left.addActionListener(this);
@@ -184,7 +190,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
   public void adjustmentValueChanged(AdjustmentEvent e) {
     
     Game.gamerunner.auftretenvonperks=perks.getValue();
-    repaint(); 
   }
   public void itemStateChanged(ItemEvent ie)
   {
@@ -300,7 +305,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
           
           else if(Game.player[c]==null) {
             
-            Game.player[c] = new Bot(Game.texture[(int) (Math.random()*textureAnzahl)],Game.shottexture[(int) (Math.random()*shottextureAnzahl)],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Spieler");
+            Game.player[c] = new Bot(Game.texture[(int) (Math.random()*textureAnzahl)],Game.shottexture[(int) (Math.random()*shottextureAnzahl)],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Bot");
             Game.player[c].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);
             
           } // end of if-else
@@ -409,12 +414,23 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       } // end of if
       this.dispose();
       Game.gamerunner.running=true;
+    } // end of if 
+    
+    if (e.getSource()==Weiter) {
+      playerCount();
+      Game.gamerunner.running=true;
+      if (Game.soundan) {
+        Game.ac.loop(10);
+      } // end of if
+      this.dispose();
     } // end of if  
     
     if (e.getSource()==Bot) {
       int spieler = SpielerAuswahl.getSelectedIndex()+1;
       Game.player[spieler] = new Bot(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
       Game.player[spieler].laden(Game,Game.player[spieler].x,Game.player[spieler].y);
+      Game.player[spieler].name="Bot ";
+      Name.setText("Bot");
     } // end of if
     
     if (e.getSource()==bPlayer) {
@@ -422,6 +438,8 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       Game.player[spieler] = new Player(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
       Game.player[spieler].laden(Game,Game.player[spieler].x,Game.player[spieler].y);
       Game.addKeyListener(Game.player[spieler]);
+      Game.player[spieler].name="Spieler "+spieler;
+      Name.setText("Spieler "+spieler);
     } // end of if
     
     if (e.getSource()==Left) {

@@ -139,22 +139,23 @@ public class JavaGame extends Frame implements KeyListener {
     
     // Spieler
     
-    player[1] = new Bot(texture[0],shottexture[0],dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,1,35,"Justus");                // I'm in Space! SPACE!
-    player[2] = new Player(texture[1],shottexture[1],dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,2,35,"Christian");
-    player[3] = new Bot(texture[2],shottexture[2],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,3,35,"Tjorben");
-    player[4] = new Bot(texture[3],shottexture[3],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,4,35,"abc");
+                   // I'm in Space! SPACE!
+    player[1] = new Player(texture[0],shottexture[0],dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,1,35,"Spieler 1");
+    player[2] = new Bot(texture[1],shottexture[1],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,2,35,"Spieler 2");
+    player[3] = new Bot(texture[2],shottexture[2],dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,3,35,"Spieler 3");
+    
     
     
     player[1].laden(this,100,400);
     player[2].laden(this,200,400);
     player[3].laden(this,300,400);
-    player[4].laden(this,400,400);
+
     
     
     this.addKeyListener(player[1]);
     this.addKeyListener(player[2]);
     this.addKeyListener(player[3]);
-    this.addKeyListener(player[4]);
+
     
     this.addKeyListener(this);
     

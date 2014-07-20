@@ -104,11 +104,7 @@ class Bot extends Player {
         Game.dbImage.getGraphics().drawImage(boomImage,boomx,boomy,Game);
       } // end of if
       
-      if (Game.player[1].name.equals("boss")) {          //Cheat
-        Game.player[1].health=200;                       //Cheat
-        Game.player[1].name="bot";                       //Cheat
-      } // end of if
-      
+       min=1000000;  
       for (int c=1;c<Game.player.length;c++) {
         if (Game.player[c] != null) {
           dif=Game.player[c].x-x;
@@ -118,9 +114,9 @@ class Bot extends Player {
           } // end of if
         }
       } // end of if
-      if (Game.player[angriffsziel].health<=0) {
-        min=1000000;  
-      } // end of if
+      
+       
+      
       
       
       if (x<100 || x>1000) {      //selbstschutz
