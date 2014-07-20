@@ -33,6 +33,7 @@ class Updater extends Frame{
   boolean firstrun = false;
   String arg;
   TextArea console;
+  JavaGame Game;
   
   class WindowListener extends WindowAdapter
   {
@@ -44,6 +45,7 @@ class Updater extends Frame{
   }
   
   public Updater(JavaGame Game) {
+    this.Game = Game;
     
     setTitle("JavaGame");  
     setSize(1200,900);                            
