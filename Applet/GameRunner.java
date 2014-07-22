@@ -85,7 +85,7 @@ class GameRunner extends Thread {
           
           for (int c=0;c<Game.nachricht.length;c++) {
             if (Game.nachricht[c] != null) {
-              Game.dbImage.getGraphics().drawString(Game.nachricht[c], Game.getWidth()-620, Game.getHeight()-40-(c*20));
+              Game.dbImage.getGraphics().drawString(Game.nachricht[c], 20, Game.getHeight()-20-(c*20));
             } // end of if
           } // end of for
           Game.dbImage.getGraphics().drawString("Music: Early Riser Kevin MacLeod (incompetech.com)", Game.getWidth()-320, Game.getHeight()-20);
