@@ -20,6 +20,8 @@ class GameRunner extends Thread {
   boolean neu=false,schonneu=false;
   int auftretenvonperks=9;
   int totencounter=0;
+  int gesamtticks=0;
+  ScoreFrame scoreFrame;
   
   // Ende Attribute5
   
@@ -132,9 +134,10 @@ class GameRunner extends Thread {
                         } // end of if
                       } // end of if
                     } // end of for
-                    
-                    Game.highscore.sendHighscore(Game.player[c].name, (Game.player[c].health*(spielerAnzahl-1)*kills));
-                    new ScoreFrame(Game, Game.player[c].name);
+                    int score = (Game.player[c].health*(spielerAnzahl-1)*kills);
+                    Game.highscore.sendHighscore(Game.player[c].name, score);
+                    scoreFrame = new ScoreFrame(Game, Game.player[c].name,spielerAnzahl-1,kills,Game.player[c].health,score);
+                    Game.toFront();
                   } // end of if
                   if (!neu) {
                     neustart=300;
@@ -149,12 +152,13 @@ class GameRunner extends Thread {
           } // end of if
           totencounter=0;
           
-          if (Game.updater.arg.equals("dev")) {
-        	  //new ScoreFrame(Game, "Justus");
+          if (Game.updater.arg.equals("dev") && gesamtticks==0) {
+        	 new ScoreFrame(Game, "Justus", 3, 5, 10, 10000000) ;
           }
           
           neustart-=1;
           if (neustart==0 && !schonneu) {
+        	  scoreFrame.dispose();
             for (int c=1;c<Game.player.length;c++) {
               if (Game.player[c] != null) {
                 Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
@@ -174,6 +178,7 @@ class GameRunner extends Thread {
           
           
           Game.getGraphics().drawImage(Game.dbImage,0,0,Game);
+          gesamtticks++;
         }
         
         
