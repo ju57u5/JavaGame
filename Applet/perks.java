@@ -1,17 +1,9 @@
 package Applet;
 
-import java.awt.*;
-import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.util.Observable; 
-import java.util.Observer;
-import java.net.*; 
-import javax.sound.sampled.FloatControl;
-import javax.swing.*;
-import Applet.*;
 
   class perks extends Thread 
 {
@@ -28,8 +20,6 @@ import Applet.*;
     this.Game = Game;
     this.speed = speed;
     this.rechts = rechts;
-    this.x = x;
-    this.y = y;
     this.perkx=perkx;
     this.perky=perky;
     

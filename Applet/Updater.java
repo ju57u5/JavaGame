@@ -5,20 +5,9 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.*;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.util.Observable; 
-import java.util.Observer;
 import java.net.*; 
-import javax.sound.sampled.FloatControl;
-import javax.swing.*; 
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
-import Applet.*;
 
 class Updater extends Frame{
   
@@ -52,6 +41,7 @@ class Updater extends Frame{
     addWindowListener(new WindowListener());
     setLocationRelativeTo(null);                                        
     setVisible(true);
+    setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
     
     console = new TextArea("",1200,900,TextArea.SCROLLBARS_VERTICAL_ONLY);
     add(console);
@@ -59,9 +49,13 @@ class Updater extends Frame{
       arg = Game.args[0]  ;
     }
     catch (ArrayIndexOutOfBoundsException e){
+    	arg="nothing";
     }
     
-    if (!arg.equals("dev")) {
+    if (arg.equals("dev")) {
+    	offlineUpdate();
+    }
+    else {	
       try {
         File folder = new File(System.getenv("APPDATA")+"\\texture");
         if (!folder.isDirectory()) {
@@ -96,7 +90,7 @@ class Updater extends Frame{
             c=-1;
           } // end of if
           else {
-            if ((currentver<ver || firstrun) && testInet("ju57u5v.tk")) {
+            if ((currentver<ver || firstrun) && testInet("ju57u5v.tk") && !line.startsWith("#")) {
               System.out.println(testInet("ju57u5v.tk"));
               download("http://ju57u5v.tk/JavaGame/" + line, System.getenv("APPDATA")+"\\texture");
             }
@@ -107,6 +101,10 @@ class Updater extends Frame{
           if (counter==1 && !line.startsWith("!")) {
             Game.texture[c] = new File(System.getenv("APPDATA")+"\\texture\\"+line);
           } // end of if
+          if (line.startsWith("#")) {
+            console.append("\n"+line.replace("#",""));
+            Game.nachricht[c]=line.replace("#","");
+          }
           
           c++;
         }
@@ -125,7 +123,7 @@ class Updater extends Frame{
         
       } 
       
-      if (currentver<ver || firstrun) {
+      if (currentver<ver || firstrun ) {
         console.append("\nPlease start the Game again, to load the update.");
         
         while (true) { 
@@ -230,6 +228,6 @@ class Updater extends Frame{
   }
 }
   
-
-
-
+  
+  
+  

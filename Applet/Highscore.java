@@ -1,24 +1,8 @@
 package Applet;
 
-import java.awt.*;
-import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
 import java.io.*;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.util.Observable; 
-import java.util.Observer;
-import java.net.*; 
-import javax.sound.sampled.FloatControl;
-import javax.swing.*; 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
-import Applet.*;
+import java.net.*;
 
 class Highscore {
   
@@ -78,7 +62,6 @@ class Highscore {
         } // end of if
         else if (c==pos) {
           name = line;
-          System.out.println(line);
           return name;
         } // end of if
       } // end of for
@@ -97,6 +80,7 @@ class Highscore {
       DataOutputStream dOut = new DataOutputStream(echoSocket.getOutputStream());
       dOut.writeInt(score);
       dOut.writeUTF(name);
+      echoSocket.close();
     }
     catch (Exception e) {
       e.printStackTrace();

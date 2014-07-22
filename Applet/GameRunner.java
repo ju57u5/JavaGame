@@ -1,17 +1,6 @@
 package Applet;
 
-import java.awt.*;
-import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.util.Observable; 
-import java.util.Observer;
-import java.net.*; 
-import javax.sound.sampled.FloatControl;
-import javax.swing.*;
-import Applet.*;
 
   ////// Standart Thread für das aktualisieren aller Komponenten
   
@@ -94,6 +83,11 @@ class GameRunner extends Thread {
             Game.DamageLogig.updateDamage();
           } // end of if
           
+          for (int c=0;c<Game.nachricht.length;c++) {
+            if (Game.nachricht[c] != null) {
+              Game.dbImage.getGraphics().drawString(Game.nachricht[c], Game.getWidth()-620, Game.getHeight()-40-(c*20));
+            } // end of if
+          } // end of for
           Game.dbImage.getGraphics().drawString("Music: Early Riser Kevin MacLeod (incompetech.com)", Game.getWidth()-320, Game.getHeight()-20);
           
           int timediff = ((int) System.currentTimeMillis()-time);
@@ -127,7 +121,7 @@ class GameRunner extends Thread {
               if (Game.player[c] != null) {
                 if (Game.player[c].health>0) {
                   Game.dbImage.getGraphics().drawString(Game.player[c].name+" hat gewonnen",500,120); 
-                  if ((!Game.player[c].name.startsWith("Bot") || !Game.player[c].name.equals("Spieler "+c) )&& neustart==299) {
+                  if ((!Game.player[c].name.startsWith("Bot") && !Game.player[c].name.equals("Spieler "+c) ) && neustart==299) {
                     int spielerAnzahl=0;
                     int kills=0;
                     for (int cou=1;cou<Game.player.length;cou++) {

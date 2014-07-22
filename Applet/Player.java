@@ -6,12 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.util.Observable; 
-import java.util.Observer;
-import java.net.*; 
-import javax.sound.sampled.FloatControl;
-import javax.swing.*;
-import Applet.*;
 
 class Player extends Thread implements KeyListener  {
   

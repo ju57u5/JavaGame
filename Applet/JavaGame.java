@@ -6,17 +6,10 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.util.Observable; 
-import java.util.Observer;
 import java.net.*; 
-import javax.sound.sampled.FloatControl;
-import javax.swing.*; 
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-
-import Applet.*;
 
 
 //                           Interfaces
@@ -50,13 +43,14 @@ public class JavaGame extends Frame implements KeyListener {
   Clip ac;
   String[] args = new String[100];
   Highscore highscore;
+  String[] nachricht = new String[5];
   //FloatControl volume;
   // Ende Attribute
   
   
   
   public static void main(String[] args) {
-    new JavaGame();
+    new JavaGame(args);
   }
   
   class WindowListener extends WindowAdapter
@@ -67,8 +61,7 @@ public class JavaGame extends Frame implements KeyListener {
     }
   }
   
-  public JavaGame() {
-    args[0]="";
+  public JavaGame(String[] args) {
     this.args = args;
     Updater updater = new Updater(this);
     highscore = new Highscore(this);

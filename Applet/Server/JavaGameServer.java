@@ -1,20 +1,6 @@
-import java.awt.*;
-import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
 import java.io.*;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.util.Observable; 
-import java.util.Observer;
-import java.net.*; 
-import javax.sound.sampled.FloatControl;
-import javax.swing.*; 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import java.net.*;
 
 
 public class JavaGameServer {
@@ -44,20 +30,17 @@ public class JavaGameServer {
           BufferedReader brver = new BufferedReader(new FileReader(new File(c+".txt")));
           String currentscore = brver.readLine();
           int currentIScore = Integer.parseInt(currentscore);
-          String currentname = brver.readLine();
           brver.close();
           System.out.println("Aktueller Score: "+currentIScore+" Platz:"+c);
           if (score > currentIScore) {
-            for (int cou=c;cou<=10;cou++ ) {
-              System.out.println("Gesendeter Score: "+score+" Platz:"+cou);
+            for (int cou=10;cou>c;cou-- ) {
               
-              BufferedReader br = new BufferedReader(new FileReader(new File(cou+".txt")));
-              String altscore = br.readLine();
-              int altIScore = Integer.parseInt(currentscore);
+              BufferedReader br = new BufferedReader(new FileReader(new File((cou-1)+".txt")));
+              int altIScore = Integer.parseInt(br.readLine());
               String altname = br.readLine();
               brver.close();
               
-              PrintWriter writer = new PrintWriter((cou+1)+".txt", "UTF-8");
+              PrintWriter writer = new PrintWriter((cou)+".txt", "UTF-8");
               writer.println(""+altIScore);
               writer.println(altname);
               writer.close();
