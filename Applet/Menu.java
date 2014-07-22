@@ -135,31 +135,31 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     Weiter.addKeyListener(this);
     this.add(Weiter);
     
-    Left = new Button("Left");
+    Left = new Button(""+KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].left));
     Left.setBounds(120,570,100,20);
     Left.addActionListener(this);
     Left.addKeyListener(this);
     this.add(Left);
     
-    Right = new Button("Right");
+    Right = new Button(""+KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].right));
     Right.setBounds(350,570,100,20);
     Right.addActionListener(this);
     Right.addKeyListener(this);
     this.add(Right);
     
-    Up = new Button("Up");
+    Up = new Button(""+KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].jump));
     Up.setBounds(240,540,100,20);
     Up.addActionListener(this);
     Up.addKeyListener(this);
     this.add(Up);
     
-    Down = new Button("Down");
+    Down = new Button(""+KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].down));
     Down.setBounds(240,570,100,20);
     Down.addActionListener(this);
     Down.addKeyListener(this);
     this.add(Down);
     
-    Shot = new Button("Shot");
+    Shot = new Button(""+KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].attack));
     Shot.setBounds(120,540,100,20);
     Shot.addActionListener(this);
     Shot.addKeyListener(this);
@@ -220,27 +220,27 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     else if (bLeft) {
       bLeft=false;
       Game.player[SpielerAuswahl.getSelectedIndex()+1].left = e.getKeyCode();
-      Left.setLabel(""+e.getKeyChar());
+      Left.setLabel(""+KeyEvent.getKeyText(e.getKeyCode()));
     } // end of if
     else if (bRight) {
       bRight=false;
       Game.player[SpielerAuswahl.getSelectedIndex()+1].right = e.getKeyCode();
-      Right.setLabel(""+e.getKeyChar());
+      Right.setLabel(""+KeyEvent.getKeyText(e.getKeyCode()));
     } // end of if
     else if (bUp) {
       bUp=false;
       Game.player[SpielerAuswahl.getSelectedIndex()+1].jump = e.getKeyCode();
-      Up.setLabel(""+e.getKeyChar());
+      Up.setLabel(""+KeyEvent.getKeyText(e.getKeyCode()));
     } // end of if
     else if (bDown) {
       bDown=false;
       Game.player[SpielerAuswahl.getSelectedIndex()+1].down = e.getKeyCode();
-      Down.setLabel(""+e.getKeyChar());
+      Down.setLabel(""+KeyEvent.getKeyText(e.getKeyCode()));
     } // end of if
     else if (bShot) {
       bShot=false;
       Game.player[SpielerAuswahl.getSelectedIndex()+1].attack = e.getKeyCode();
-      Shot.setLabel(""+e.getKeyChar());
+      Shot.setLabel(""+KeyEvent.getKeyText(e.getKeyCode()));
     } // end of if
     else {
       playerCount();
@@ -420,17 +420,24 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     
     if (e.getSource()==Bot) {
       int spieler = SpielerAuswahl.getSelectedIndex()+1;
+      int xPos = Game.player[spieler].x;
+      int yPos = Game.player[spieler].y;
+      
       Game.player[spieler] = new Bot(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
-      Game.player[spieler].laden(Game,Game.player[spieler].x,Game.player[spieler].y);
+      Game.player[spieler].laden(Game,xPos,yPos);
       Game.player[spieler].name="Bot ";
       Name.setText("Bot");
     } // end of if
     
     if (e.getSource()==bPlayer) {
       int spieler = SpielerAuswahl.getSelectedIndex()+1;
+      int xPos = Game.player[spieler].x;
+      int yPos = Game.player[spieler].y;
+      
       Game.player[spieler] = new Player(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
-      Game.player[spieler].laden(Game,Game.player[spieler].x,Game.player[spieler].y);
+      Game.player[spieler].laden(Game,xPos,yPos);
       Game.addKeyListener(Game.player[spieler]);
+      
       String playername = Game.highscore.getName(spieler);
       if (playername != null && !playername.equals("Bot") && !playername.equals(" ")) {
         Game.player[spieler].name=playername;
@@ -439,6 +446,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
         playername = "Spieler "+spieler;
         Game.player[spieler].name="Spieler "+spieler;
       } // end of if-else
+      
       Name.setText(playername);
     } // end of if
     
