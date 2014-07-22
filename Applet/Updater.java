@@ -138,7 +138,7 @@ class Updater extends Frame{
     
   } 
   
-  private void download(String fileURL, String destinationDirectory) throws IOException {
+  public void download(String fileURL, String destinationDirectory) throws IOException {
     // File name that is being downloaded
     String downloadedFileName = fileURL.substring(fileURL.lastIndexOf("/")+1);
     

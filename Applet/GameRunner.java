@@ -134,6 +134,7 @@ class GameRunner extends Thread {
                     } // end of for
                     
                     Game.highscore.sendHighscore(Game.player[c].name, (Game.player[c].health*(spielerAnzahl-1)*kills));
+                    new ScoreFrame(Game, Game.player[c].name);
                   } // end of if
                   if (!neu) {
                     neustart=300;
@@ -148,6 +149,9 @@ class GameRunner extends Thread {
           } // end of if
           totencounter=0;
           
+          if (Game.updater.arg.equals("dev")) {
+        	  //new ScoreFrame(Game, "Justus");
+          }
           
           neustart-=1;
           if (neustart==0 && !schonneu) {

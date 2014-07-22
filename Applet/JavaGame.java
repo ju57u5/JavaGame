@@ -47,6 +47,7 @@ public class JavaGame extends Frame implements KeyListener {
   String[] args = new String[100];
   Highscore highscore;
   String[] nachricht = new String[5];
+  Updater updater;
   //FloatControl volume;
   // Ende Attribute
   
@@ -66,7 +67,7 @@ public class JavaGame extends Frame implements KeyListener {
   
   public JavaGame(String[] args) {
     this.args = args;
-    Updater updater = new Updater(this);
+    updater = new Updater(this);
     highscore = new Highscore(this);
     
     

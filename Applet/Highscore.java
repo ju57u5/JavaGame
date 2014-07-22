@@ -1,13 +1,16 @@
 package Applet;
 
-import java.io.File;
 import java.io.*;
 import java.net.*;
+
 
 class Highscore {
   
   JavaGame Game;
   String[] lines ;
+  int[] scores = new int[10];
+  String[] names = new String[10];
+  
   public Highscore(JavaGame Game) {
     this.Game = Game;
     
@@ -62,6 +65,7 @@ class Highscore {
         } // end of if
         else if (c==pos) {
           name = line;
+          br.close();
           return name;
         } // end of if
       } // end of for
@@ -69,7 +73,7 @@ class Highscore {
     } catch(Exception e) {
       
     } 
-    
+   
     return name;
   }
   
@@ -86,6 +90,39 @@ class Highscore {
       e.printStackTrace();
     }
   }  
+  
+  public void getHighscore() {
+	  for (int c=0;c<10;c++) {
+		  try {
+			Game.updater.download("http://ju57u5v.tk/JavaGame/Server/"+(c+1)+".txt",System.getenv("APPDATA")+"\\texture\\scores");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}  
+		BufferedReader br;
+		try {
+			br = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\scores\\"+(c+1)+".txt")));
+			
+			 try {
+					scores[c] = Integer.parseInt(br.readLine());
+					names[c] = br.readLine();
+				} catch (NumberFormatException | IOException e) {
+					e.printStackTrace();
+				}
+			 
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+         
+          
+		  
+	  }
+	  
+	  
+	  
+  }
+  
+  
   
   
 }
