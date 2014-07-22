@@ -135,31 +135,31 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     Weiter.addKeyListener(this);
     this.add(Weiter);
     
-    Left = new Button(""+KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].left));
+    Left = new Button(""+KeyEvent.getKeyText(Game.player[1].left));
     Left.setBounds(120,570,100,20);
     Left.addActionListener(this);
     Left.addKeyListener(this);
     this.add(Left);
     
-    Right = new Button(""+KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].right));
+    Right = new Button(""+KeyEvent.getKeyText(Game.player[1].right));
     Right.setBounds(350,570,100,20);
     Right.addActionListener(this);
     Right.addKeyListener(this);
     this.add(Right);
     
-    Up = new Button(""+KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].jump));
+    Up = new Button(""+KeyEvent.getKeyText(Game.player[1].jump));
     Up.setBounds(240,540,100,20);
     Up.addActionListener(this);
     Up.addKeyListener(this);
     this.add(Up);
     
-    Down = new Button(""+KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].down));
+    Down = new Button(""+KeyEvent.getKeyText(Game.player[1].down));
     Down.setBounds(240,570,100,20);
     Down.addActionListener(this);
     Down.addKeyListener(this);
     this.add(Down);
     
-    Shot = new Button(""+KeyEvent.getKeyText(Game.player[SpielerAuswahl.getSelectedIndex()+1].attack));
+    Shot = new Button(""+KeyEvent.getKeyText(Game.player[1].attack));
     Shot.setBounds(120,540,100,20);
     Shot.addActionListener(this);
     Shot.addKeyListener(this);
