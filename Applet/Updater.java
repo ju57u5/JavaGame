@@ -41,7 +41,6 @@ class Updater extends Frame{
     addWindowListener(new WindowListener());
     setLocationRelativeTo(null);                                        
     setVisible(true);
-    setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
     
     console = new TextArea("",1200,900,TextArea.SCROLLBARS_VERTICAL_ONLY);
     add(console);
@@ -62,9 +61,9 @@ class Updater extends Frame{
           folder.mkdirs();
         } // end of if
         
-        download("http://ju57u5v.tk/JavaGame/list.txt" , System.getenv("APPDATA")+"\\texture");
+        download("http://ju57u5v.tk/JavaGame/listneu.txt" , System.getenv("APPDATA")+"\\texture");
         
-        BufferedReader br = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\list.txt")));
+        BufferedReader br = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\listneu.txt")));
         
         File filever = new File(System.getenv("APPDATA")+"\\texture\\version.txt");
         
@@ -91,7 +90,6 @@ class Updater extends Frame{
           } // end of if
           else {
             if ((currentver<ver || firstrun) && testInet("ju57u5v.tk") && !line.startsWith("#")) {
-              System.out.println(testInet("ju57u5v.tk"));
               download("http://ju57u5v.tk/JavaGame/" + line, System.getenv("APPDATA")+"\\texture");
             }
           } // end of if-else
@@ -189,7 +187,7 @@ class Updater extends Frame{
         folder.mkdirs();
       } // end of if
       
-      BufferedReader br = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\list.txt")));
+      BufferedReader br = new BufferedReader(new FileReader(new File(System.getenv("APPDATA")+"\\texture\\listneu.txt")));
       File filever = new File(System.getenv("APPDATA")+"\\texture\\version.txt");
       
       if (filever.exists()) {

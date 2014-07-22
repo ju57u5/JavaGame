@@ -4,9 +4,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
+
 import java.awt.image.BufferedImage;
 import java.net.*; 
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -72,6 +75,8 @@ public class JavaGame extends Frame implements KeyListener {
     addWindowListener(new WindowListener());
     setLocationRelativeTo(null);                                        // EventListener für das Fenster hinzufügen
     setVisible(true);
+    setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+    
     
     try{
       /*URI Path = URLDecoder.decode(getClass().getClassLoader().getResource("texture").toURI();//, "UTF-8"); //Pfad zu den Resourcen
