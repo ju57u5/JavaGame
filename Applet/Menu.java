@@ -60,7 +60,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     this.add(Name);
     
     
-    perks=new Scrollbar(Scrollbar.HORIZONTAL,10,5,1,100);
+    perks=new Scrollbar(Scrollbar.HORIZONTAL,Game.gamerunner.auftretenvonperks,5,1,100); 
     perks.addKeyListener(this);
     perks.addAdjustmentListener(this);
     this.add(perks);
