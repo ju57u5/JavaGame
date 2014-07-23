@@ -60,7 +60,10 @@ public class JavaGame extends Frame implements KeyListener {
   class WindowListener extends WindowAdapter
   {
     public void windowClosing(WindowEvent e)
-    {
+    { 
+      if (gamerunner.scoreFrame != null) {
+    	  gamerunner.scoreFrame.dispose();
+      }
       e.getWindow().dispose();                   // Fenster "killen"
     }
   }
@@ -75,8 +78,10 @@ public class JavaGame extends Frame implements KeyListener {
     setSize(1200,900);                            // Fenstergröße einstellen
     addWindowListener(new WindowListener());
     setLocationRelativeTo(null);                                        // EventListener für das Fenster hinzufügen
+    //setUndecorated(true);    //"Vollbild"
     setVisible(true);
     setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+    
     
     
     try{

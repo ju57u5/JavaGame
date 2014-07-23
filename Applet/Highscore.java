@@ -93,6 +93,12 @@ class Highscore {
 	}  
 
 	public void getHighscore() {
+		
+		File folder = new File(System.getenv("APPDATA")+"\\texture\\scores"); //Wir müssen erst gucken ob der Ordner existiert
+		if (!folder.isDirectory()) {
+			folder.mkdirs();
+		} // end of if
+		
 		for (int c=0;c<10;c++) {
 			try {
 				Game.updater.download("http://ju57u5v.tk/JavaGame/Server/"+(c+1)+".txt",System.getenv("APPDATA")+"\\texture\\scores");
