@@ -54,7 +54,7 @@ public class JavaGame extends Frame implements KeyListener {
   
   
   public static void main(String[] args) {
-    new JavaGame(args);
+		  new JavaGame(args);
   }
   
   class WindowListener extends WindowAdapter
@@ -65,6 +65,7 @@ public class JavaGame extends Frame implements KeyListener {
     	  gamerunner.scoreFrame.dispose();
       }
       e.getWindow().dispose();                   // Fenster "killen"
+      System.exit(0);
     }
   }
   
@@ -77,8 +78,19 @@ public class JavaGame extends Frame implements KeyListener {
     setTitle("JavaGame");  // Fenstertitel setzen
     setSize(1200,900);                            // Fenstergröße einstellen
     addWindowListener(new WindowListener());
-    setLocationRelativeTo(null);                                        // EventListener für das Fenster hinzufügen
-    //setUndecorated(true);    //"Vollbild"
+    setLocationRelativeTo(null);     
+	String arg;
+    try {
+    	arg = args[0]  ;
+    }
+    catch (ArrayIndexOutOfBoundsException e){
+    	arg="nothing";
+    }
+    if (arg.equals("fullscreen")) {
+    	setUndecorated(true);    //"Vollbild"
+    	setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth()-200,(int) Toolkit.getDefaultToolkit().getScreenSize().getWidth());
+    	setLocation(0,0);
+    }
     setVisible(true);
     setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
     
@@ -194,6 +206,13 @@ public class JavaGame extends Frame implements KeyListener {
     
     else if (e.getKeyCode()==KeyEvent.VK_R) {
       restartGame();
+    }
+    
+    else if (e.getKeyCode()==KeyEvent.VK_F11) {
+    	dispose();
+    	setUndecorated(true);
+    	String[] arguments = {"fullscreen"};
+    	new JavaGame(arguments);
     }
   }
   

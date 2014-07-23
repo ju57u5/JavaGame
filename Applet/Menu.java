@@ -11,7 +11,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
 	JavaGame Game;
 	Button[] buttonSpieler = new Button[100] ;
 	Button[] buttonSchuss = new Button[100] ;
-	Button Sound,Restart,Fps,Bot,bPlayer,Weiter;
+	Button Sound,Restart,Fps,Bot,bPlayer,Weiter,Stop;
 	Choice SpielerAuswahl;
 	Button Right,Left,Up,Down,Shot;
 	boolean bRight,bLeft,bUp,bDown,bShot;
@@ -164,6 +164,12 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
 		Shot.addActionListener(this);
 		Shot.addKeyListener(this);
 		this.add(Shot);
+		
+		Stop = new Button("Beenden");
+		Stop.setBounds(340,430,100,20);
+		Stop.addActionListener(this);
+		Stop.addKeyListener(this);
+		this.add(Stop);
 
 		maxFps = new TextField(Game.gamerunner.maxFPS+"");
 		maxFps.setBounds(230,400,100,20);
@@ -464,6 +470,10 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
 		} // end of if
 		if (e.getSource()==Shot) {
 			bShot=true;
+		} // end of if
+		
+		if (e.getSource()==Stop) {
+			System.exit(0);
 		} // end of if
 
 	}
