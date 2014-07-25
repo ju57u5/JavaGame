@@ -13,6 +13,7 @@ import java.net.*;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 
 //                           Interfaces
@@ -48,7 +49,8 @@ public class JavaGame extends Frame implements KeyListener {
   Highscore highscore;
   String[] nachricht = new String[5];
   Updater updater;
-  //FloatControl volume;
+  String arg;
+  FloatControl volume;
   // Ende Attribute
   
   
@@ -61,9 +63,9 @@ public class JavaGame extends Frame implements KeyListener {
   {
     public void windowClosing(WindowEvent e)
     { 
-      if (gamerunner.scoreFrame != null) {
-    	  gamerunner.scoreFrame.dispose();
-      }
+//      if (gamerunner.scoreFrame != null) {
+//    	  gamerunner.scoreFrame.dispose();
+//      }
       e.getWindow().dispose();                   // Fenster "killen"
       System.exit(0);
     }
@@ -79,7 +81,7 @@ public class JavaGame extends Frame implements KeyListener {
     setSize(1200,900);                            // Fenstergröße einstellen
     addWindowListener(new WindowListener());
     setLocationRelativeTo(null);     
-	String arg;
+	
     try {
     	arg = args[0]  ;
     }
@@ -109,6 +111,8 @@ public class JavaGame extends Frame implements KeyListener {
       Stream =AudioSystem.getAudioInputStream(sound);
       ac = AudioSystem.getClip();
       ac.open(Stream);
+      volume =  (FloatControl) ac.getControl(FloatControl.Type.MASTER_GAIN);
+      volume.setValue(-10.0f);
     }
     catch(Exception ex)
     {  }

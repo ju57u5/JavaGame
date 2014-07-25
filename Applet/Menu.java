@@ -26,8 +26,13 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
 		this.addKeyListener(this);
 		setTitle("Menu");  // Fenstertitel setzen
 		setSize(Game.getWidth(),Game.getHeight());                            // Fenstergröße einstellen  
-		addWindowListener(new TestWindowListener());                        // EventListener für das Fenster hinzufügen
-		setLocationRelativeTo(null);
+		addWindowListener(new TestWindowListener());
+		if (Game.arg.equals("fullscreen")) {
+			setLocation(0, 0);
+		}
+		else {                        
+			setLocationRelativeTo(null);
+		}
 		setVisible(true);                                                   // Fenster (inkl. Inhalt) sichtbar machen
 
 		for (int c=0;c<Game.texture.length;c++) {

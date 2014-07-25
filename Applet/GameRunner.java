@@ -43,6 +43,7 @@ class GameRunner extends Thread {
 				}
 				catch(InterruptedException e) {
 				}
+				
 				if (running) {
 					Game.repaint();
 					Game.dbImage.getGraphics().clearRect(0,0, (int)Game.getWidth(), (int)Game.getHeight());

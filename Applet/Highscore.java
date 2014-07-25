@@ -101,7 +101,7 @@ class Highscore {
 		
 		for (int c=0;c<10;c++) {
 			try {
-				Game.updater.download("http://ju57u5v.tk/JavaGame/Server/"+(c+1)+".txt",System.getenv("APPDATA")+"\\texture\\scores");
+				Game.updater.download("http://ju57u5v.tk/JavaGame/Server/"+(c+1)+".txt",System.getenv("APPDATA")+"\\texture\\scores", false);
 			} catch (IOException e) {
 				e.printStackTrace();
 				failed=true;
