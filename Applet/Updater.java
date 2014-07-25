@@ -67,7 +67,6 @@ class Updater extends Frame{
 				download("http://ju57u5v.tk/JavaGame/" + listenName , System.getenv("APPDATA")+"\\texture", false);
 				try {
 					fileSize = getContentSize();
-					System.out.println(fileSize);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

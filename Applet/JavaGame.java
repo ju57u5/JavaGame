@@ -63,9 +63,6 @@ public class JavaGame extends Frame implements KeyListener {
   {
     public void windowClosing(WindowEvent e)
     { 
-//      if (gamerunner.scoreFrame != null) {
-//    	  gamerunner.scoreFrame.dispose();
-//      }
       e.getWindow().dispose();                   // Fenster "killen"
       System.exit(0);
     }

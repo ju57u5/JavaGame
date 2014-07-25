@@ -16,8 +16,8 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
 	Button Right,Left,Up,Down,Shot;
 	boolean bRight,bLeft,bUp,bDown,bShot;
 	TextField Name,maxFps,Spieler;
-	Label L1,L2;
-	Scrollbar perks;
+	Label L1,L2,lautstaerkeLabel;
+	Scrollbar perks, lautstaerke;
 	public Menu (JavaGame Game) 
 
 	{
@@ -70,6 +70,24 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
 		perks.addAdjustmentListener(this);
 		this.add(perks);
 		perks.setBounds(210,460,200,20);
+		
+		
+		int currentVolume=(int) Game.volume.getValue();
+		//(int) Game.volume.getMinimum(); geht hier schlecht, da es unterirdische Werte ausgibt...
+		int minVolume=-50;  
+		int maxVolume=(int) Game.volume.getMaximum();
+		
+		lautstaerke=new Scrollbar(Scrollbar.HORIZONTAL,currentVolume,5,minVolume, maxVolume); 
+		lautstaerke.addKeyListener(this);
+		lautstaerke.addAdjustmentListener(this);
+		this.add(lautstaerke);
+		lautstaerke.setBounds(300,370,200,20);
+		
+		lautstaerkeLabel=new Label("Lautstärke:");
+		lautstaerkeLabel.setBounds(230,370,90,20);
+		lautstaerkeLabel.addKeyListener(this);
+		this.add(lautstaerkeLabel);
+
 
 		L1=new Label("Perkhäufigkeit:");
 		L1.setBounds(120,460,90,20);
@@ -194,6 +212,8 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
 	public void adjustmentValueChanged(AdjustmentEvent e) {
 
 		Game.gamerunner.auftretenvonperks=perks.getValue();
+		System.out.println(lautstaerke.getValue());
+		Game.volume.setValue(lautstaerke.getValue());
 	}
 	public void itemStateChanged(ItemEvent ie)
 	{
