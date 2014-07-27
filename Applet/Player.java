@@ -148,11 +148,11 @@ class Player extends Thread implements KeyListener  {
     
     
     if (!characterInverted && health>0) {
-      Game.dbImage.getGraphics().drawString(name,x+33,y-10);
+      Game.dbImage.getGraphics().drawString(name,x+33-(name.length()/2),y-10);
       Game.dbImage.getGraphics().drawImage(textureImage,x,y,Game);
     } // end of if
     else if (characterInverted && health>0){
-      Game.dbImage.getGraphics().drawString(name,x+33,y-10);
+      Game.dbImage.getGraphics().drawString(name,x+33-name.length()/2,y-10);
       Game.dbImage.getGraphics().drawImage(textureImageb,x,y,Game);
     } // end of if-else
     

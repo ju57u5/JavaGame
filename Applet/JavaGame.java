@@ -10,10 +10,13 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.net.*; 
 
+import javax.swing.*;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
+
+import Applet.*;
 
 
 //                           Interfaces
@@ -178,8 +181,24 @@ public class JavaGame extends Frame implements KeyListener {
     
     this.addKeyListener(this);
     
+    Client client = new Client(this);
+    int result;
+    if ((result = JOptionPane.showConfirmDialog((Component) null, "Sever an?", "alert", JOptionPane.OK_CANCEL_OPTION))==0) {
+    	Server server = new Server(this);
+    }
+    
     gamerunner = new GameRunner(player,this);
     DamageLogig = new damageLogig (gamerunner);
+    
+    try {
+		client.initialise("localhost", 9876);
+	} catch (SocketException e) {
+		e.printStackTrace();
+	} catch (UnknownHostException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
   } // end of init
   
   
@@ -210,6 +229,7 @@ public class JavaGame extends Frame implements KeyListener {
     }
     
     else if (e.getKeyCode()==KeyEvent.VK_F11) {
+    	ac.stop();
     	dispose();
     	setUndecorated(true);
     	String[] arguments = {"fullscreen"};

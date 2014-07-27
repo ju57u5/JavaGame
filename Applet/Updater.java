@@ -46,6 +46,7 @@ class Updater extends Frame{
 		setLocationRelativeTo(null);                                        
 		
 		console = new TextArea("",1200,900,TextArea.SCROLLBARS_VERTICAL_ONLY);
+		console.setEditable(false);
 		
 		try {
 			arg = Game.args[0]  ;
@@ -169,9 +170,9 @@ class Updater extends Frame{
 		byte[] buffer = new byte[4096];
 		int bytesRead = 0;
 
-		console.append("\nDownloading " + downloadedFileName);
+		console.append("\nDownloading " + downloadedFileName+ " ... ");
 		while ((bytesRead = is.read(buffer)) != -1) {
-			console.append(".");  // Progress bar :)
+			//console.append(".");  // Progress bar :)
 			doneSize += bytesRead;
 			if (processBarEnabled) {
 				this.progressBar.setValue(doneSize);
