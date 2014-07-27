@@ -54,6 +54,7 @@ public class JavaGame extends Frame implements KeyListener {
   Updater updater;
   String arg;
   FloatControl volume;
+  Client client;
   // Ende Attribute
   
   
@@ -162,8 +163,8 @@ public class JavaGame extends Frame implements KeyListener {
     // Spieler
     
     // I'm in Space! SPACE!
-    player[1] = new Player(texture[0],shottexture[0],dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,1,35,highscore.getName(1));
-    player[2] = new Bot(texture[1],shottexture[1],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,2,35,highscore.getName(1));
+    player[1] = new Bot(texture[0],shottexture[0],dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,1,35,highscore.getName(1));
+    player[2] = new Player(texture[1],shottexture[1],dbImage,KeyEvent.VK_J,KeyEvent.VK_L,KeyEvent.VK_I,KeyEvent.VK_K,KeyEvent.VK_U,2,35,highscore.getName(1));
     player[3] = new Bot(texture[2],shottexture[2],dbImage,KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT,KeyEvent.VK_UP,KeyEvent.VK_DOWN,KeyEvent.VK_ENTER,3,35,highscore.getName(1));
     
     
@@ -181,7 +182,7 @@ public class JavaGame extends Frame implements KeyListener {
     
     this.addKeyListener(this);
     
-    Client client = new Client(this);
+    client = new Client(this);
     int result;
     if ((result = JOptionPane.showConfirmDialog((Component) null, "Sever an?", "alert", JOptionPane.OK_CANCEL_OPTION))==0) {
     	Server server = new Server(this);
@@ -192,6 +193,7 @@ public class JavaGame extends Frame implements KeyListener {
     
     try {
 		client.initialise("localhost", 9876);
+		client.start();
 	} catch (SocketException e) {
 		e.printStackTrace();
 	} catch (UnknownHostException e) {

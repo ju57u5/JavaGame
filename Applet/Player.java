@@ -35,6 +35,7 @@ class Player extends Thread implements KeyListener  {
   int gefroren=0;
   boolean freeze,aufeinerebeneüberjemandem=true;
   int min=1000000000,dif,angriffsziel;
+  int id;
   Player murderer; 
   
   // Ende Attribute1
@@ -47,6 +48,7 @@ class Player extends Thread implements KeyListener  {
     this.right = right;
     this.jump = jump;
     this.attack = attack;
+    this.id = xHealth;
     this.xHealth = (xHealth-1)*110+10;
     this.yHealth = yHealth;
     this.down = down;
@@ -224,7 +226,11 @@ class Player extends Thread implements KeyListener  {
       
     } // end of if
     gefroren-=1;
-    
+    try {
+		Game.client.sendPlayerData(id);
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
   }
   
   public void move(boolean rechts, int amount)  {

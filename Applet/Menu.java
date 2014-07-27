@@ -212,7 +212,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
 	public void adjustmentValueChanged(AdjustmentEvent e) {
 
 		Game.gamerunner.auftretenvonperks=perks.getValue();
-		System.out.println(lautstaerke.getValue());
 		Game.volume.setValue(lautstaerke.getValue());
 	}
 	public void itemStateChanged(ItemEvent ie)
