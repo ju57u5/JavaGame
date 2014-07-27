@@ -119,7 +119,7 @@ class GameRunner extends Thread {
 					} // end of for
 
 
-					if (totencounter==anzahl-1) {
+					if (totencounter==anzahl-1 && Game.online==false) {
 						for (int c=1;c<Game.player.length;c++) {
 							if (Game.player[c] != null) {
 								if (Game.player[c].health>0) {

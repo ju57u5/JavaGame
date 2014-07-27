@@ -20,6 +20,9 @@ class Server extends Thread{
 
 	public Server(JavaGame Game) {
 		this.Game = Game;
+		clients.add("");
+		clientPorts.add(null);
+		clientIPs.add(null);
 		start();
 	}  
 
@@ -74,7 +77,7 @@ class Server extends Thread{
 			daos.close();
 			sendData = baos.toByteArray();
 			System.out.println("[Server] Client "+playerID+" schickt Daten.");
-			for (int cou=0;cou<clients.size();cou++) {	
+			for (int cou=1;cou<clients.size();cou++) {	
 				if (cou != playerID) {
 
 					DatagramPacket sendPacket =	new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
@@ -100,8 +103,9 @@ class Server extends Thread{
 			dao.writeBoolean(rechts);
 			dao.writeInt(shotspeed);
 			dao.close();
+			sendData = bao.toByteArray();
 			
-			for (int cou=0;cou<clients.size();cou++) {
+			for (int cou=1;cou<clients.size();cou++) {
 				if (cou != shotplayerID) {
 					DatagramPacket sendPacket =	new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
 					serverSocket.send(sendPacket);
@@ -117,12 +121,26 @@ class Server extends Thread{
 			System.out.println("[Server] Login from " + clientIPs.get(clientIPs.size()-1).toString() + ":" + clientPorts.get(clientPorts.size()-1) + " "+packet);
 			clients.add(packet);
 
-			String id = clients.size()+"";
+			String id = clients.size()-1+"";
 			sendData = id.getBytes();
 			DatagramPacket sendPacket =	new DatagramPacket(sendData, sendData.length, clientIPs.get(clientIPs.size()-1), clientPorts.get(clientPorts.size()-1));
 			serverSocket.send(sendPacket);
+			
+			ByteArrayOutputStream ba=new ByteArrayOutputStream();
+			DataOutputStream da=new DataOutputStream(ba);
 
-
+			da.writeInt(2);
+			da.writeInt(clientIPs.size()-1);
+			da.close();
+			sendData = ba.toByteArray();
+			
+			for (int cou=1;cou<clients.size();cou++) {
+				if (cou != clientIPs.size()-1) {
+					DatagramPacket sendPacket1 =	new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
+					serverSocket.send(sendPacket1);
+				}
+			}
+			
 			break;
 
 		}	

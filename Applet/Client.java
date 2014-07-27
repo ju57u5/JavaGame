@@ -1,5 +1,6 @@
 package Applet;
 
+import java.awt.event.KeyEvent;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -41,6 +42,22 @@ class Client extends Thread{
 		String gottenPacket = new String(receivePacket.getData());
 		System.out.println("[Client]ID from Server: " + gottenPacket);
 		id = Integer.parseInt(gottenPacket.trim());
+		
+		for (int c=1;c<Game.player.length;c++) {
+			if (c<id) {
+				Game.player[c] = new ClientPlayer(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Online Player "+c);
+				Game.addKeyListener(Game.player[c]);
+				Game.player[c].laden(Game,-1000,100);
+			}
+			else if (c==id) {
+				Game.player[c] = new Player(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Online Player "+c);
+				Game.addKeyListener(Game.player[c]);
+				Game.player[c].laden(Game,100,100);
+			}
+			else if (c>id) {
+				Game.player[c]=null;
+			}
+		}
 		return true; 
 	}
 
@@ -99,7 +116,17 @@ class Client extends Thread{
 			shot.laden(shotx, shoty);
 			Game.DamageLogig.registerShot(shot);
 			break;
+		case 2: //Player connected
+			int connectplayerID = dais.readInt();
+			
+
+			Game.player[connectplayerID] = new ClientPlayer(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,connectplayerID,35,"Online Player "+connectplayerID);
+			Game.player[connectplayerID].laden(Game, -1000, 100);
+			
+			System.out.println("[Client] Spieler mit der ID "+ connectplayerID+" connected.");
+			break;
 		}
+		
 	}
 	public void run() {
 		while (true) {
