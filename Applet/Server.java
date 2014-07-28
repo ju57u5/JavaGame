@@ -101,6 +101,7 @@ class Server extends Thread{
 			DataOutputStream dao=new DataOutputStream(bao);
 			
 			dao.writeInt(1);
+			dao.writeInt(shotplayerID);
 			dao.writeInt(shotx);
 			dao.writeInt(shoty);
 			dao.writeBoolean(rechts);

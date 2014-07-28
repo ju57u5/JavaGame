@@ -56,6 +56,7 @@ public class JavaGame extends Frame implements KeyListener {
   FloatControl volume;
   Client client;
   boolean online=false,server=false;
+  String onlinename="Online Player";
   // Ende Attribute
   
   
@@ -185,11 +186,12 @@ public class JavaGame extends Frame implements KeyListener {
     
     
     int result;
-    if ((result = JOptionPane.showConfirmDialog((Component) null, "Client an?", "Online", JOptionPane.OK_CANCEL_OPTION))==0) {
+    if ((result = JOptionPane.showConfirmDialog((Component) null, "Client an?", "Online", JOptionPane.YES_NO_OPTION))==0) {
     	client = new Client(this);
     	online=true;
+    	while ((onlinename = JOptionPane.showInputDialog(null,"Geben Sie Ihren Namen ein", "Eine Eingabeaufforderung", JOptionPane.PLAIN_MESSAGE)).isEmpty() && onlinename != null) {}
     }
-    if ((result = JOptionPane.showConfirmDialog((Component) null, "Sever an?", "Online", JOptionPane.OK_CANCEL_OPTION))==0) {
+    if ((result = JOptionPane.showConfirmDialog((Component) null, "Sever an?", "Online", JOptionPane.YES_NO_OPTION))==0) {
     	Server server = new Server(this);
     	this.server=true;
     }

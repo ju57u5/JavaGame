@@ -12,6 +12,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+
 class Client extends Thread{
 	JavaGame Game;
 	int port,id;
@@ -50,7 +51,7 @@ class Client extends Thread{
 				Game.player[c].laden(Game,-1000,100);
 			}
 			else if (c==id) {
-				Game.player[c] = new Player(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Online Player "+c);
+				Game.player[c] = new Player(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,Game.onlinename);
 				Game.addKeyListener(Game.player[c]);
 				Game.player[c].laden(Game,100,100);
 			}
@@ -81,8 +82,23 @@ class Client extends Thread{
 
 	}
 
-	public void sendNewShot(Shot shot, int shotid) {
-
+	public void sendNewShot(Shot shot, int shotplayerid, int shotx, int shoty, boolean rechts, int shotspeed) throws IOException {
+		byte[] sendData = new byte[1024];
+		ByteArrayOutputStream baos=new ByteArrayOutputStream();
+		DataOutputStream daos=new DataOutputStream(baos);
+		daos.writeInt(1); //PacketID
+		
+		daos.writeInt(shotplayerid);
+		daos.writeInt(shotx);
+		daos.writeInt(shoty);
+		daos.writeBoolean(rechts);
+		daos.writeInt(shotspeed);
+		
+		daos.close();
+		sendData = baos.toByteArray();
+		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+		clientSocket.send(sendPacket);
+		System.out.println("[Client] Neuer Schuss: "+shot.x+" "+shot.y+" "+shot.rechts+" ID: "+shotplayerid);
 	}
 
 	public void updateFromServer() throws IOException {
@@ -115,14 +131,14 @@ class Client extends Thread{
 
 		case 1: //New Shot
 			int shotplayerID = dais.readInt();
-			//int shotID = dais.readInt();
 			int shotx = dais.readInt();
 			int shoty = dais.readInt();
 			boolean rechts = dais.readBoolean();
 			int shotspeed = dais.readInt();
-			Shot shot = new Shot(Game.player[shotplayerID].shottexture, rechts, shotspeed, Game, Game.player[shotplayerID]);
+			System.out.println("[Client] Schuss angekommen "+shotx+" "+shoty+" "+shotplayerID);
+			Shot shot = new Shot(Game.shottexture[1], rechts, shotspeed, Game, Game.player[shotplayerID]);
 			shot.laden(shotx, shoty);
-			Game.DamageLogig.registerShot(shot);
+
 			break;
 		case 2: //Player connected
 			int connectplayerID = dais.readInt();

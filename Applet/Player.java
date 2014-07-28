@@ -133,6 +133,13 @@ class Player extends Thread implements KeyListener  {
 			if (keys[attack] && y<900 && schusssperre == 0) {                             
 				Shot bullet = new Shot(shottexture,!characterInverted, 10, Game, this);
 				bullet.laden(x,y+50);
+				if (Game.online) {
+					try {
+						Game.client.sendNewShot(bullet, id, x,y+50,!characterInverted,10);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 				schusssperre = sperrzeit;
 			} // end of if
 		} // end of if  
