@@ -100,6 +100,20 @@ class Client extends Thread{
 		clientSocket.send(sendPacket);
 		System.out.println("[Client] Neuer Schuss: "+shot.x+" "+shot.y+" "+shot.rechts+" ID: "+shotplayerid);
 	}
+	
+	public void sendDisconnect() throws IOException {
+		byte[] sendData = new byte[1024];
+		ByteArrayOutputStream baos=new ByteArrayOutputStream();
+		DataOutputStream daos=new DataOutputStream(baos);
+		daos.writeInt(3); //PacketID
+		
+		daos.writeInt(this.id);
+		daos.close();
+		sendData = baos.toByteArray();
+		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+		clientSocket.send(sendPacket);
+
+	}
 
 	public void updateFromServer() throws IOException {
 		byte[] receiveData = new byte[1024];
@@ -119,13 +133,13 @@ class Client extends Thread{
 			boolean playerori = dais.readBoolean();
 			String playername = dais.readUTF();
 			
-
-			Game.player[playerID].x = playerx;
-			Game.player[playerID].y = playery;
-			Game.player[playerID].health = playerhealth;
-			Game.player[playerID].characterInverted = playerori;
-			Game.player[playerID].name = playername;
-			
+			if (Game.player[playerID] != null) {
+				Game.player[playerID].x = playerx;
+				Game.player[playerID].y = playery;
+				Game.player[playerID].health = playerhealth;
+				Game.player[playerID].characterInverted = playerori;
+				Game.player[playerID].name = playername;
+			}
 			System.out.println("[Client] Server sendet Daten von Client " + playerID+". "+playerx+" "+playery+ " "+playerhealth+" "+playerori+" "+playername);
 			break;
 
@@ -149,6 +163,13 @@ class Client extends Thread{
 			Game.player[connectplayerID].laden(Game, 100, 100);
 			
 			System.out.println("[Client] Spieler mit der ID "+ connectplayerID+" connected.");
+			break;
+		case 3: //disconnect
+			int disconnectId = dais.readInt();
+			
+			Game.player[disconnectId] = null;
+			
+			System.out.println("[Client] Spieler mit der ID "+ disconnectId+" disconnected.");
 			break;
 		}
 		

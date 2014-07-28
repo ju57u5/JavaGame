@@ -497,6 +497,13 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
 		} // end of if
 		
 		if (e.getSource()==Stop) {
+			if (Game.online) {
+				try {
+					Game.client.sendDisconnect();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
 			System.exit(0);
 		} // end of if
 

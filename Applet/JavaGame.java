@@ -70,7 +70,14 @@ public class JavaGame extends Frame implements KeyListener {
   {
     public void windowClosing(WindowEvent e)
     { 
-      e.getWindow().dispose();                   // Fenster "killen"
+    	if (online) {
+    		try {
+				client.sendDisconnect();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+    	}
+    	e.getWindow().dispose();                   // Fenster "killen"
       System.exit(0);
     }
   }
@@ -197,8 +204,8 @@ public class JavaGame extends Frame implements KeyListener {
     	Server server = new Server(this);
     	this.server=true;
     }
-    else {
-    	while ((serveradresse = JOptionPane.showInputDialog(null,"Geben Sie die Serveradresse ein", "Eine Eingabeaufforderung", JOptionPane.PLAIN_MESSAGE)).isEmpty() && onlinename != null) {}
+    else if(!online){
+    	while ((serveradresse = JOptionPane.showInputDialog(null,"Geben Sie die Serveradresse ein", "Eine Eingabeaufforderung", JOptionPane.PLAIN_MESSAGE)).isEmpty() && serveradresse != null) {}
     }
     
     gamerunner = new GameRunner(player,this);

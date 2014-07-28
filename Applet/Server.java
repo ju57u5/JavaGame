@@ -146,6 +146,24 @@ class Server extends Thread{
 			}
 			
 			break;
+		case 3: //Disconnect
+			int disconnectId = dais.readInt();
+			
+			ByteArrayOutputStream ba1=new ByteArrayOutputStream();
+			DataOutputStream da1=new DataOutputStream(ba1);
+			da1.writeInt(3);
+			da1.writeInt(disconnectId);
+			
+			da1.close();
+			sendData = ba1.toByteArray();
+			
+			for (int cou=1;cou<clients.size();cou++) {
+				if (cou != clientIPs.size()-1) {
+					DatagramPacket sendPacket1 =	new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
+					serverSocket.send(sendPacket1);
+				}
+			}
+			break;
 
 		}	
 
