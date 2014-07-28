@@ -57,6 +57,7 @@ public class JavaGame extends Frame implements KeyListener {
   Client client;
   boolean online=false,server=false;
   String onlinename="Online Player";
+  String serveradresse="localhost";
   // Ende Attribute
   
   
@@ -190,17 +191,21 @@ public class JavaGame extends Frame implements KeyListener {
     	client = new Client(this);
     	online=true;
     	while ((onlinename = JOptionPane.showInputDialog(null,"Geben Sie Ihren Namen ein", "Eine Eingabeaufforderung", JOptionPane.PLAIN_MESSAGE)).isEmpty() && onlinename != null) {}
+    	
     }
     if ((result = JOptionPane.showConfirmDialog((Component) null, "Sever an?", "Online", JOptionPane.YES_NO_OPTION))==0) {
     	Server server = new Server(this);
     	this.server=true;
+    }
+    else {
+    	while ((serveradresse = JOptionPane.showInputDialog(null,"Geben Sie die Serveradresse ein", "Eine Eingabeaufforderung", JOptionPane.PLAIN_MESSAGE)).isEmpty() && onlinename != null) {}
     }
     
     gamerunner = new GameRunner(player,this);
     DamageLogig = new damageLogig (gamerunner);
     
     try {
-		client.initialise("localhost", 9876);
+		client.initialise(serveradresse, 9876);
 		client.start();
 	} catch (SocketException e) {
 		e.printStackTrace();
