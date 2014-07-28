@@ -63,7 +63,8 @@ class Server extends Thread{
 			int playerx = dais.readInt();
 			int playery = dais.readInt();
 			int playerhealth = dais.readInt();
-
+			boolean playerori = dais.readBoolean();
+			String playername = dais.readUTF();
 
 			ByteArrayOutputStream baos=new ByteArrayOutputStream();
 			DataOutputStream daos=new DataOutputStream(baos);
@@ -73,6 +74,8 @@ class Server extends Thread{
 			daos.writeInt(playerx);
 			daos.writeInt(playery);
 			daos.writeInt(playerhealth);
+			daos.writeBoolean(playerori);
+			daos.writeUTF(playername);
 
 			daos.close();
 			sendData = baos.toByteArray();
