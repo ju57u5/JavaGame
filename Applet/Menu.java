@@ -393,17 +393,28 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
 					BufferedImage Image = ImageIO.read(Game.texture[c]);
 					Game.player[spieler].textureImage  = Image;
 					Game.player[spieler].textureImageb = Game.player[spieler].verticalflip(Image);
+					if (Game.online) {
+						Game.client.sendNewTexture(false, c);
+					}
 				} 
 				catch(IOException exeption) {
 
 				}
-			} // end of if
+				
+ 			} // end of if
 		}
 
 		for (int c=0;c<buttonSchuss.length;c++ ) {
 			if (e.getSource()==buttonSchuss[c]) {
 				int spieler = SpielerAuswahl.getSelectedIndex()+1;
 				Game.player[spieler].shottexture = Game.shottexture[c];
+				if (Game.online) {
+					try {
+						Game.client.sendNewTexture(true, c);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 			} // end of if
 		} // end of for
 

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 
 class Server extends Thread{
-	JavaGame Game;
 	DatagramSocket serverSocket = null;
 	int[] healths = new int[99];
 	int[] lastupdates = new int[99];
@@ -23,8 +22,7 @@ class Server extends Thread{
 	ArrayList<InetAddress> clientIPs = new ArrayList<InetAddress>();
 
 
-	public Server(JavaGame Game) {
-		this.Game = Game;
+	public Server() {
 		clients.add("");
 		clientPorts.add(null);
 		clientIPs.add(null);
@@ -213,6 +211,27 @@ class Server extends Thread{
 			// Server muss nichts machen
 			break;
 		case 5: //Restart Packet
+			break;
+		case 6: //net Texture
+			boolean shottexture = dais.readBoolean();
+			int textureid = dais.readInt();
+			int playerid = dais.readInt();
+			
+			ByteArrayOutputStream ba2=new ByteArrayOutputStream();
+			DataOutputStream da2=new DataOutputStream(ba2);
+			da2.writeInt(6);//PacketID
+			da2.writeBoolean(shottexture);
+			da2.writeInt(textureid);
+			da2.writeInt(playerid);
+			da2.close();
+			sendData = ba2.toByteArray();
+			
+			for (int cou=1;cou<clients.size();cou++) {
+				if (cou != playerid) {
+					DatagramPacket sendPacket1 =	new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
+					serverSocket.send(sendPacket1);
+				}
+			}
 			break;
 		
 		}	

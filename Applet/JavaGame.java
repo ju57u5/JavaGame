@@ -196,7 +196,7 @@ public class JavaGame extends Frame implements KeyListener {
 		int result;
 		Object[] options = {"SinglePlayer", "MultiPlayer"};
 		if (arg.equals("dedicated")) {
-			Server server = new Server(this);
+			Server server = new Server();
 			this.server=true;
 			setVisible(false);
 
@@ -210,7 +210,7 @@ public class JavaGame extends Frame implements KeyListener {
 
 				Object[] optionsmp = {"Host", "Client"};
 				if ((result = JOptionPane.showOptionDialog(null,"Treffen Sie eine Auswahl", "Alternativen",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, optionsmp, optionsmp[0]))==0) {
-					Server server = new Server(this);
+					Server server = new Server();
 					this.server=true;
 				}
 				else if(online){

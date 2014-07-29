@@ -1,6 +1,7 @@
 package Applet;
 
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -11,6 +12,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+
+import javax.imageio.ImageIO;
 
 
 class Client extends Thread{
@@ -116,6 +119,21 @@ class Client extends Thread{
 		clientSocket.send(sendPacket);
 
 	}
+	
+	public void sendNewTexture(boolean shottexture, int textureid) throws IOException {
+		byte[] sendData = new byte[1024];
+		ByteArrayOutputStream baos=new ByteArrayOutputStream();
+		DataOutputStream daos=new DataOutputStream(baos);
+		daos.writeInt(6); //PacketID
+		daos.writeBoolean(shottexture);
+		daos.writeInt(textureid);
+		daos.writeInt(id);
+		daos.close();
+		sendData = baos.toByteArray();
+		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+		clientSocket.send(sendPacket);
+		System.out.println("[Client] Sende neue Texture "+textureid);
+	}
 
 	public void updateFromServer() throws IOException {
 		byte[] receiveData = new byte[1024];
@@ -196,9 +214,29 @@ class Client extends Thread{
 			Game.player[id].speed=5;
 			Game.player[id].sperrzeit=40;
 			Game.player[id].freezeControls=false;
-			Game.player[id].health=1000;
+			Game.player[id].health=100;
 			sendPlayerData(id);
 			Game.gamerunner.running=true;
+			break;
+		case 6: //new Texture
+			boolean shottexture = dais.readBoolean();
+			int textureid = dais.readInt();
+			int playerid = dais.readInt();
+			
+			if (shottexture) {
+				Game.player[playerid].shottexture = Game.shottexture[textureid];
+				System.out.println("[Client] Neue Shottexture: "+textureid);
+			}
+			else {
+				try {
+					BufferedImage Image = ImageIO.read(Game.texture[textureid]);
+					Game.player[playerid].textureImage  = Image;
+					Game.player[playerid].textureImageb = Game.player[playerid].verticalflip(Image);
+				} 
+				catch(IOException exeption) {
+
+				}
+			}
 			break;
 		}
 		
