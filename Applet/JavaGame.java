@@ -195,24 +195,34 @@ public class JavaGame extends Frame implements KeyListener {
 
 		int result;
 		Object[] options = {"SinglePlayer", "MultiPlayer"};
-		if ((result = JOptionPane.showOptionDialog(null,"Treffen Sie eine Auswahl", "Alternativen",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]))==1) {
-			client = new Client(this);
-			online=true;
-			while ((onlinename = JOptionPane.showInputDialog(null,"Geben Sie Ihren Namen ein", "Eine Eingabeaufforderung", JOptionPane.PLAIN_MESSAGE)).isEmpty() && onlinename != null) {}
+		if (arg.equals("dedicated")) {
+			Server server = new Server(this);
+			this.server=true;
+			setVisible(false);
+			
+		}
+		else {
+			if ((result = JOptionPane.showOptionDialog(null,"Treffen Sie eine Auswahl", "Alternativen",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]))==1) {
+				client = new Client(this);
+				online=true;
+				while ((onlinename = JOptionPane.showInputDialog(null,"Geben Sie Ihren Namen ein", "Eine Eingabeaufforderung", JOptionPane.PLAIN_MESSAGE)).isEmpty() && onlinename != null) {}
 
 
-			Object[] optionsmp = {"Host", "Client"};
-			if ((result = JOptionPane.showOptionDialog(null,"Treffen Sie eine Auswahl", "Alternativen",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, optionsmp, optionsmp[0]))==0) {
-				Server server = new Server(this);
-				this.server=true;
-			}
-			else if(online){
-				while ((serveradresse = JOptionPane.showInputDialog(null,"Geben Sie die Serveradresse ein", "Eine Eingabeaufforderung", JOptionPane.PLAIN_MESSAGE)).isEmpty() && serveradresse != null) {}
+				Object[] optionsmp = {"Host", "Client"};
+				if ((result = JOptionPane.showOptionDialog(null,"Treffen Sie eine Auswahl", "Alternativen",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, optionsmp, optionsmp[0]))==0) {
+					Server server = new Server(this);
+					this.server=true;
+				}
+				else if(online){
+					while ((serveradresse = JOptionPane.showInputDialog(null,"Geben Sie die Serveradresse ein", "Eine Eingabeaufforderung", JOptionPane.PLAIN_MESSAGE)).isEmpty() && serveradresse != null) {}
+				}
 			}
 		}
-		gamerunner = new GameRunner(player,this);
-		DamageLogig = new damageLogig (gamerunner);
-
+		if (!arg.equals("dedicated")) {
+			gamerunner = new GameRunner(player,this);
+			DamageLogig = new damageLogig (gamerunner);
+		}
+		
 		if (online) {
 			try {
 				client.initialise(serveradresse, 9876);
