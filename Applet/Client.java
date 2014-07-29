@@ -132,7 +132,7 @@ class Client extends Thread{
 		sendData = baos.toByteArray();
 		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 		clientSocket.send(sendPacket);
-		System.out.println("[Client] Sende neue Texture "+textureid);
+		System.out.println("[Client] Sende neue Texture "+textureid+" "+shottexture);
 	}
 
 	public void updateFromServer() throws IOException {
@@ -170,7 +170,7 @@ class Client extends Thread{
 			boolean rechts = dais.readBoolean();
 			int shotspeed = dais.readInt();
 			System.out.println("[Client] Schuss angekommen "+shotx+" "+shoty+" "+shotplayerID);
-			Shot shot = new Shot(Game.shottexture[1], rechts, shotspeed, Game, Game.player[shotplayerID]);
+			Shot shot = new Shot(Game.player[shotplayerID].shottexture, rechts, shotspeed, Game, Game.player[shotplayerID]);
 			shot.laden(shotx, shoty);
 
 			break;
@@ -222,7 +222,7 @@ class Client extends Thread{
 			boolean shottexture = dais.readBoolean();
 			int textureid = dais.readInt();
 			int playerid = dais.readInt();
-			
+			System.out.println("[Client] Neue Shottexture: "+textureid+" "+shottexture+" "+playerid);
 			if (shottexture) {
 				Game.player[playerid].shottexture = Game.shottexture[textureid];
 				System.out.println("[Client] Neue Shottexture: "+textureid);

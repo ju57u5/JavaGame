@@ -49,7 +49,7 @@ class Server extends Thread{
 			if (perkjn<9) {//Standart 9
 				int perkx= (int) (Math.random()*1000+1);
 				int perky= (int) (Math.random()*400+100);
-				int perkw = (int) (Math.random()*6+1);
+				int perkw = (int) (Math.random()*5+1);
 				try {
 					System.out.println("[Server] Sende Perk.");
 					sendNewPerk(perkx,perky,perkw);
@@ -212,7 +212,7 @@ class Server extends Thread{
 			break;
 		case 5: //Restart Packet
 			break;
-		case 6: //net Texture
+		case 6: //new Texture
 			boolean shottexture = dais.readBoolean();
 			int textureid = dais.readInt();
 			int playerid = dais.readInt();
