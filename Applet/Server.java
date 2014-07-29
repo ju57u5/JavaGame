@@ -13,6 +13,10 @@ import java.util.ArrayList;
 class Server extends Thread{
 	JavaGame Game;
 	DatagramSocket serverSocket = null;
+	int[] healths = new int[99];
+	int[] lastupdates = new int[99];
+	int tickzähler = 0;
+	int disconnectcounter=0;
 	ArrayList<String> clients = new ArrayList<String>();
 	ArrayList<Integer> clientPorts = new ArrayList<Integer>();
 	ArrayList<InetAddress> clientIPs = new ArrayList<InetAddress>();
@@ -54,7 +58,27 @@ class Server extends Thread{
 					e.printStackTrace();
 				}
 			} // end of if
-			
+			int totencounter=0;
+			for (int i = 1; i < clients.size(); i++) {
+				if (healths[i]<=0) {
+					totencounter++;
+				}
+			}
+			System.out.println("[Server] Tote: "+totencounter+" Spieler: "+(clients.size()-1-disconnectcounter));
+			if (totencounter==clients.size()-1-disconnectcounter) {
+				try {
+					Thread.sleep(5000);
+				} catch (Exception e) {
+				}
+				try {
+					System.out.println("[Server] Restart");
+					sendRestart();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			checkTimeout();
+			tickzähler++;
 		}
 	}
 	
@@ -77,6 +101,10 @@ class Server extends Thread{
 			int playerx = dais.readInt();
 			int playery = dais.readInt();
 			int playerhealth = dais.readInt();
+			//Health wird gespeichert
+			healths[playerID]=playerhealth;
+			//Update wird gespeichert
+			lastupdates[playerID] = tickzähler;
 			boolean playerori = dais.readBoolean();
 			String playername = dais.readUTF();
 
@@ -181,7 +209,9 @@ class Server extends Thread{
 		case 4: //New Perk
 			// Server muss nichts machen
 			break;
-
+		case 5: //Restart Packet
+			break;
+		
 		}	
 
 
@@ -202,6 +232,30 @@ class Server extends Thread{
 		for (int cou=1;cou<clients.size();cou++) {
 				DatagramPacket sendPacket1 =	new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
 				serverSocket.send(sendPacket1);
+		}
+	}
+	
+	public void sendRestart() throws IOException {
+		byte[] sendData = new byte[1024];
+		ByteArrayOutputStream ba1=new ByteArrayOutputStream();
+		DataOutputStream da1=new DataOutputStream(ba1);
+		da1.writeInt(5); //PacketID
+		
+		
+		da1.close();
+		sendData = ba1.toByteArray();
+		
+		for (int cou=1;cou<clients.size();cou++) {
+				DatagramPacket sendPacket1 =	new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
+				serverSocket.send(sendPacket1);
+		}
+	}
+	
+	public void checkTimeout() {
+		for (int c=1;c<clients.size();c++) {
+			if (tickzähler-lastupdates[c]>150) {
+				disconnectcounter++;
+			}
 		}
 	}
 	

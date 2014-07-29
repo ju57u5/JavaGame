@@ -180,6 +180,16 @@ class Client extends Thread{
 			Game.gamerunner.perk[Game.gamerunner.count] = new perks(Game.gamerunner.perktexture, Game, perkx, perky, perkart);
 			Game.gamerunner.count++;
 			break;
+		case 5: //Restart Packet
+			System.out.println("[Client] Restart!!!!!!!!!!!!!!");
+			
+			Game.player[id].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
+			Game.player[id].y=0;
+			Game.player[id].health=100;
+			Game.player[id].jumpheigth=200;
+			Game.player[id].speed=5;
+			Game.player[id].sperrzeit=40;
+			Game.player[id].freezeControls=false;
 		}
 		
 	}
