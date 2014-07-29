@@ -41,9 +41,23 @@ class Server extends Thread{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			//Perk wird vom Server ermittelt
+			int perkjn= (int) (Math.random()*3000+1);
+			if (perkjn<9) {//Standart 9
+				int perkx= (int) (Math.random()*1000+1);
+				int perky= (int) (Math.random()*400+100);
+				int perkw = (int) (Math.random()*6+1);
+				try {
+					System.out.println("[Server] Sende Perk.");
+					sendNewPerk(perkx,perky,perkw);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} // end of if
+			
 		}
 	}
-
+	
 	public void updateClients () throws IOException {
 
 		byte[] receiveData = new byte[1024];
@@ -164,12 +178,33 @@ class Server extends Thread{
 				}
 			}
 			break;
+		case 4: //New Perk
+			// Server muss nichts machen
+			break;
 
 		}	
 
 
 
 	}
+	public void sendNewPerk(int x,int y,int art) throws IOException {
+		byte[] sendData = new byte[1024];
+		ByteArrayOutputStream ba1=new ByteArrayOutputStream();
+		DataOutputStream da1=new DataOutputStream(ba1);
+		da1.writeInt(4); //PacketID
+		da1.writeInt(x);
+		da1.writeInt(y);
+		da1.writeInt(art);
+		
+		da1.close();
+		sendData = ba1.toByteArray();
+		
+		for (int cou=1;cou<clients.size();cou++) {
+				DatagramPacket sendPacket1 =	new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
+				serverSocket.send(sendPacket1);
+		}
+	}
+	
+}	
 
 	
-}

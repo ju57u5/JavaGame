@@ -171,6 +171,15 @@ class Client extends Thread{
 			
 			System.out.println("[Client] Spieler mit der ID "+ disconnectId+" disconnected.");
 			break;
+		case 4: //new perk
+			System.out.println("[Client] Empfange Perk");
+			int perkx = dais.readInt();
+			int perky = dais.readInt();
+			int perkart = dais.readInt();
+			
+			Game.gamerunner.perk[Game.gamerunner.count] = new perks(Game.gamerunner.perktexture, Game, perkx, perky, perkart);
+			Game.gamerunner.count++;
+			break;
 		}
 		
 	}
