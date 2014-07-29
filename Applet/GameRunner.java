@@ -51,7 +51,7 @@ class GameRunner extends Thread {
 					Game.dbImage.getGraphics().drawImage(Game.backgroundImage,100,200-67,Game);
 
 					int perkjn= (int) (Math.random()*3000+1);
-					if (perkjn<auftretenvonperks) {
+					if (perkjn<auftretenvonperks && !Game.online) {
 						int perkx= (int) (Math.random()*1000+1);
 						int perky= (int) (Math.random()*400+100);
 						perk[count] = new perks(perktexture, false, 10, Game, perkx, perky); 

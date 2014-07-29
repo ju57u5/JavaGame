@@ -12,10 +12,17 @@ import Applet.JavaGame;
 
 public class ScoreFrame extends Frame {
 	JavaGame Game;
+	int gegner,kills,leben,score;
+	String winner;
 
 	public ScoreFrame (JavaGame Game, String winner, int gegner, int kills, int leben, int score) {
 
 		this.Game = Game;
+		this.gegner=gegner;
+		this.kills=kills;
+		this.leben=leben;
+		this.score=score;
+		this.winner=winner;
 		setTitle("Online Highscore");  
 		setSize(200,Game.getHeight());                            
 		addWindowListener(new TestWindowListener());
@@ -23,14 +30,20 @@ public class ScoreFrame extends Frame {
 		toBack();
 		setVisible(true);
 
+//		Game.highscore.getHighscore();
+
+	}
+
+	public void paint(Graphics g) {
+		super.paint(g);
 		Game.highscore.getHighscore();
 		if (Game.highscore.failed) {
-			java.awt.Graphics g = this.getGraphics();
-			
+			//java.awt.Graphics g = this.getGraphics();
+
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 			g.drawString("Dein Score", 20, 60);
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-			
+
 			g.drawString("Gegner", 20,1*20+80);
 			g.drawString(""+gegner, 120,1*20+80);
 
@@ -45,7 +58,7 @@ public class ScoreFrame extends Frame {
 			//dispose();
 		}
 		else {
-			java.awt.Graphics g = this.getGraphics();
+			//			java.awt.Graphics g = this.getGraphics();
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 			g.drawString("Online Highscore", 20, 60);
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
@@ -59,6 +72,7 @@ public class ScoreFrame extends Frame {
 				g.setColor(Color.black);
 				//g.drawLine(0, 80+c*20+5, getWidth(), 80+c*20+5);                               //Trennlinien
 				höhe=80+c*20;
+
 			}
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 			g.drawString("Dein Score", 20, höhe+60);

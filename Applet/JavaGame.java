@@ -204,7 +204,7 @@ public class JavaGame extends Frame implements KeyListener {
     	Server server = new Server(this);
     	this.server=true;
     }
-    else if(!online){
+    else if(online){
     	while ((serveradresse = JOptionPane.showInputDialog(null,"Geben Sie die Serveradresse ein", "Eine Eingabeaufforderung", JOptionPane.PLAIN_MESSAGE)).isEmpty() && serveradresse != null) {}
     }
     
