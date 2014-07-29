@@ -199,7 +199,7 @@ public class JavaGame extends Frame implements KeyListener {
 			Server server = new Server(this);
 			this.server=true;
 			setVisible(false);
-			
+
 		}
 		else {
 			if ((result = JOptionPane.showOptionDialog(null,"Treffen Sie eine Auswahl", "Alternativen",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, options, options[0]))==1) {
@@ -222,7 +222,7 @@ public class JavaGame extends Frame implements KeyListener {
 			gamerunner = new GameRunner(player,this);
 			DamageLogig = new damageLogig (gamerunner);
 		}
-		
+
 		if (online) {
 			try {
 				client.initialise(serveradresse, 9876);
@@ -260,7 +260,7 @@ public class JavaGame extends Frame implements KeyListener {
 			} // end of if
 		} // end of if-else
 
-		else if (e.getKeyCode()==KeyEvent.VK_R) {
+		else if (e.getKeyCode()==KeyEvent.VK_R && !online) {
 			restartGame();
 		}
 

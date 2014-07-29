@@ -16,6 +16,7 @@ class Server extends Thread{
 	int[] healths = new int[99];
 	int[] lastupdates = new int[99];
 	int tickzähler = 0;
+	int restarttick=0;
 	int disconnectcounter=0;
 	ArrayList<String> clients = new ArrayList<String>();
 	ArrayList<Integer> clientPorts = new ArrayList<Integer>();
@@ -64,17 +65,19 @@ class Server extends Thread{
 					totencounter++;
 				}
 			}
-			System.out.println("[Server] Tote: "+totencounter+" Spieler: "+(clients.size()-1-disconnectcounter));
-			if (totencounter==clients.size()-1-disconnectcounter) {
-				try {
-					Thread.sleep(5000);
-				} catch (Exception e) {
-				}
+			System.out.println("[Server] Tote: "+totencounter+" Spieler: "+(clients.size()-1-disconnectcounter)+" Diconnected: "+disconnectcounter);
+			if (totencounter==clients.size()-1-disconnectcounter && tickzähler-restarttick>10) {
+				
 				try {
 					System.out.println("[Server] Restart");
+					restarttick=tickzähler;
 					sendRestart();
 				} catch (IOException e) {
 					e.printStackTrace();
+				}
+				try {
+					Thread.sleep(1);
+				} catch (Exception e) {
 				}
 			}
 			checkTimeout();
@@ -121,7 +124,7 @@ class Server extends Thread{
 
 			daos.close();
 			sendData = baos.toByteArray();
-			System.out.println("[Server] Client "+playerID+" schickt Daten.");
+			System.out.println("[Server] Client "+playerID+" schickt Daten. Health: " +playerhealth);
 			for (int cou=1;cou<clients.size();cou++) {	
 				if (cou != playerID) {
 
@@ -249,14 +252,19 @@ class Server extends Thread{
 				DatagramPacket sendPacket1 =	new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
 				serverSocket.send(sendPacket1);
 		}
+		for (int c=0;c<healths.length;c++) {
+			healths[c]=100;
+		}
 	}
 	
 	public void checkTimeout() {
+		int disconnectcounter=0;
 		for (int c=1;c<clients.size();c++) {
-			if (tickzähler-lastupdates[c]>150) {
+			if (tickzähler-lastupdates[c]>150 && tickzähler-restarttick > 20) {
 				disconnectcounter++;
 			}
 		}
+		this.disconnectcounter=clients.size()-2-disconnectcounter;
 	}
 	
 }	

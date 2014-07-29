@@ -79,6 +79,8 @@ class Client extends Thread{
 		sendData = baos.toByteArray();
 		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 		clientSocket.send(sendPacket);
+		System.out.println("[Client] Sende Spielerdata. Health: "+Game.player[id].health);
+		
 
 	}
 
@@ -181,15 +183,23 @@ class Client extends Thread{
 			Game.gamerunner.count++;
 			break;
 		case 5: //Restart Packet
-			System.out.println("[Client] Restart!!!!!!!!!!!!!!");
 			
+			System.out.println("[Client] Restart!!!!!!!!!!!!!!");
+			Game.gamerunner.running=false;
+			try {
+				Thread.sleep(5000);
+			} catch (Exception e) {
+			}
 			Game.player[id].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
 			Game.player[id].y=0;
-			Game.player[id].health=100;
 			Game.player[id].jumpheigth=200;
 			Game.player[id].speed=5;
 			Game.player[id].sperrzeit=40;
 			Game.player[id].freezeControls=false;
+			Game.player[id].health=1000;
+			sendPlayerData(id);
+			Game.gamerunner.running=true;
+			break;
 		}
 		
 	}
