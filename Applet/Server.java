@@ -173,7 +173,7 @@ class Server extends Thread{
 			while (!timeout[bestid] || bestid>=timeout.length) {bestid++;} //Erster freier Slot
 			timeout[bestid] = false;
 			lastupdates[bestid] = tickzähler;
-			if (clients.size()>=bestid) {
+			if (clients.size()<=bestid) {
 				clientPorts.add(receivePacket.getPort());
 				clientIPs.add(receivePacket.getAddress());
 				clients.add(packet);
@@ -183,13 +183,20 @@ class Server extends Thread{
 				clientIPs.set(bestid, receivePacket.getAddress());
 				clients.set(bestid, packet);
 			}
-			System.out.println("[Server] Login from " + clientIPs.get(clientIPs.size()-1).toString() + ":" + clientPorts.get(clientPorts.size()-1) + " "+packet);
-
-			String id = bestid+"";
-			sendData = id.getBytes();
-			DatagramPacket sendPacket =	new DatagramPacket(sendData, sendData.length, clientIPs.get(clientIPs.size()-1), clientPorts.get(clientPorts.size()-1));
+			System.out.println("[Server] Login from " + clientIPs.get(bestid).toString() + ":" + clientPorts.get(bestid) + " "+packet+" ID: "+bestid+" Spieler: "+(clients.size()-1));
+			// Es wird das Initial Packet übergeben
+			ByteArrayOutputStream bao1=new ByteArrayOutputStream();
+			DataOutputStream dao1=new DataOutputStream(bao1);
+			
+			dao1.writeInt(bestid);
+			dao1.writeInt(clients.size()-1);
+			
+			dao1.close();
+			sendData = bao1.toByteArray();
+			
+			DatagramPacket sendPacket =	new DatagramPacket(sendData, sendData.length, clientIPs.get(bestid), clientPorts.get(bestid));
 			serverSocket.send(sendPacket);
-
+			//Das Login Packet wird an alle anderen Clienten übergeben
 			ByteArrayOutputStream ba=new ByteArrayOutputStream();
 			DataOutputStream da=new DataOutputStream(ba);
 
@@ -199,8 +206,8 @@ class Server extends Thread{
 			sendData = ba.toByteArray();
 
 			for (int cou=1;cou<clients.size();cou++) {
-				if (cou != clientIPs.size()-1) {
-					DatagramPacket sendPacket1 =	new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
+				if (cou != bestid) {
+					DatagramPacket sendPacket1 = new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
 					serverSocket.send(sendPacket1);
 				}
 			}
@@ -216,6 +223,7 @@ class Server extends Thread{
 
 			da1.close();
 			sendData = ba1.toByteArray();
+			timeout[disconnectId]=true;
 
 			for (int cou=1;cou<clients.size();cou++) {
 				if (cou != disconnectId) {

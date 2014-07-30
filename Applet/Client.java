@@ -43,12 +43,17 @@ class Client extends Thread{
 		byte[] receiveData = new byte[1024];
 		DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 		clientSocket.receive(receivePacket);
-		String gottenPacket = new String(receivePacket.getData());
-		System.out.println("[Client]ID from Server: " + gottenPacket);
-		id = Integer.parseInt(gottenPacket.trim());
+		
+		ByteArrayInputStream bais=new ByteArrayInputStream(receiveData);
+		DataInputStream dais=new DataInputStream(bais);
+		id = dais.readInt();
+		int playersize = dais.readInt();
+		
+		System.out.println("[Client]ID from Server: " + id);
+		
 		
 		for (int c=1;c<Game.player.length;c++) {
-			if (c<id) {
+			if (c <= playersize&& c!=id) {
 				Game.player[c] = new ClientPlayer(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Online Player "+c);
 				Game.addKeyListener(Game.player[c]);
 				Game.player[c].laden(Game,-1000,100);
@@ -58,7 +63,7 @@ class Client extends Thread{
 				Game.addKeyListener(Game.player[c]);
 				Game.player[c].laden(Game,100,100);
 			}
-			else if (c>id) {
+			else if (c>playersize) {
 				Game.player[c]=null;
 			}
 		}
