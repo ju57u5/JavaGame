@@ -14,7 +14,7 @@ public class ClientPlayer extends Player {
 	
 	public void updateKey()
 	{
-		 if (firsttimepressed && !freezeControls) {
+		 if (/*firsttimepressed &&*/ !freezeControls) {
 		     
 		    
 		    

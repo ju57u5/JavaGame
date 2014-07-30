@@ -14,6 +14,7 @@ class Server extends Thread{
 	DatagramSocket serverSocket = null;
 	int[] healths = new int[99];
 	int[] lastupdates = new int[99];
+	boolean[] timeout = new boolean[99];
 	int tickzähler = 0;
 	int restarttick=0;
 	int disconnectcounter=0;
@@ -26,6 +27,9 @@ class Server extends Thread{
 		clients.add("");
 		clientPorts.add(null);
 		clientIPs.add(null);
+		for (int c=0;c<timeout.length;c++) {
+			timeout[c] = true;
+		}
 		start();
 	}  
 
@@ -167,8 +171,12 @@ class Server extends Thread{
 			clientIPs.add(receivePacket.getAddress());
 			System.out.println("[Server] Login from " + clientIPs.get(clientIPs.size()-1).toString() + ":" + clientPorts.get(clientPorts.size()-1) + " "+packet);
 			clients.add(packet);
-
-			String id = clients.size()-1+"";
+			
+			int bestid=1;
+			while (!timeout[bestid] || bestid>=timeout.length) {bestid++;} //Erster freier Slot
+			timeout[bestid] = false;
+			
+			String id = bestid+"";
 			sendData = id.getBytes();
 			DatagramPacket sendPacket =	new DatagramPacket(sendData, sendData.length, clientIPs.get(clientIPs.size()-1), clientPorts.get(clientPorts.size()-1));
 			serverSocket.send(sendPacket);
@@ -281,6 +289,7 @@ class Server extends Thread{
 		for (int c=1;c<clients.size();c++) {
 			if (tickzähler-lastupdates[c]>150 && tickzähler-restarttick > 20) {
 				disconnectcounter++;
+				timeout[c] = true;
 			}
 		}
 		this.disconnectcounter=clients.size()-2-disconnectcounter;
