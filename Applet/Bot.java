@@ -5,6 +5,8 @@ import java.io.File;
 
 class Bot extends Player {
   
+  
+  
   public Bot(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int down, int attack, int xHealth, int yHealth, String name) {
     super(playertexture, shottexture, dbImage, left, right, jump, down, attack, xHealth, yHealth, name);
   }  
@@ -111,15 +113,24 @@ class Bot extends Player {
           if (Game.player[angriffsziel].health>0 && Game.player[angriffsziel] != this) {
             int botdif=y-Game.player[angriffsziel].y;      //Kampf gegen Spieler 2
             
-            if (x<Game.player[angriffsziel].x && Game.player[angriffsziel].x<1000) {
+            if (botdif<0) {
+              botdif=-botdif;
+            } // end of if
+            
+            if (x<Game.player[angriffsziel].x && Game.player[angriffsziel].x<1000) {          //Bewegung
               x +=speed/2;
-              characterInverted = false;
-              
             } // end of if
             if (x>Game.player[angriffsziel].x && Game.player[angriffsziel].x>100) {
-              x -=speed/2;
-              characterInverted = true; 
+              x -=speed/2; 
             } // end of if 
+            
+            if (x>Game.player[angriffsziel].x) {
+              characterInverted = true;
+            } // end of if
+            if (x<Game.player[angriffsziel].x) {
+              characterInverted = false;
+            } // end of if                                                                    //Bewegung Ende
+            
             
             if (x==Game.player[angriffsziel].x && y<Game.player[angriffsziel].y) {
               y -=1;
@@ -128,13 +139,6 @@ class Bot extends Player {
             } // end of if
             
             
-            if (x==Game.player[angriffsziel].x && botdif<80 && botdif>-80) {
-              if (schusssperre == 0) {
-                Shot bullet = new Shot(shottexture,!characterInverted, 10, Game,this);
-                bullet.laden(x,y+50);
-                schusssperre = sperrzeit;
-              } // end of if
-            }
             if (botdif<80 && botdif>-80) {     //selbe Höhe
               
               if (schusssperre == 0) {
@@ -165,14 +169,16 @@ class Bot extends Player {
       } // end of if
       gefroren-=1;
       
-      min=1000000;  
+      min=100000;
       for (int c=1;c<Game.player.length;c++) {
-        if (Game.player[c] != null) {
+        if (Game.player[c] != null && Game.player[c] != this) {
           dif=Game.player[c].x-x;
-          if (dif<min && Game.player[c].health>0 && Game.player[c] != this) {
-            min=dif;
+          if (dif<min) {
             angriffsziel=c;
+            dif=min;
           } // end of if
+            
+
         }
       } // end of if
       
