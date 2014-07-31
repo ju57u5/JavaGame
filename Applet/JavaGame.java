@@ -245,7 +245,9 @@ public class JavaGame extends Frame implements KeyListener {
 			Graphics gr = this.getGraphics();
 			gr.setFont(new Font("TimesRoman", Font.PLAIN, 40)); 
 			gr.drawString("PAUSE", (int) this.getWidth()/2, this.getHeight()/2);
-			gamerunner.running=false;
+			if (!online) {
+				gamerunner.running=false;
+			}
 			if (soundan) {
 				ac.stop();
 			} // end of if
