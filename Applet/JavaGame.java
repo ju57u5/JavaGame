@@ -49,15 +49,12 @@ public class JavaGame extends Frame implements KeyListener {
   GameRunner gamerunner;
   float vol;
   BufferedImage backgroundImage;
-  AudioInputStream Stream;
-  Clip ac;
   OggClip oc;
   String[] args = new String[100];
   Highscore highscore;
   String[] nachricht = new String[5];
   Updater updater;
   String arg;
-  FloatControl volume;
   Client client;
   boolean online=false,server=false;
   String onlinename="Online Player";
@@ -123,12 +120,6 @@ public class JavaGame extends Frame implements KeyListener {
       File File = new File((System.getenv("APPDATA")));
       basePath = new File(File, "/texture");
       backgroundTexture = new File(basePath,"/hintergrund.jpg");
-      sound = new File(basePath,"/sound.wav");
-      Stream =AudioSystem.getAudioInputStream(sound);
-      ac = AudioSystem.getClip();
-      ac.open(Stream);
-      volume =  (FloatControl) ac.getControl(FloatControl.Type.MASTER_GAIN);
-      volume.setValue(-10.0f);
       oc = new OggClip(new FileInputStream(basePath+"\\sound.ogg"));
     }
     catch(Exception ex)
@@ -149,7 +140,6 @@ public class JavaGame extends Frame implements KeyListener {
     
     
     if (soundan) {
-//      ac.loop(10);
       oc.loop();
       oc.setGain(0.8f);
       currentVolume= 80;
@@ -268,7 +258,6 @@ public class JavaGame extends Frame implements KeyListener {
         gamerunner.running=false;
       }
       if (soundan) {
-        ac.stop();
         oc.stop();
       } // end of if
       Menu menu = new Menu(this);
@@ -278,7 +267,6 @@ public class JavaGame extends Frame implements KeyListener {
     else if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {
       gamerunner.running=true;
       if (soundan) {
-        ac.loop(10);
         oc.loop();
       } // end of if
     } // end of if-else
@@ -288,7 +276,6 @@ public class JavaGame extends Frame implements KeyListener {
     }
     
     else if (e.getKeyCode()==KeyEvent.VK_F11) {
-      ac.stop();
       oc.stop();
       dispose();
       setUndecorated(true);

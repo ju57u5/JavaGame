@@ -248,7 +248,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
   public void adjustmentValueChanged(AdjustmentEvent e) {
     
     Game.gamerunner.auftretenvonperks=perks.getValue();
-//    Game.volume.setValue(lautstaerke.getValue());
     Game.oc.setGain((float) lautstaerke.getValue()/100);
     Game.currentVolume=lautstaerke.getValue();
   }
@@ -281,7 +280,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       playerCount();
       Game.gamerunner.running=true;
       if (Game.soundan) {
-//        Game.ac.loop(10);
     	  Game.oc.loop();
       } // end of if
       this.dispose(); 
@@ -391,7 +389,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       playerCount();
       Game.gamerunner.running=true;
       if (Game.soundan) {
-//        Game.ac.loop(10);
     	  Game.oc.loop();
       } // end of if
       e.getWindow().dispose();                   // Fenster "killen"
@@ -485,7 +482,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       playerCount();
       Game.restartGame();
       if (Game.soundan) {
-        Game.ac.loop(10);
+        Game.oc.loop();
       } // end of if
       this.dispose();
       Game.gamerunner.running=true;
@@ -495,7 +492,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       playerCount();
       Game.gamerunner.running=true;
       if (Game.soundan) {
-        Game.ac.loop(10);
+        Game.oc.loop();
       } // end of if
       this.dispose();
     } // end of if  
