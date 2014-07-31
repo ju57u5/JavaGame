@@ -43,12 +43,13 @@ class GameRunner extends Thread {
 				}
 				catch(InterruptedException e) {
 				}
-				
+
 				if (running) {
 					Game.repaint();
 					Game.dbImage.getGraphics().clearRect(0,0, (int)Game.getWidth(), (int)Game.getHeight());
 
-					Game.dbImage.getGraphics().drawImage(Game.backgroundImage,100,200-67,Game);
+					//Game.dbImage.getGraphics().drawImage(Game.backgroundImage,100,200-67,Game);
+					Game.dbImage.getGraphics().drawImage(Game.backgroundImage,0,0,Game);
 
 					int perkjn= (int) (Math.random()*3000+1);
 					if (perkjn<auftretenvonperks && !Game.online) {
@@ -99,13 +100,13 @@ class GameRunner extends Thread {
 						Game.dbImage.getGraphics().drawString("FPS: "+ 1000/timediff, Game.getWidth()-380, Game.getHeight()-20);
 					} // end of if
 					time =(int) System.currentTimeMillis();
-
-					for (int c = 1;c<Game.ebenen.length;c++) {
-						if (Game.ebenen[c] != null) {
-							Game.dbImage.getGraphics().drawLine(Game.ebenen[c][0],Game.ebenen[c][2],Game.ebenen[c][1],Game.ebenen[c][2]);
-						} // end of if
-					} // end of for
-
+					if (Game.arg.equals("dev")) {
+						for (int c = 0;c<Game.ebenen.length;c++) {
+							if (Game.ebenen[c] != null) {
+								Game.dbImage.getGraphics().drawLine(Game.ebenen[c][0],Game.ebenen[c][2],Game.ebenen[c][1],Game.ebenen[c][2]);
+							} // end of if
+						} // end of for
+					}
 
 
 					int anzahl=0;

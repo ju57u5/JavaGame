@@ -154,21 +154,31 @@ public class JavaGame extends Frame implements KeyListener {
     
     //Ebenen Liste
     
-    ebenen[0][0]= 100;
-    ebenen[0][1]= 1000;       // Main Ebene: Kann nicht durchschrittenwerden indem down gedrückt wird
-    ebenen[0][2]= 590;
+    ebenen[0][0]= 91;
+    ebenen[0][1]= 991;       // Main Ebene: Kann nicht durchschrittenwerden indem down gedrückt wird
+    ebenen[0][2]= 563;
     
-    ebenen[1][0]= 430;  //x1
-    ebenen[1][1]= 500;  //x2
-    ebenen[1][2]= 480;  //y
+    ebenen[1][0]= 387;  //x1
+    ebenen[1][1]= 524;  //x2
+    ebenen[1][2]= 454;  //y
     
-    ebenen[2][0]= 530;
-    ebenen[2][1]= 655;
-    ebenen[2][2]= 377;
+    ebenen[2][0]= 525;
+    ebenen[2][1]= 645;
+    ebenen[2][2]= 350;
     
-    ebenen[3][0]= 250;
-    ebenen[3][1]= 375;
-    ebenen[3][2]= 377;
+    ebenen[3][0]= 246;
+    ebenen[3][1]= 365;
+    ebenen[3][2]= 351;
+    
+    ebenen[4][0]= 760;
+    ebenen[4][1]= 870;
+    ebenen[4][2]= 294;
+    
+    ebenen[5][0]= 835;
+    ebenen[5][1]= 969;
+    ebenen[5][2]= 441;
+    
+    
     
     // Spieler
     
