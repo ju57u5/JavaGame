@@ -215,8 +215,11 @@ class Client extends Thread{
 			}
 			for (int c=1;c<Game.player.length;c++) {
 				if (Game.player[c] != null) {
-					Game.player[c].freezeControls=false;
+					//Reihenfolge wichtig!!! erst health dann controls
+					Game.player[c].y=0;
+					Game.player[c].firsttimepressed=true;
 					Game.player[c].health=100;
+					Game.player[c].freezeControls=false;
 				}
 			}
 			Game.player[id].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
