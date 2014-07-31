@@ -123,7 +123,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     L1.addKeyListener(this);
     this.add(L1);
     L1=new Label("3. Schalte den Port 9876 mit dem Protokoll UDP frei");
-    L1.setBounds(540,500,280,20);
+    L1.setBounds(540,500,290,20);
     L1.addKeyListener(this);
     this.add(L1);
     
