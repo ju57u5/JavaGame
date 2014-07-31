@@ -61,8 +61,7 @@ class Bot extends Player {
         freezeControls=true;
       } // end of if
       
-      //Perk begrenzen
-      //perks anzeigen
+      
       if (jumpheigth==300) {
         Game.dbImage.getGraphics().drawString("Springen "+perkzählerjump/10,xHealth,yHealth+50);
         perkzählerjump=perkzählerjump-1;
@@ -96,7 +95,7 @@ class Bot extends Player {
         Game.dbImage.getGraphics().drawImage(boomImage,boomx,boomy,Game);
       } // end of if
       
-      if (gefroren<0) {
+      if (gefroren<0 && amstartwarten<0) {
         freezeControls=false;
         if (x<100 || x>1000) {      //selbstschutz
           if (x<100)
@@ -177,11 +176,11 @@ class Bot extends Player {
             angriffsziel=c;
             dif=min;
           } // end of if
-            
-
+          
+          
         }
       } // end of if
-      
+      amstartwarten-=1;
       
       
       
