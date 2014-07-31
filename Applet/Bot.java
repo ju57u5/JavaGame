@@ -172,7 +172,7 @@ class Bot extends Player {
       for (int c=1;c<Game.player.length;c++) {
         if (Game.player[c] != null && Game.player[c] != this) {
           dif=Game.player[c].x-x;
-          if (dif<min) {
+          if (dif<min && Game.player[c].health>0) {
             angriffsziel=c;
             dif=min;
           } // end of if
