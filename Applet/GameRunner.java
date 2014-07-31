@@ -1,5 +1,6 @@
 package Applet;
 
+import java.awt.Graphics;
 import java.io.File;
 
 ////// Standart Thread für das aktualisieren aller Komponenten
@@ -22,6 +23,8 @@ class GameRunner extends Thread {
 	int totencounter=0;
 	int gesamtticks=0;
 	ScoreFrame scoreFrame;
+	String chatMessages[] = new String [30];
+	
 
 	// Ende Attribute5
 
@@ -92,6 +95,14 @@ class GameRunner extends Thread {
 							Game.dbImage.getGraphics().drawString(Game.nachricht[c], 20, Game.getHeight()-20-(c*20));
 						} // end of if
 					} // end of for
+					
+					for (int c=0;c<5;c++) {
+						if (chatMessages[c] != null) {
+							System.out.println(chatMessages[c]);
+							Game.dbImage.getGraphics().drawString(chatMessages[c], Game.getWidth()-Game.getGraphics().getFontMetrics().stringWidth(chatMessages[c])-20, 50+(c*20));
+						} // end of if
+					} // end of for
+					
 					Game.dbImage.getGraphics().drawString("Music: Early Riser Kevin MacLeod (incompetech.com)", Game.getWidth()-320, Game.getHeight()-20);
 
 					int timediff = ((int) System.currentTimeMillis()-time);

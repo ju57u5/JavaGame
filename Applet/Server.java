@@ -275,6 +275,25 @@ class Server extends Thread{
 				}
 			}
 			break;
+		case 7://New ChatMessage
+			String name=dais.readUTF();
+			String message=dais.readUTF();
+			
+			ByteArrayOutputStream ba3=new ByteArrayOutputStream();
+			DataOutputStream da3=new DataOutputStream(ba3);
+			da3.writeInt(7); //PacketID
+			da3.writeUTF(name);
+			da3.writeUTF(message);
+			da3.close();
+			
+			sendData = ba3.toByteArray();
+			System.out.println("[Server] Neue Chatnachricht: "+message);
+			for (int cou=1;cou<clients.size();cou++) {
+					DatagramPacket sendPacket1 = new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
+					serverSocket.send(sendPacket1);
+			}
+			
+			break;
 
 		}	
 

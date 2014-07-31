@@ -43,15 +43,15 @@ class Client extends Thread{
 		byte[] receiveData = new byte[1024];
 		DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 		clientSocket.receive(receivePacket);
-		
+
 		ByteArrayInputStream bais=new ByteArrayInputStream(receiveData);
 		DataInputStream dais=new DataInputStream(bais);
 		id = dais.readInt();
 		int playersize = dais.readInt();
-		
+
 		System.out.println("[Client]ID from Server: " + id);
-		
-		
+
+
 		for (int c=1;c<Game.player.length;c++) {
 			if (c <= playersize&& c!=id) {
 				Game.player[c] = new ClientPlayer(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Online Player "+c);
@@ -87,8 +87,8 @@ class Client extends Thread{
 		sendData = baos.toByteArray();
 		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 		clientSocket.send(sendPacket);
-//		System.out.println("[Client] Sende Spielerdata. Health: "+Game.player[id].health);
-		
+		//		System.out.println("[Client] Sende Spielerdata. Health: "+Game.player[id].health);
+
 
 	}
 
@@ -97,26 +97,26 @@ class Client extends Thread{
 		ByteArrayOutputStream baos=new ByteArrayOutputStream();
 		DataOutputStream daos=new DataOutputStream(baos);
 		daos.writeInt(1); //PacketID
-		
+
 		daos.writeInt(shotplayerid);
 		daos.writeInt(shotx);
 		daos.writeInt(shoty);
 		daos.writeBoolean(rechts);
 		daos.writeInt(shotspeed);
-		
+
 		daos.close();
 		sendData = baos.toByteArray();
 		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 		clientSocket.send(sendPacket);
-//		System.out.println("[Client] Neuer Schuss: "+shot.x+" "+shot.y+" "+shot.rechts+" ID: "+shotplayerid);
+		//		System.out.println("[Client] Neuer Schuss: "+shot.x+" "+shot.y+" "+shot.rechts+" ID: "+shotplayerid);
 	}
-	
+
 	public void sendDisconnect() throws IOException {
 		byte[] sendData = new byte[1024];
 		ByteArrayOutputStream baos=new ByteArrayOutputStream();
 		DataOutputStream daos=new DataOutputStream(baos);
 		daos.writeInt(3); //PacketID
-		
+
 		daos.writeInt(this.id);
 		daos.close();
 		sendData = baos.toByteArray();
@@ -124,7 +124,7 @@ class Client extends Thread{
 		clientSocket.send(sendPacket);
 
 	}
-	
+
 	public void sendNewTexture(boolean shottexture, int textureid) throws IOException {
 		byte[] sendData = new byte[1024];
 		ByteArrayOutputStream baos=new ByteArrayOutputStream();
@@ -138,6 +138,19 @@ class Client extends Thread{
 		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 		clientSocket.send(sendPacket);
 		System.out.println("[Client] Sende neue Texture "+textureid+" "+shottexture);
+	}
+
+	public void sendNewChatMessage(String name, String message) throws IOException {
+		byte[] sendData = new byte[1024];
+		ByteArrayOutputStream baos=new ByteArrayOutputStream();
+		DataOutputStream daos=new DataOutputStream(baos);
+		daos.writeInt(7); //PacketID
+		daos.writeUTF(name);
+		daos.writeUTF(message);
+		daos.close();
+		sendData = baos.toByteArray();
+		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+		clientSocket.send(sendPacket);
 	}
 
 	public void updateFromServer() throws IOException {
@@ -157,7 +170,7 @@ class Client extends Thread{
 			int playerhealth = dais.readInt();
 			boolean playerori = dais.readBoolean();
 			String playername = dais.readUTF();
-			
+
 			if (Game.player[playerID] != null) {
 				Game.player[playerID].x = playerx;
 				Game.player[playerID].y = playery;
@@ -165,7 +178,7 @@ class Client extends Thread{
 				Game.player[playerID].characterInverted = playerori;
 				Game.player[playerID].name = playername;
 			}
-//			System.out.println("[Client] Server sendet Daten von Client " + playerID+". "+playerx+" "+playery+ " "+playerhealth+" "+playerori+" "+playername);
+			//			System.out.println("[Client] Server sendet Daten von Client " + playerID+". "+playerx+" "+playery+ " "+playerhealth+" "+playerori+" "+playername);
 			break;
 
 		case 1: //New Shot
@@ -174,39 +187,39 @@ class Client extends Thread{
 			int shoty = dais.readInt();
 			boolean rechts = dais.readBoolean();
 			int shotspeed = dais.readInt();
-//			System.out.println("[Client] Schuss angekommen "+shotx+" "+shoty+" "+shotplayerID);
+			//			System.out.println("[Client] Schuss angekommen "+shotx+" "+shoty+" "+shotplayerID);
 			Shot shot = new Shot(Game.player[shotplayerID].shottexture, rechts, shotspeed, Game, Game.player[shotplayerID]);
 			shot.laden(shotx, shoty);
 
 			break;
 		case 2: //Player connected
 			int connectplayerID = dais.readInt();
-			
+
 
 			Game.player[connectplayerID] = new ClientPlayer(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,connectplayerID,35,"Online Player "+connectplayerID);
 			Game.addKeyListener(Game.player[connectplayerID]);
 			Game.player[connectplayerID].laden(Game, 100, 100);
-			
+
 			System.out.println("[Client] Spieler mit der ID "+ connectplayerID+" connected.");
 			break;
 		case 3: //disconnect
 			int disconnectId = dais.readInt();
-			
+
 			Game.player[disconnectId] = null;
-			
+
 			System.out.println("[Client] Spieler mit der ID "+ disconnectId+" disconnected.");
 			break;
 		case 4: //new perk
-//			System.out.println("[Client] Empfange Perk");
+			//			System.out.println("[Client] Empfange Perk");
 			int perkx = dais.readInt();
 			int perky = dais.readInt();
 			int perkart = dais.readInt();
-			
+
 			Game.gamerunner.perk[Game.gamerunner.count] = new perks(Game.gamerunner.perktexture, Game, perkx, perky, perkart);
 			Game.gamerunner.count++;
 			break;
 		case 5: //Restart Packet
-			
+
 			System.out.println("[Client] Restart!!!!!!!!!!!!!!");
 			Game.gamerunner.running=false;
 			try {
@@ -236,7 +249,7 @@ class Client extends Thread{
 			boolean shottexture = dais.readBoolean();
 			int textureid = dais.readInt();
 			int playerid = dais.readInt();
-//			System.out.println("[Client] Neue Texture: "+textureid+" "+shottexture+" "+playerid);
+			//			System.out.println("[Client] Neue Texture: "+textureid+" "+shottexture+" "+playerid);
 			if (shottexture) {
 				Game.player[playerid].shottexture = Game.shottexture[textureid];
 			}
@@ -251,8 +264,17 @@ class Client extends Thread{
 				}
 			}
 			break;
+		case 7: //New Chat Message
+			String name = dais.readUTF();
+			String message = dais.readUTF();
+			for (int c=Game.gamerunner.chatMessages.length-2;c>=0;c--) {
+					Game.gamerunner.chatMessages[c+1]=Game.gamerunner.chatMessages[c];
+			}
+			Game.gamerunner.chatMessages[0] = "["+name+"]: "+message;
+			System.out.println("[Client] Neue Chatnachricht: "+"["+name+"]: "+message);
+			break;
 		}
-		
+
 	}
 	public void run() {
 		while (true) {
