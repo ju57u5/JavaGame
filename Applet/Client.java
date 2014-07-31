@@ -213,6 +213,12 @@ class Client extends Thread{
 				Thread.sleep(5000);
 			} catch (Exception e) {
 			}
+			for (int c=1;c<Game.player.length;c++) {
+				if (Game.player[c] != null) {
+					Game.player[c].freezeControls=false;
+					Game.player[c].health=100;
+				}
+			}
 			Game.player[id].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
 			Game.player[id].y=0;
 			Game.player[id].jumpheigth=200;
