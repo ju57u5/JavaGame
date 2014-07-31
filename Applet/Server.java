@@ -182,6 +182,7 @@ class Server extends Thread{
 				clientPorts.set(bestid, receivePacket.getPort());
 				clientIPs.set(bestid, receivePacket.getAddress());
 				clients.set(bestid, packet);
+//				disconnectcounter--;
 			}
 			System.out.println("[Server] Login from " + clientIPs.get(bestid).toString() + ":" + clientPorts.get(bestid) + " "+packet+" ID: "+bestid+" Spieler: "+(clients.size()-1));
 			// Es wird das Initial Packet übergeben
@@ -304,7 +305,7 @@ class Server extends Thread{
 	public void checkTimeout() {
 		int disconnectcounter=0;
 		for (int c=1;c<clients.size();c++) {
-			if (tickzähler-lastupdates[c]>150 && tickzähler-restarttick > 20) {
+			if (tickzähler-lastupdates[c]>300 && tickzähler-restarttick > 20) {
 				disconnectcounter++;
 				if (!timeout[c]) {
 					System.out.println("[Server] Timeout. ID: "+c);
