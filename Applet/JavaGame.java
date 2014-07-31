@@ -62,6 +62,7 @@ public class JavaGame extends Frame implements KeyListener {
   boolean online=false,server=false;
   String onlinename="Online Player";
   String serveradresse="localhost";
+  int currentVolume;
   // Ende Attribute
   
   
@@ -150,6 +151,8 @@ public class JavaGame extends Frame implements KeyListener {
     if (soundan) {
 //      ac.loop(10);
       oc.loop();
+      oc.setGain(0.8f);
+      currentVolume= 80;
     } // end of if
     
     
@@ -266,6 +269,7 @@ public class JavaGame extends Frame implements KeyListener {
       }
       if (soundan) {
         ac.stop();
+        oc.stop();
       } // end of if
       Menu menu = new Menu(this);
       //volume.setValue(vol);
@@ -275,6 +279,7 @@ public class JavaGame extends Frame implements KeyListener {
       gamerunner.running=true;
       if (soundan) {
         ac.loop(10);
+        oc.loop();
       } // end of if
     } // end of if-else
     
@@ -284,6 +289,7 @@ public class JavaGame extends Frame implements KeyListener {
     
     else if (e.getKeyCode()==KeyEvent.VK_F11) {
       ac.stop();
+      oc.stop();
       dispose();
       setUndecorated(true);
       String[] arguments = {"fullscreen"};

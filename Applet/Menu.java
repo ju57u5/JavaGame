@@ -72,10 +72,10 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     perks.setBounds(210,460,200,20);
     
     
-    int currentVolume=(int) Game.volume.getValue();
+    int currentVolume=Game.currentVolume;//(int) Game.volume.getValue();
     //(int) Game.volume.getMinimum(); geht hier schlecht, da es unterirdische Werte ausgibt...
-    int minVolume=-50;  
-    int maxVolume=(int) Game.volume.getMaximum();
+    int minVolume=0;  
+    int maxVolume=100;
     
     lautstaerke=new Scrollbar(Scrollbar.HORIZONTAL,currentVolume,5,minVolume, maxVolume); 
     lautstaerke.addKeyListener(this);
@@ -248,7 +248,9 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
   public void adjustmentValueChanged(AdjustmentEvent e) {
     
     Game.gamerunner.auftretenvonperks=perks.getValue();
-    Game.volume.setValue(lautstaerke.getValue());
+//    Game.volume.setValue(lautstaerke.getValue());
+    Game.oc.setGain((float) lautstaerke.getValue()/100);
+    Game.currentVolume=lautstaerke.getValue();
   }
   public void itemStateChanged(ItemEvent ie)
   {
@@ -279,7 +281,8 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       playerCount();
       Game.gamerunner.running=true;
       if (Game.soundan) {
-        Game.ac.loop(10);
+//        Game.ac.loop(10);
+    	  Game.oc.loop();
       } // end of if
       this.dispose(); 
     }   
@@ -388,7 +391,8 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       playerCount();
       Game.gamerunner.running=true;
       if (Game.soundan) {
-        Game.ac.loop(10);
+//        Game.ac.loop(10);
+    	  Game.oc.loop();
       } // end of if
       e.getWindow().dispose();                   // Fenster "killen"
     }           
