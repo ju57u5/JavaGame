@@ -212,6 +212,22 @@ class Server extends Thread{
 					serverSocket.send(sendPacket1);
 				}
 			}
+			//Wir wollen dem neuen Spieler nun mitteilen welche Clienten schon ausgetimed sind.
+			for (int cou=1;cou<clients.size();cou++) {
+				if (cou != bestid) {
+					if (timeout[cou]) {
+						ByteArrayOutputStream ba1=new ByteArrayOutputStream();
+						DataOutputStream da1=new DataOutputStream(ba1);
+						da1.writeInt(3);
+						da1.writeInt(cou);
+
+						da1.close();
+						sendData = ba1.toByteArray();
+						DatagramPacket sendPacket1 = new DatagramPacket(sendData, sendData.length, clientIPs.get(bestid), clientPorts.get(bestid));
+						serverSocket.send(sendPacket1);
+					}
+				}
+			}
 
 			break;
 		case 3: //Disconnect
