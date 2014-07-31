@@ -3,6 +3,7 @@ package Applet;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -10,13 +11,15 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.net.*; 
 
+import org.newdawn.easyogg.OggClip;
+
 import javax.swing.*;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
-import Applet.*;
+//import Applet.*;
 
 
 //                           Interfaces
@@ -26,7 +29,7 @@ public class JavaGame extends Frame implements KeyListener {
 
   // Anfang Attribute
   boolean notrunning = true;
-  boolean soundan=false;
+  boolean soundan=true;
   boolean fpsan=false;
   URL  PlayerTextureUrl;
 
@@ -48,6 +51,7 @@ public class JavaGame extends Frame implements KeyListener {
   BufferedImage backgroundImage;
   AudioInputStream Stream;
   Clip ac;
+  OggClip oc;
   String[] args = new String[100];
   Highscore highscore;
   String[] nachricht = new String[5];
@@ -124,9 +128,10 @@ public class JavaGame extends Frame implements KeyListener {
       ac.open(Stream);
       volume =  (FloatControl) ac.getControl(FloatControl.Type.MASTER_GAIN);
       volume.setValue(-10.0f);
+      oc = new OggClip(new FileInputStream(basePath+"\\sound.ogg"));
     }
     catch(Exception ex)
-    {  }
+    { ex.printStackTrace(); }
     
     try { 
       PlayerTextureUrl = sound.toURI().toURL();
@@ -143,7 +148,8 @@ public class JavaGame extends Frame implements KeyListener {
     
     
     if (soundan) {
-      ac.loop(10);
+//      ac.loop(10);
+      oc.loop();
     } // end of if
     
     

@@ -215,7 +215,7 @@ class Client extends Thread{
 			}
 			for (int c=1;c<Game.player.length;c++) {
 				if (Game.player[c] != null) {
-					//Reihenfolge wichtig!!! erst health dann controls
+					//Reihenfolge wichtig!!! Erst health dann controls
 					Game.player[c].y=0;
 					Game.player[c].firsttimepressed=true;
 					Game.player[c].health=100;
