@@ -298,6 +298,12 @@ public class JavaGame extends Frame implements KeyListener {
         gamerunner.neu=false;
         gamerunner.schonneu=true;
         player[c].amstartwarten=42;
+        player[c].perkzählerjump=-1;
+        player[c].perkzählerrun=-1;
+        player[c].perkzählershoot=-1;
+        player[c].boomRight=0;
+        player[c].boomUp=0;
+        player[c].boomLeft=0;
       } // end of if
     } // end of for
     
