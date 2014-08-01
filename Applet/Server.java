@@ -294,7 +294,16 @@ class Server extends Thread{
 			}
 			
 			break;
-
+		case 8: //checkOnlineStatus
+			ByteArrayOutputStream ba4=new ByteArrayOutputStream();
+			DataOutputStream da4=new DataOutputStream(ba4);
+			//da4.writeInt(8); //PacketID
+			da4.writeBoolean(true);
+			da4.close();
+			sendData = ba4.toByteArray();
+			DatagramPacket sendPacket1 = new DatagramPacket(sendData, sendData.length, receivePacket.getAddress(), receivePacket.getPort());
+			serverSocket.send(sendPacket1);
+			break;
 		}	
 
 

@@ -152,6 +152,30 @@ class Client extends Thread{
 		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 		clientSocket.send(sendPacket);
 	}
+	
+	public boolean getOnlineStatus(String ipAddress, int port) throws IOException {
+		clientSocket = new DatagramSocket();
+		clientSocket.setSoTimeout(100);
+		IPAddress = InetAddress.getByName(ipAddress);
+		byte[] sendData = new byte[1024];
+		ByteArrayOutputStream baos=new ByteArrayOutputStream();
+		DataOutputStream daos=new DataOutputStream(baos);
+		daos.writeInt(8); //PacketID
+		daos.close();
+		sendData = baos.toByteArray();
+		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+		clientSocket.send(sendPacket);
+		
+		byte[] receiveData = new byte[1024];
+		DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+		clientSocket.receive(receivePacket);
+		
+		ByteArrayInputStream bais=new ByteArrayInputStream(receiveData);
+		DataInputStream dais=new DataInputStream(bais);
+		
+		boolean online = dais.readBoolean();
+		return online;
+	}
 
 	public void updateFromServer() throws IOException {
 		byte[] receiveData = new byte[1024];

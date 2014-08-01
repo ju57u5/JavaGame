@@ -18,8 +18,9 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
   TextField Name,maxFps,Spieler;
   Label L1,L2,L3,lautstaerkeLabel;
   Scrollbar perks, lautstaerke;
-  public Menu (JavaGame Game) 
+  boolean onlineStatus;
   
+  public Menu (JavaGame Game) 
   {
     this.Game = Game;
     this.setLayout(null);
@@ -243,6 +244,12 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     SpielerAuswahl.addItemListener(this);
     
     this.add(SpielerAuswahl);
+    
+    try {
+		onlineStatus = new Client(Game).getOnlineStatus("ju57u5v.tk", 9876);
+	} catch (IOException e) {
+		onlineStatus=false;
+	}
   }
   
   public void adjustmentValueChanged(AdjustmentEvent e) {
@@ -420,6 +427,17 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       }  
     } // end of for  
     g.drawRect(538,398,300,130);
+    g.drawString("Server auf ju57u5v.tk ist", 20, this.getHeight()-50);
+    if (onlineStatus) {
+    	g.setColor(Color.green);
+    	g.drawString("Online", 20, this.getHeight()-30);
+    	g.setColor(Color.black);
+    }
+    else {
+    	g.setColor(Color.red);
+    	g.drawString("Offline", 20, this.getHeight()-30);
+    	g.setColor(Color.black);
+    }
   }  
   
   

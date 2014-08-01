@@ -48,9 +48,9 @@ public class ScoreFrame extends Frame {
 			g.drawString("Highscore Server ist ", 20, this.getHeight()-50);
 			g.setColor(Color.green);
 			g.drawString("Online", 20, this.getHeight()-30);
+			g.setColor(Color.black);
 		}
 		if (Game.highscore.failed) {
-			//java.awt.Graphics g = this.getGraphics();
 
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 			g.drawString("Dein Score", 20, 60);
