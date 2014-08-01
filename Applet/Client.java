@@ -201,12 +201,13 @@ class Client extends Thread{
 			Game.player[connectplayerID].laden(Game, 100, 100);
 
 			System.out.println("[Client] Spieler mit der ID "+ connectplayerID+" connected.");
+			writeToChat("Spieler " + 1 + " connected.");
 			break;
 		case 3: //disconnect
 			int disconnectId = dais.readInt();
 
 			Game.player[disconnectId] = null;
-
+			writeToChat("Spieler " + disconnectId + " disconnected.");
 			System.out.println("[Client] Spieler mit der ID "+ disconnectId+" disconnected.");
 			break;
 		case 4: //new perk
@@ -267,10 +268,7 @@ class Client extends Thread{
 		case 7: //New Chat Message
 			String name = dais.readUTF();
 			String message = dais.readUTF();
-			for (int c=Game.gamerunner.chatMessages.length-2;c>=0;c--) {
-					Game.gamerunner.chatMessages[c+1]=Game.gamerunner.chatMessages[c];
-			}
-			Game.gamerunner.chatMessages[0] = "["+name+"]: "+message;
+			writeToChat("["+name+"]: "+message);
 			System.out.println("[Client] Neue Chatnachricht: "+"["+name+"]: "+message);
 			break;
 		}
@@ -284,6 +282,13 @@ class Client extends Thread{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void writeToChat(String Message) {
+		for (int c=Game.gamerunner.chatMessages.length-2;c>=0;c--) {
+			Game.gamerunner.chatMessages[c+1]=Game.gamerunner.chatMessages[c];
+	}
+	Game.gamerunner.chatMessages[0] = Message;
 	}
 
 
