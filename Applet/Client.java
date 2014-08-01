@@ -254,10 +254,20 @@ class Client extends Thread{
 			for (int c=1;c<Game.player.length;c++) {
 				if (Game.player[c] != null) {
 					//Reihenfolge wichtig!!! Erst health dann controls
+					Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
 					Game.player[c].y=0;
-					Game.player[c].firsttimepressed=true;
 					Game.player[c].health=100;
+					Game.player[c].jumpheigth=200;
+					Game.player[c].speed=5;
+					Game.player[c].sperrzeit=40;
 					Game.player[c].freezeControls=false;
+					Game.player[c].amstartwarten=42;
+					Game.player[c].perkzählerjump=-1;
+					Game.player[c].perkzählerrun=-1;
+					Game.player[c].perkzählershoot=-1;
+					Game.player[c].boomRight=0;
+					Game.player[c].boomUp=0;
+				    Game.player[c].boomLeft=0;
 				}
 			}
 			Game.player[id].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
