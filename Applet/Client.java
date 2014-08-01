@@ -225,13 +225,13 @@ class Client extends Thread{
 			Game.player[connectplayerID].laden(Game, 100, 100);
 
 			System.out.println("[Client] Spieler mit der ID "+ connectplayerID+" connected.");
-			writeToChat("Spieler " + 1 + " connected.");
+			writeToChat( dais.readUTF() + " connected.");
 			break;
 		case 3: //disconnect
 			int disconnectId = dais.readInt();
 
 			Game.player[disconnectId] = null;
-			writeToChat("Spieler " + disconnectId + " disconnected.");
+			writeToChat( dais.readUTF() + " disconnected.");
 			System.out.println("[Client] Spieler mit der ID "+ disconnectId+" disconnected.");
 			break;
 		case 4: //new perk

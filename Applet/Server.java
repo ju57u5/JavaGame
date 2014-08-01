@@ -203,6 +203,7 @@ class Server extends Thread{
 
 			da.writeInt(2);
 			da.writeInt(bestid);
+			da.writeUTF(packet);
 			da.close();
 			sendData = ba.toByteArray();
 
@@ -237,6 +238,7 @@ class Server extends Thread{
 			DataOutputStream da1=new DataOutputStream(ba1);
 			da1.writeInt(3);
 			da1.writeInt(disconnectId);
+			da1.writeUTF(clients.get(disconnectId));
 
 			da1.close();
 			sendData = ba1.toByteArray();
