@@ -2,6 +2,7 @@ package Applet;
 
 import java.awt.Graphics;
 import java.io.File;
+import java.io.IOException;
 
 ////// Standart Thread für das aktualisieren aller Komponenten
 
@@ -24,6 +25,7 @@ class GameRunner extends Thread {
 	int gesamtticks=0;
 	ScoreFrame scoreFrame;
 	String chatMessages[] = new String [30];
+	boolean sendHighscoreFailed;
 
 
 	// Ende Attribute5
@@ -152,7 +154,12 @@ class GameRunner extends Thread {
 											} // end of if
 										} // end of for
 										int score = (Game.player[c].health*(spielerAnzahl-1)*kills);
-										Game.highscore.sendHighscore(Game.player[c].name, score);
+										try {
+											Game.highscore.sendHighscore(Game.player[c].name, score);
+										} catch (IOException e) {
+											e.printStackTrace();
+											sendHighscoreFailed=true;
+										}
 										scoreFrame = new ScoreFrame(Game, Game.player[c].name,spielerAnzahl-1,kills,Game.player[c].health,score);
 										Game.toFront();
 									} // end of if
@@ -191,8 +198,9 @@ class GameRunner extends Thread {
 						} // end of for
 					} // end of if
 
-					Game.highscore.saveNames();
-
+					if (Game.online) {
+						Game.highscore.saveNames();
+					}
 
 					Game.getGraphics().drawImage(Game.dbImage,0,0,Game);
 					gesamtticks++;

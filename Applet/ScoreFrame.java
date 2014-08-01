@@ -37,6 +37,18 @@ public class ScoreFrame extends Frame {
 	public void paint(Graphics g) {
 		super.paint(g);
 		Game.highscore.getHighscore();
+		if (Game.gamerunner.sendHighscoreFailed) {
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+			g.drawString("Highscore Server ist ", 20, this.getHeight()-50);
+			g.setColor(Color.red);
+			g.drawString("Offline", 20, this.getHeight()-30);
+		}
+		else {
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+			g.drawString("Highscore Server ist ", 20, this.getHeight()-50);
+			g.setColor(Color.green);
+			g.drawString("Online", 20, this.getHeight()-30);
+		}
 		if (Game.highscore.failed) {
 			//java.awt.Graphics g = this.getGraphics();
 

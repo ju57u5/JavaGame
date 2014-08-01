@@ -78,18 +78,14 @@ class Highscore {
 		return name;
 	}
 
-	public void sendHighscore(String name, int score) {
+	public void sendHighscore(String name, int score) throws IOException {
 
-		try {
 			Socket echoSocket = new Socket("ju57u5v.tk", 8080);
 			DataOutputStream dOut = new DataOutputStream(echoSocket.getOutputStream());
 			dOut.writeInt(score);
 			dOut.writeUTF(name);
 			echoSocket.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 	}  
 
 	public void getHighscore() {
