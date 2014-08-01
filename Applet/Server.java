@@ -99,6 +99,8 @@ class Server extends Thread{
 		ByteArrayInputStream bais=new ByteArrayInputStream(receiveData);
 		DataInputStream dais=new DataInputStream(bais);
 		int packetID = dais.readInt();
+		ByteArrayOutputStream baos=new ByteArrayOutputStream();
+		DataOutputStream daos=new DataOutputStream(baos);
 
 		switch (packetID) {
 		case 0: //PlayerData
@@ -113,8 +115,7 @@ class Server extends Thread{
 			boolean playerori = dais.readBoolean();
 			String playername = dais.readUTF();
 
-			ByteArrayOutputStream baos=new ByteArrayOutputStream();
-			DataOutputStream daos=new DataOutputStream(baos);
+			
 			daos.writeInt(0); //PacketID
 
 			daos.writeInt(playerID);
@@ -144,17 +145,15 @@ class Server extends Thread{
 			boolean rechts = dais.readBoolean();
 			int shotspeed = dais.readInt();
 
-			ByteArrayOutputStream bao=new ByteArrayOutputStream();
-			DataOutputStream dao=new DataOutputStream(bao);
 
-			dao.writeInt(1);
-			dao.writeInt(shotplayerID);
-			dao.writeInt(shotx);
-			dao.writeInt(shoty);
-			dao.writeBoolean(rechts);
-			dao.writeInt(shotspeed);
-			dao.close();
-			sendData = bao.toByteArray();
+			daos.writeInt(1);
+			daos.writeInt(shotplayerID);
+			daos.writeInt(shotx);
+			daos.writeInt(shoty);
+			daos.writeBoolean(rechts);
+			daos.writeInt(shotspeed);
+			daos.close();
+			sendData = baos.toByteArray();
 
 			for (int cou=1;cou<clients.size();cou++) {
 				if (cou != shotplayerID) {
@@ -186,14 +185,12 @@ class Server extends Thread{
 			}
 			System.out.println("[Server] Login from " + clientIPs.get(bestid).toString() + ":" + clientPorts.get(bestid) + " "+packet+" ID: "+bestid+" Spieler: "+(clients.size()-1));
 			// Es wird das Initial Packet übergeben
-			ByteArrayOutputStream bao1=new ByteArrayOutputStream();
-			DataOutputStream dao1=new DataOutputStream(bao1);
 			
-			dao1.writeInt(bestid);
-			dao1.writeInt(clients.size()-1);
+			daos.writeInt(bestid);
+			daos.writeInt(clients.size()-1);
 			
-			dao1.close();
-			sendData = bao1.toByteArray();
+			daos.close();
+			sendData = baos.toByteArray();
 			
 			DatagramPacket sendPacket =	new DatagramPacket(sendData, sendData.length, clientIPs.get(bestid), clientPorts.get(bestid));
 			serverSocket.send(sendPacket);
@@ -234,14 +231,12 @@ class Server extends Thread{
 		case 3: //Disconnect
 			int disconnectId = dais.readInt();
 
-			ByteArrayOutputStream ba1=new ByteArrayOutputStream();
-			DataOutputStream da1=new DataOutputStream(ba1);
-			da1.writeInt(3);
-			da1.writeInt(disconnectId);
-			da1.writeUTF(clients.get(disconnectId));
+			daos.writeInt(3);
+			daos.writeInt(disconnectId);
+			daos.writeUTF(clients.get(disconnectId));
 
-			da1.close();
-			sendData = ba1.toByteArray();
+			daos.close();
+			sendData = baos.toByteArray();
 			timeout[disconnectId]=true;
 
 			for (int cou=1;cou<clients.size();cou++) {
@@ -261,14 +256,12 @@ class Server extends Thread{
 			int textureid = dais.readInt();
 			int playerid = dais.readInt();
 
-			ByteArrayOutputStream ba2=new ByteArrayOutputStream();
-			DataOutputStream da2=new DataOutputStream(ba2);
-			da2.writeInt(6);//PacketID
-			da2.writeBoolean(shottexture);
-			da2.writeInt(textureid);
-			da2.writeInt(playerid);
-			da2.close();
-			sendData = ba2.toByteArray();
+			daos.writeInt(6);//PacketID
+			daos.writeBoolean(shottexture);
+			daos.writeInt(textureid);
+			daos.writeInt(playerid);
+			daos.close();
+			sendData = baos.toByteArray();
 
 			for (int cou=1;cou<clients.size();cou++) {
 				if (cou != playerid) {
@@ -281,14 +274,12 @@ class Server extends Thread{
 			String name=dais.readUTF();
 			String message=dais.readUTF();
 			
-			ByteArrayOutputStream ba3=new ByteArrayOutputStream();
-			DataOutputStream da3=new DataOutputStream(ba3);
-			da3.writeInt(7); //PacketID
-			da3.writeUTF(name);
-			da3.writeUTF(message);
-			da3.close();
+			daos.writeInt(7); //PacketID
+			daos.writeUTF(name);
+			daos.writeUTF(message);
+			daos.close();
 			
-			sendData = ba3.toByteArray();
+			sendData = baos.toByteArray();
 			System.out.println("[Server] Neue Chatnachricht: "+message);
 			for (int cou=1;cou<clients.size();cou++) {
 					DatagramPacket sendPacket1 = new DatagramPacket(sendData, sendData.length, clientIPs.get(cou), clientPorts.get(cou));
@@ -297,12 +288,9 @@ class Server extends Thread{
 			
 			break;
 		case 8: //checkOnlineStatus
-			ByteArrayOutputStream ba4=new ByteArrayOutputStream();
-			DataOutputStream da4=new DataOutputStream(ba4);
-			//da4.writeInt(8); //PacketID
-			da4.writeBoolean(true);
-			da4.close();
-			sendData = ba4.toByteArray();
+			daos.writeBoolean(true);
+			daos.close();
+			sendData = baos.toByteArray();
 			DatagramPacket sendPacket1 = new DatagramPacket(sendData, sendData.length, receivePacket.getAddress(), receivePacket.getPort());
 			serverSocket.send(sendPacket1);
 			break;
