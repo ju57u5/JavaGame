@@ -231,12 +231,12 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     Stop.addKeyListener(this);
     this.add(Stop);
     
-    Welle = new Button("Wellen-Modus starten");
+    Welle = new Button("Wellen Modus starten");
     Welle.setBounds(850,400,140,20);
     Welle.addActionListener(this);
     Welle.addKeyListener(this);
     this.add( Welle);
-
+    
     
     
     if (!Game.online) {
@@ -521,6 +521,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       } // end of if
       this.dispose();
       Game.gamerunner.running=true;
+      Game.gamerunner.Wellenmodus=false;
     } // end of if 
     
     if (e.getSource()==Weiter) {
@@ -591,6 +592,16 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       System.exit(0);
     } // end of if
     
+    if (e.getSource()==Welle) {
+      Game.gamerunner.Wellenmodus=true;
+      playerCount();
+      Game.restartGame();
+      if (Game.soundan) {
+        Game.oc.loop();
+      } // end of if
+      this.dispose();
+      Game.gamerunner.running=true;
+    }
   }
   
   

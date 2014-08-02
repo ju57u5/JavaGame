@@ -152,7 +152,7 @@ class Bot extends Player {
               aufeinerebeneüberjemandem=true;
             } // end of if
             
-            if (y>Game.player[angriffsziel].y && y<Game.player[angriffsziel].y+300) {
+            if (y>Game.player[angriffsziel].y-50 && y<Game.player[angriffsziel].y+300) {
               setJump(jumpheigth);                                            ////Sprung
             } // end of if
             
@@ -168,37 +168,39 @@ class Bot extends Player {
       } // end of if
       gefroren-=1;
       
+      
+      
+      
       min=100000;
       for (int c=1;c<Game.player.length;c++) {
         if (Game.player[c] != null && Game.player[c] != this) {
           dif=Game.player[c].x-x;
+          
           if (dif<0) {
             dif=-dif;
           } // end of if
+          
           if (dif<min && Game.player[c].health>0) {
-            angriffsziel=c;
-            dif=min;
+            if (!Game.gamerunner.Wellenmodus) {
+              angriffsziel=c;
+              dif=min;
+            } // end of if
+            if (Game.gamerunner.Wellenmodus && !Game.player[c].name.startsWith("Bot")) {
+              angriffsziel=c;
+              dif=min;
+            } // end of if
           } // end of if
-          
-          
-        }
-      } // end of if
+        } // end of if
+        
+        
+      } // end of For
+      
+    
       amstartwarten-=1;
-      
-      
-      
-      
-      
     }
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-}
+    
+    
+  } // end of if
+    
+ }
+   
