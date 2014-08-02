@@ -110,7 +110,7 @@ class Bot extends Player {
         else {
           
           if (Game.player[angriffsziel].health>0 && Game.player[angriffsziel] != this) {
-            int botdif=y-Game.player[angriffsziel].y;      //Kampf gegen Spieler 2
+            int botdif=y-Game.player[angriffsziel].y;      //Kampf gegen Spieler 
             
             if (botdif<0) {
               botdif=-botdif;
@@ -119,13 +119,13 @@ class Bot extends Player {
             if (x<Game.player[angriffsziel].x && Game.player[angriffsziel].x<1000) {          //Bewegung
               x +=speed/2;
             } // end of if
-            if (x>Game.player[angriffsziel].x && Game.player[angriffsziel].x>100) {
+            if (x>Game.player[angriffsziel].x && Game.player[angriffsziel].x>100) {                  ////Laufen
               x -=speed/2; 
             } // end of if 
             
             if (x>Game.player[angriffsziel].x) {
               characterInverted = true;
-            } // end of if
+            } // end of if                                                                     ////Drehen
             if (x<Game.player[angriffsziel].x) {
               characterInverted = false;
             } // end of if                                                                    //Bewegung Ende
@@ -152,8 +152,8 @@ class Bot extends Player {
               aufeinerebeneüberjemandem=true;
             } // end of if
             
-            if (y>Game.player[angriffsziel].y) {
-              setJump(jumpheigth);
+            if (y>Game.player[angriffsziel].y && y<Game.player[angriffsziel].y+300) {
+              setJump(jumpheigth);                                            ////Sprung
             } // end of if
             
           } 
