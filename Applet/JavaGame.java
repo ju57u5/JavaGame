@@ -340,6 +340,16 @@ public class JavaGame extends Frame implements KeyListener {
     paint(g);
 
   }
+  
+  public int getPlayerCount() {
+	  int spielerAnzahl=0;
+      for (int c=1;c<player.length;c++) {
+        if (player[c] != null) {
+          spielerAnzahl++;
+        } // end of if
+      } // end of for
+      return spielerAnzahl;
+  }
   // Ende Methoden
 } // end of class JavaGame
 

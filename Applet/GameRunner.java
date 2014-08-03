@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 ////// Standart Thread für das aktualisieren aller Komponenten
 
@@ -206,11 +205,12 @@ class GameRunner extends Thread {
             
             
             
-            if (wbtotencounter==wbanzahl) {                                      ///Sieg
+            if (wbtotencounter==wbanzahl) {///Sieg
+            	int spielerAnzahl = Game.getPlayerCount(); //Du kannst ein Array nicht größer belegen als es ist, deswegen musst du herausfinden, wo der erste lehre Spielerslot ist. Hier hab ich eine Methode dazu;
                 Game.dbImage.getGraphics().drawString("Welle überstanden",500,120);
-                Game.player[Game.player.length+1] = new Bot(Game.texture[0],Game.shottexture[0],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,Game.player.length+1,35,"Bot");
+                Game.player[spielerAnzahl+1] = new Bot(Game.texture[0],Game.shottexture[0],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,Game.player.length+1,35,"Bot");
                 System.out.println("Bot Laden");
-                Game.player[Game.player.length+1].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);
+                Game.player[spielerAnzahl+1].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);
                 Game.restartGame();
             } // end of if                                                                         ///////WELLENMODUS - Sieg oder Niederlage
             if (wptotencounter==wpanzahl) {                                            ///Niederlage

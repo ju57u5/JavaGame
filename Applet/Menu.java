@@ -362,12 +362,8 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     if (!Game.online) {
       if (isNumeric(Spieler.getText()) ) {
         int anzahl = Integer.parseInt(Spieler.getText());
-        int spielerAnzahl=0;
-        for (int c=1;c<Game.player.length;c++) {
-          if (Game.player[c] != null) {
-            spielerAnzahl++;
-          } // end of if
-        } // end of for
+        int spielerAnzahl=Game.getPlayerCount();
+        
         if (anzahl>1 && anzahl<Game.player.length && anzahl != spielerAnzahl) {
           int textureAnzahl=0;
           int shottextureAnzahl=0;
