@@ -594,7 +594,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     
     if (e.getSource()==Welle) {
       Game.gamerunner.Wellenmodus=true;
-      playerCount();
       Game.restartGame();
       if (Game.soundan) {
         Game.oc.loop();

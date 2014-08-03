@@ -25,8 +25,8 @@ class GameRunner extends Thread {
   int gesamtticks=0;
   ScoreFrame scoreFrame;
   String chatMessages[] = new String [30];
-  boolean sendHighscoreFailed,Wellenmodus,wgewonnen;
-  int wptotencounter,wbtotencounter,wbanzahl,wpanzahl;
+  boolean sendHighscoreFailed,Wellenmodus;
+  int wptotencounter,wbtotencounter,wbanzahl,wpanzahl,wgewonnen;
 
 
   // Ende Attribute5
@@ -181,17 +181,19 @@ class GameRunner extends Thread {
           } // end of if
           
           if (Wellenmodus) {
+            wbanzahl=0;
+            wpanzahl=0;
+            wbtotencounter=0;
+            wptotencounter=0;
             for (int c=1;c<Game.player.length ;c++ ) {
               
               if (Game.player[c].name.startsWith("Bot")) {
                 wbanzahl+=1;
                 if (Game.player[c].health<=0) {
                   wbtotencounter+=1;
-                  
                 } // end of if
                 
               }
-              
               
               if (!Game.player[c].name.startsWith("Bot")) {
                 wpanzahl+=1;
@@ -201,21 +203,22 @@ class GameRunner extends Thread {
                 
               } // end of if
               
-              
-              
               if (wbtotencounter==wbanzahl) {
                 Game.dbImage.getGraphics().drawString("Welle überstanden",500,120);
-                wgewonnen=true;
+                Game.player[Game.player.length+1] = new Bot(Game.texture[1],Game.shottexture[1],Game.dbImage,1,1,1,1,1,c,35,"Bot");
+                Game.player[Game.player.length+1].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);  
+                Game.restartGame();
               } // end of if                                                                     ///WELLENMODUS - Sieg oder Niederlage
               if (wptotencounter==wpanzahl) {
                 Game.dbImage.getGraphics().drawString("Welle nicht überstanden",500,120);
                 Wellenmodus=false;
+                Game.restartGame();
               } // end of if
               
-            }
+            } // end of for
             
             
-          } // end of for
+          }     /// Ende vom Wellenmodus
           
           
           
@@ -241,9 +244,7 @@ class GameRunner extends Thread {
               Game.player[c].sperrzeit=40;
               Game.player[c].freezeControls=false;
               neu=false;
-              if (Wellenmodus && wgewonnen) {
-                Game.menu.spielerAnzahl+=1;
-              }
+              
             } // end of if
           } // end of if
         } // end of for

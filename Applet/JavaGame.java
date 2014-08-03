@@ -30,7 +30,7 @@ public class JavaGame extends Frame implements KeyListener {
   boolean fpsan=false;
   URL  PlayerTextureUrl;
 
-
+   
   File basePath;//Pfad zu den Resourcen
   File backgroundTexture;
   File sound;
