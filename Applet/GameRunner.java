@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
 
 ////// Standart Thread für das aktualisieren aller Komponenten
 
-class GameRunner extends Thread implements KeyListener {
+class GameRunner extends Thread {
   // Anfang Attribute5
   Player player[] = null;
   Shot shot[] = new Shot[1000];
@@ -205,14 +205,11 @@ class GameRunner extends Thread implements KeyListener {
             
             
             if (wbtotencounter==wbanzahl) {                                      ///Sieg
-              Game.dbImage.getGraphics().drawString("Welle überstanden",500,120);
-              if (Game.player[Game.player.length+1] == null) {
+                Game.dbImage.getGraphics().drawString("Welle überstanden",500,120);
                 Game.player[Game.player.length+1] = new Bot(Game.texture[0],Game.shottexture[0],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,Game.player.length+1,35,"Bot");
                 System.out.println("Bot Laden");
                 Game.player[Game.player.length+1].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);
-              } // end of if
-              
-              Game.restartGame();
+                Game.restartGame();
             } // end of if                                                                         ///////WELLENMODUS - Sieg oder Niederlage
             if (wptotencounter==wpanzahl) {                                            ///Niederlage
               Game.dbImage.getGraphics().drawString("Welle nicht überstanden",500,120);
