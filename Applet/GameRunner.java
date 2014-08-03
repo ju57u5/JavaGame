@@ -3,10 +3,12 @@ package Applet;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 ////// Standart Thread für das aktualisieren aller Komponenten
 
-class GameRunner extends Thread {
+class GameRunner extends Thread implements KeyListener {
   // Anfang Attribute5
   Player player[] = null;
   Shot shot[] = new Shot[1000];
@@ -181,40 +183,42 @@ class GameRunner extends Thread {
           } // end of if
           
           if (Wellenmodus) {
-             
+            
             for (int c=1;c<Game.player.length ;c++ ) {
-              
-              if (Game.player[c].name.startsWith("Bot")) {
-                wbanzahl+=1;
+              if (Game.player[c] != null) {
+                if (Game.player[c].name.startsWith("Bot")) {
+                  wbanzahl+=1;
+                } else {
+                  wpanzahl+=1;
+                } // end of if-else    
+                ///Bot/Spieler Zähler und Totenzähler
+                if (Game.player[c].health<=0) {
+                  if (Game.player[c].name.startsWith("Bot")) {
+                    wbtotencounter+=1;
+                  } else {
+                    wptotencounter+=1;
+                  } // end of if-else
+                } // end of if
               }
-              
-              if (!Game.player[c].name.startsWith("Bot")) {
-                wpanzahl+=1;
-              } 
-              
-            } // end of for  
+            } // end of for         
             
-            for (int c=1;c<Game.player.length ;c++ ) {
-              
-              if (Game.player[c].health<=0 && Game.player[c].name.startsWith("Bot")) {
-                wbtotencounter+=1;
-              } // end of if
-              if (Game.player[c].health<=0 && !Game.player[c].name.startsWith("Bot")) {
-                wptotencounter+=1;
-              } // end of if
-            }                
             
-             if (wbtotencounter==wbanzahl) {
+            
+            if (wbtotencounter==wbanzahl) {                                      ///Sieg
               Game.dbImage.getGraphics().drawString("Welle überstanden",500,120);
-              Game.player[Game.player.length+1] = new Bot(Game.texture[1],Game.shottexture[1],Game.dbImage,1,1,1,1,1,Game.player.length+1,35,"Bot");
-              Game.player[Game.player.length].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);  
+              if (Game.player[Game.player.length+1] == null) {
+                Game.player[Game.player.length+1] = new Bot(Game.texture[0],Game.shottexture[0],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,Game.player.length+1,35,"Bot");
+                System.out.println("Bot Laden");
+                Game.player[Game.player.length+1].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);
+              } // end of if
+              
               Game.restartGame();
-            } // end of if                                                                     ///WELLENMODUS - Sieg oder Niederlage
-            if (wptotencounter==wpanzahl) {
+            } // end of if                                                                         ///////WELLENMODUS - Sieg oder Niederlage
+            if (wptotencounter==wpanzahl) {                                            ///Niederlage
               Game.dbImage.getGraphics().drawString("Welle nicht überstanden",500,120);
               Wellenmodus=false;
-              Game.restartGame();
-            } // end of if 
+              
+            } // end of if    
             wbanzahl=0;
             wpanzahl=0;
             wbtotencounter=0;
