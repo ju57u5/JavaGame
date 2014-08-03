@@ -1,5 +1,6 @@
 package Applet;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
@@ -94,10 +95,11 @@ class GameRunner extends Thread {
             }
             Game.DamageLogig.updateDamage();
           } // end of if
-          
+          Graphics gra = Game.dbImage.getGraphics();
+          gra.setColor(Color.white);
           for (int c=0;c<Game.nachricht.length;c++) {
             if (Game.nachricht[c] != null) {
-              Game.dbImage.getGraphics().drawString(Game.nachricht[c], 20, Game.getHeight()-20-(c*20));
+              gra.drawString(Game.nachricht[c], 20, Game.getHeight()-20-(c*20));
             } // end of if
           } // end of for
           
@@ -112,7 +114,7 @@ class GameRunner extends Thread {
             } // end of if
           } // end of for
           
-          Game.dbImage.getGraphics().drawString("Music: Early Riser Kevin MacLeod (incompetech.com)", Game.getWidth()-320, Game.getHeight()-20);
+          gra.drawString("Music: Early Riser Kevin MacLeod (incompetech.com)", Game.getWidth()-320, Game.getHeight()-20);
           
           int timediff = ((int) System.currentTimeMillis()-time);
           if (Game.fpsan) {
@@ -252,7 +254,7 @@ class GameRunner extends Thread {
         } // end of for
       } // end of if
       
-      if (Game.online) {
+      if (!Game.online) {
         Game.highscore.saveNames();
       }
       

@@ -136,6 +136,7 @@ class Server extends Thread{
 
 				}
 			}
+			
 			break;
 		case 1: //ShotData
 			int shotplayerID = dais.readInt();

@@ -15,6 +15,8 @@ import java.net.UnknownHostException;
 
 import javax.imageio.ImageIO;
 
+import com.sun.org.apache.xml.internal.serializer.ToTextSAXHandler;
+
 
 class Client extends Thread{
 	JavaGame Game;
@@ -35,7 +37,7 @@ class Client extends Thread{
 		ByteArrayOutputStream baos=new ByteArrayOutputStream();
 		DataOutputStream daos=new DataOutputStream(baos);
 		daos.writeInt(2);
-		daos.writeUTF("Justus");
+		daos.writeUTF(Game.onlinename);
 		sendData = baos.toByteArray();
 		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 		clientSocket.send(sendPacket);
@@ -203,6 +205,12 @@ class Client extends Thread{
 				Game.player[playerID].name = playername;
 			}
 			//			System.out.println("[Client] Server sendet Daten von Client " + playerID+". "+playerx+" "+playery+ " "+playerhealth+" "+playerori+" "+playername);
+//			if (playerhealth<=0) {
+//				if (!Game.gamerunner.tot[playerID]) {
+//					writeToChat(playername+" died.");
+//				}
+//				Game.gamerunner.tot[playerID]=true;
+//			}
 			break;
 
 		case 1: //New Shot
