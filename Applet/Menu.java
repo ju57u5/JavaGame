@@ -20,6 +20,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
   Scrollbar perks, lautstaerke;
   boolean onlineStatus;
   
+  
   public Menu (JavaGame Game) 
   {
     this.Game = Game;

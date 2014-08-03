@@ -26,7 +26,7 @@ class GameRunner extends Thread {
   ScoreFrame scoreFrame;
   String chatMessages[] = new String [30];
   boolean sendHighscoreFailed,Wellenmodus;
-  int wptotencounter,wbtotencounter,wbanzahl,wpanzahl,wgewonnen;
+  int wptotencounter=0,wbtotencounter=0,wbanzahl=0,wpanzahl=0,wgewonnen;
 
 
   // Ende Attribute5
@@ -181,44 +181,45 @@ class GameRunner extends Thread {
           } // end of if
           
           if (Wellenmodus) {
-            wbanzahl=0;
-            wpanzahl=0;
-            wbtotencounter=0;
-            wptotencounter=0;
+             
             for (int c=1;c<Game.player.length ;c++ ) {
               
               if (Game.player[c].name.startsWith("Bot")) {
                 wbanzahl+=1;
-                if (Game.player[c].health<=0) {
-                  wbtotencounter+=1;
-                } // end of if
-                
               }
               
               if (!Game.player[c].name.startsWith("Bot")) {
                 wpanzahl+=1;
-                if (Game.player[c].health<=0) {
-                  wptotencounter+=1;
-                } // end of if
-                
-              } // end of if
+              } 
               
-              if (wbtotencounter==wbanzahl) {
-                Game.dbImage.getGraphics().drawString("Welle überstanden",500,120);
-                Game.player[Game.player.length+1] = new Bot(Game.texture[1],Game.shottexture[1],Game.dbImage,1,1,1,1,1,c,35,"Bot");
-                Game.player[Game.player.length+1].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);  
-                Game.restartGame();
-              } // end of if                                                                     ///WELLENMODUS - Sieg oder Niederlage
-              if (wptotencounter==wpanzahl) {
-                Game.dbImage.getGraphics().drawString("Welle nicht überstanden",500,120);
-                Wellenmodus=false;
-                Game.restartGame();
-              } // end of if
+            } // end of for  
+            
+            for (int c=1;c<Game.player.length ;c++ ) {
               
-            } // end of for
+              if (Game.player[c].health<=0 && Game.player[c].name.startsWith("Bot")) {
+                wbtotencounter+=1;
+              } // end of if
+              if (Game.player[c].health<=0 && !Game.player[c].name.startsWith("Bot")) {
+                wptotencounter+=1;
+              } // end of if
+            }                
             
-            
-          }     /// Ende vom Wellenmodus
+             if (wbtotencounter==wbanzahl) {
+              Game.dbImage.getGraphics().drawString("Welle überstanden",500,120);
+              Game.player[Game.player.length+1] = new Bot(Game.texture[1],Game.shottexture[1],Game.dbImage,1,1,1,1,1,Game.player.length+1,35,"Bot");
+              Game.player[Game.player.length].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);  
+              Game.restartGame();
+            } // end of if                                                                     ///WELLENMODUS - Sieg oder Niederlage
+            if (wptotencounter==wpanzahl) {
+              Game.dbImage.getGraphics().drawString("Welle nicht überstanden",500,120);
+              Wellenmodus=false;
+              Game.restartGame();
+            } // end of if 
+            wbanzahl=0;
+            wpanzahl=0;
+            wbtotencounter=0;
+            wptotencounter=0;          
+          }     /// Ende vom Wellenmodus   
           
           
           
@@ -264,5 +265,5 @@ class GameRunner extends Thread {
   
 } // end of while
   
- 
-
+  
+  
