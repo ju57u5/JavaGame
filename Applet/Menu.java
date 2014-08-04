@@ -518,7 +518,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       } // end of if
       this.dispose();
       Game.gamerunner.running=true;
-      Game.gamerunner.Wellenmodus=false;
+      Game.gamerunner.wellenModus.setState(WellenModus.MODE_OFF);
     } // end of if 
     
     if (e.getSource()==Weiter) {
@@ -590,7 +590,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     } // end of if
     
     if (e.getSource()==Welle) {
-      Game.gamerunner.Wellenmodus=true;
+      Game.gamerunner.wellenModus.setState(WellenModus.MODE_ON);
       Game.restartGame();
       if (Game.soundan) {
         Game.oc.loop();

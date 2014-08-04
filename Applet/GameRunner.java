@@ -27,8 +27,9 @@ class GameRunner extends Thread {
   int gesamtticks=0;
   ScoreFrame scoreFrame;
   String chatMessages[] = new String [30];
-  boolean sendHighscoreFailed,Wellenmodus;
-  int wptotencounter=0,wbtotencounter=0,wbanzahl=0,wpanzahl=0,wgewonnen;
+  boolean sendHighscoreFailed;
+  WellenModus wellenModus ;
+  
 
 
   // Ende Attribute5
@@ -37,6 +38,7 @@ class GameRunner extends Thread {
     this.player = player;
     this.Game = Game;
     perktexture = new File(Game.basePath,"/perk.png");
+    wellenModus = new WellenModus(Game);
     this.start();
   }  
   // Anfang Komponenten5
@@ -139,10 +141,11 @@ class GameRunner extends Thread {
               } // end of if
             } // end of if
           } // end of for
-          
+         
+          wellenModus.update();
           
           if (totencounter==anzahl-1 && Game.online==false) {
-            if (!Wellenmodus) {
+            if (!wellenModus.isOn()) {
               for (int c=1;c<Game.player.length;c++) {
                 if (Game.player[c] != null) {
                   if (Game.player[c].health>0) {
@@ -177,52 +180,15 @@ class GameRunner extends Thread {
                     schonneu=false;
                   } // end of if
                   
+                  
+                  
                   Game.dbImage.getGraphics().drawString("Neustart in "+neustart/10,500,135);
                 } // end of if
               }
             } // end of for
           } // end of if
           
-          if (Wellenmodus) {
-            
-            for (int c=1;c<Game.player.length ;c++ ) {
-              if (Game.player[c] != null) {
-                if (Game.player[c].name.startsWith("Bot")) {
-                  wbanzahl+=1;
-                } else {
-                  wpanzahl+=1;
-                } // end of if-else    
-                ///Bot/Spieler Zähler und Totenzähler
-                if (Game.player[c].health<=0) {
-                  if (Game.player[c].name.startsWith("Bot")) {
-                    wbtotencounter+=1;
-                  } else {
-                    wptotencounter+=1;
-                  } // end of if-else
-                } // end of if
-              }
-            } // end of for         
-            
-            
-            
-            if (wbtotencounter==wbanzahl) {///Sieg
-            	int spielerAnzahl = Game.getPlayerCount(); //Du kannst ein Array nicht größer belegen als es ist, deswegen musst du herausfinden, wo der erste lehre Spielerslot ist. Hier hab ich eine Methode dazu;
-                Game.dbImage.getGraphics().drawString("Welle überstanden",500,120);
-                Game.player[spielerAnzahl+1] = new Bot(Game.texture[0],Game.shottexture[0],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,Game.player.length+1,35,"Bot");
-                System.out.println("Bot Laden");
-                Game.player[spielerAnzahl+1].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);
-                Game.restartGame();
-            } // end of if                                                                         ///////WELLENMODUS - Sieg oder Niederlage
-            if (wptotencounter==wpanzahl) {                                            ///Niederlage
-              Game.dbImage.getGraphics().drawString("Welle nicht überstanden",500,120);
-              Wellenmodus=false;
-              
-            } // end of if    
-            wbanzahl=0;
-            wpanzahl=0;
-            wbtotencounter=0;
-            wptotencounter=0;          
-          }     /// Ende vom Wellenmodus   
+             
           
           
           
@@ -235,7 +201,7 @@ class GameRunner extends Thread {
         
         neustart-=1;
         if (neustart==0 && !schonneu) {
-          if (!Wellenmodus) {
+          if (!wellenModus.isOn()) {
             scoreFrame.dispose(); 
           } // end of if
           for (int c=1;c<Game.player.length;c++) {

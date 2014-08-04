@@ -181,11 +181,11 @@ class Bot extends Player {
           } // end of if
           
           if (dif<min && Game.player[c].health>0) {
-            if (!Game.gamerunner.Wellenmodus) {
+            if (!Game.gamerunner.wellenModus.isOn()) {
               angriffsziel=c;
               dif=min;
             } // end of if
-            if (Game.gamerunner.Wellenmodus && !Game.player[c].name.startsWith("Bot")) {
+            if (Game.gamerunner.wellenModus.isOn() && !Game.player[c].name.startsWith("Bot")) {
               angriffsziel=c;
               dif=min;
             } // end of if
