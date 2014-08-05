@@ -29,6 +29,15 @@ class Client extends Thread{
 
 	}  
 
+	/**
+	 * Initialisiert eine Verbindung mit einem GameServer mit <Ipadresse>adress und <Port>port
+	 * @param address Serveradress
+	 * @param port Port
+	 * @return true
+	 * @throws SocketException
+	 * @throws UnknownHostException
+	 * @throws IOException
+	 */
 	public boolean initialise(String address, int port) throws SocketException, UnknownHostException, IOException {
 		this.port = port;
 		clientSocket = new DatagramSocket();
@@ -72,6 +81,11 @@ class Client extends Thread{
 		return true; 
 	}
 
+	/**
+	 * Sendet die Onlinedaten eines Spielers an den Server.
+	 * @param id Die SlotID des Spielers
+	 * @throws IOException
+	 */
 	public void sendPlayerData(int id) throws IOException {
 		byte[] sendData = new byte[1024];
 		ByteArrayOutputStream baos=new ByteArrayOutputStream();
@@ -94,6 +108,15 @@ class Client extends Thread{
 
 	}
 
+	/**
+	 * @param shot Schuss
+	 * @param shotplayerid SchussID
+	 * @param shotx SchussPositionX
+	 * @param shoty SchussPositionY
+	 * @param rechts Ist der Schuss invertiert?
+	 * @param shotspeed Geschwindigkeit des Schusses
+	 * @throws IOException
+	 */
 	public void sendNewShot(Shot shot, int shotplayerid, int shotx, int shoty, boolean rechts, int shotspeed) throws IOException {
 		byte[] sendData = new byte[1024];
 		ByteArrayOutputStream baos=new ByteArrayOutputStream();
@@ -113,6 +136,10 @@ class Client extends Thread{
 		//		System.out.println("[Client] Neuer Schuss: "+shot.x+" "+shot.y+" "+shot.rechts+" ID: "+shotplayerid);
 	}
 
+	/**
+	 * Sendet ein DisconnectPacket an den Server.
+	 * @throws IOException
+	 */
 	public void sendDisconnect() throws IOException {
 		byte[] sendData = new byte[1024];
 		ByteArrayOutputStream baos=new ByteArrayOutputStream();
@@ -127,6 +154,12 @@ class Client extends Thread{
 
 	}
 
+	/**
+	 * Sendet die Daten eines neuen Schusses an den Server
+	 * @param shottexture Schuss der gesendet werden soll
+	 * @param textureid Id der Schusstextur
+	 * @throws IOException
+	 */
 	public void sendNewTexture(boolean shottexture, int textureid) throws IOException {
 		byte[] sendData = new byte[1024];
 		ByteArrayOutputStream baos=new ByteArrayOutputStream();
@@ -142,6 +175,12 @@ class Client extends Thread{
 		System.out.println("[Client] Sende neue Texture "+textureid+" "+shottexture);
 	}
 
+	/**
+	 * Sendet ein ChatPacket an den Server.
+	 * @param name
+	 * @param message
+	 * @throws IOException
+	 */
 	public void sendNewChatMessage(String name, String message) throws IOException {
 		byte[] sendData = new byte[1024];
 		ByteArrayOutputStream baos=new ByteArrayOutputStream();
@@ -155,6 +194,13 @@ class Client extends Thread{
 		clientSocket.send(sendPacket);
 	}
 	
+	/**
+	 * Sendet ein Statuspacket an einen Spielserver und gibt den Onlinestatus von diesem zurück.
+	 * @param String ipAddress
+	 * @param int port
+	 * @return boolean
+	 * @throws IOException
+	 */
 	public boolean getOnlineStatus(String ipAddress, int port) throws IOException {
 		clientSocket = new DatagramSocket();
 		clientSocket.setSoTimeout(100);

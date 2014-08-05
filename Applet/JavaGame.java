@@ -298,7 +298,10 @@ public class JavaGame extends Frame implements KeyListener {
 
   }   
 
-  public void restartGame() {
+  /**
+ * Setzt alle Spielparameter zurück und verteilt die Spieler entlang der Main-Ebene
+ */
+public void restartGame() {
     for (int c=1;c<player.length;c++) {
       if (player[c] != null) {
         player[c].x=(int) (Math.random()*(ebenen[0][1]-ebenen[0][0])+ebenen[0][0]);
@@ -341,7 +344,11 @@ public class JavaGame extends Frame implements KeyListener {
 
   }
   
-  public int getPlayerCount() {
+  /**
+   * Gibt die Spieleranzahl, d.h. die belegten "Slots" im Spielerarray zurück.
+ * @return int - Spieleranzahl
+ */
+public int getPlayerCount() {
     int spielerAnzahl=0;
       for (int c=1;c<player.length;c++) {
         if (player[c] != null) {

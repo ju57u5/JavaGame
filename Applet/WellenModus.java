@@ -15,7 +15,10 @@ public class WellenModus {
   }
   
   
-  public void update() {
+  /**
+ * Updated den Spielmodus
+ */
+public void update() {
     if (wellenModus) {
 
       for (int c=1;c<Game.player.length ;c++ ) {
@@ -58,11 +61,20 @@ public class WellenModus {
     }     /// Ende vom Wellenmodus
   }
   
-  public boolean isOn() {
+ /**
+  * Methode gibt zurück ob der Modus angeschaltet ist.
+ * @return boolean
+ */
+public boolean isOn() {
     return wellenModus;
   }
   
-  public void setState(int state) {
+  /**
+   * Setzt den Status des Modus.
+   * <br>Möglichkeiten sind als statische Variablen angegeben.
+ * @param int state
+ */
+public void setState(int state) {
     if (state==0) {
       wellenModus=false;
     }

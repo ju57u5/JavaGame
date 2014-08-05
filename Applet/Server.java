@@ -33,6 +33,7 @@ class Server extends Thread{
 		start();
 	}  
 
+	
 	public void run() {
 
 
@@ -87,6 +88,10 @@ class Server extends Thread{
 		}
 	}
 
+	/**
+	 * Handelt alle Packete die von den Spielern kommen anhand von PacketIDs
+	 * @throws IOException
+	 */
 	public void updateClients () throws IOException {
 
 		byte[] receiveData = new byte[1024];
@@ -300,6 +305,13 @@ class Server extends Thread{
 
 
 	}
+	/**
+	 * Teil den Clienten mittels Packet ein neues Perk mit.
+	 * @param x PerkPositionX
+	 * @param y PerkPositionY
+	 * @param art Art des Perks (ist in der Perkklasse definiert)
+	 * @throws IOException
+	 */
 	public void sendNewPerk(int x,int y,int art) throws IOException {
 		byte[] sendData = new byte[1024];
 		ByteArrayOutputStream ba1=new ByteArrayOutputStream();
@@ -318,6 +330,10 @@ class Server extends Thread{
 		}
 	}
 
+	/**
+	 * Teilt den Clienten einen Neustart mit.
+	 * @throws IOException
+	 */
 	public void sendRestart() throws IOException {
 		byte[] sendData = new byte[1024];
 		ByteArrayOutputStream ba1=new ByteArrayOutputStream();
@@ -337,6 +353,9 @@ class Server extends Thread{
 		}
 	}
 
+	/**
+	 * Überprüft alle Spieler auf eine Timeout
+	 */
 	public void checkTimeout() {
 		int disconnectcounter=0;
 		for (int c=1;c<clients.size();c++) {
