@@ -16,9 +16,10 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
   Button Right,Left,Up,Down,Shot;
   boolean bRight,bLeft,bUp,bDown,bShot;
   TextField Name,maxFps,Spieler;
-  Label L1,L2,L3,lautstaerkeLabel;
-  Scrollbar perks, lautstaerke;
+  Label L1,L2,L3,botschwierigkeitLabel,lautstaerkeLabel;
+  Scrollbar perks, lautstaerke,botschwierigkeit;
   boolean onlineStatus;
+  int menübotschwierigkeit=1;
   
   
   public Menu (JavaGame Game) 
@@ -97,10 +98,22 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       this.add(L1);
     }
     
-    L3=new Label("Steuerung :");
-    L3.setBounds(120,520,90,20);
-    L3.addKeyListener(this);
-    this.add(L3);
+    if (!Game.online) {
+      botschwierigkeitLabel=new Label("Schwierigkeit:");
+      botschwierigkeitLabel.setBounds(120,490,90,20);
+      botschwierigkeitLabel.addKeyListener(this);
+      this.add(botschwierigkeitLabel);
+      
+      botschwierigkeit=new Scrollbar(Scrollbar.HORIZONTAL,menübotschwierigkeit,1,1,5); 
+      botschwierigkeit.addKeyListener(this);
+      botschwierigkeit.addAdjustmentListener(this);
+      this.add(botschwierigkeit);
+      botschwierigkeit.setBounds(210,490,200,20);
+      
+    } // end of if
+    
+    
+    
     
     
     /////////////SERVER - TUT
@@ -196,32 +209,37 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     Weiter.addKeyListener(this);
     this.add(Weiter);
     
+    L3=new Label("Steuerung :");
+    L3.setBounds(120,570,90,20);
+    L3.addKeyListener(this);
+    this.add(L3);
+    
     Left = new Button(""+KeyEvent.getKeyText(Game.player[1].left));
-    Left.setBounds(120,570,100,20);
+    Left.setBounds(120,620,100,20);
     Left.addActionListener(this);
     Left.addKeyListener(this);
     this.add(Left);
     
     Right = new Button(""+KeyEvent.getKeyText(Game.player[1].right));
-    Right.setBounds(350,570,100,20);
+    Right.setBounds(350,620,100,20);
     Right.addActionListener(this);
     Right.addKeyListener(this);
     this.add(Right);
     
     Up = new Button(""+KeyEvent.getKeyText(Game.player[1].jump));
-    Up.setBounds(240,540,100,20);
+    Up.setBounds(240,590,100,20);
     Up.addActionListener(this);
     Up.addKeyListener(this);
     this.add(Up);
     
     Down = new Button(""+KeyEvent.getKeyText(Game.player[1].down));
-    Down.setBounds(240,570,100,20);
+    Down.setBounds(240,620,100,20);
     Down.addActionListener(this);
     Down.addKeyListener(this);
     this.add(Down);
     
     Shot = new Button(""+KeyEvent.getKeyText(Game.player[1].attack));
-    Shot.setBounds(120,540,100,20);
+    Shot.setBounds(120,590,100,20);
     Shot.addActionListener(this);
     Shot.addKeyListener(this);
     this.add(Shot);
@@ -265,11 +283,17 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     } catch (IOException e) {
       onlineStatus=false;
     }
-  }
+  }                    
   
   public void adjustmentValueChanged(AdjustmentEvent e) {
     if (!Game.online) {
       Game.gamerunner.auftretenvonperks=perks.getValue();
+      
+      menübotschwierigkeit=botschwierigkeit.getValue();
+      System.out.println("menübotschwierigkeit "+menübotschwierigkeit);
+      for (int c=0;c<Game.player.length ;c++ ) { 
+        Game.player[c].botschwierigkeit=menübotschwierigkeit;
+      } // end of for
     }
     Game.oc.setGain((float) lautstaerke.getValue()/100);
     Game.currentVolume=lautstaerke.getValue();

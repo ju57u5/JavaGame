@@ -30,14 +30,17 @@ class Player extends Thread implements KeyListener  {
   int boomUp,boomLeft,boomRight;
   int jumpupdate=10;
   int sperrzeit=40;
-  int perkzählerjump,perkzählerrun,perkzählershoot,perkw,drawboom=20,boomx,boomy;
-  File boomtexture,freezetexture;
-  int gefroren=0;
-  boolean freeze,aufeinerebeneüberjemandem=true;
-  int min=1000000000,dif,angriffsziel;
+  int perkzählerjump,perkzählerrun,perkzählershoot,perkw,drawboom=20,boomx,boomy,gefroren=0;         // Perks
+  File boomtexture,freezetexture;                                                                    //Perks
+  boolean freeze;                                                                                    //Perks
+  boolean aufeinerebeneüberjemandem=true;
+  int min=1000000000,dif,angriffsziel;                                                               //Bot zielerkennung
+  int botschwierigkeit=1;
   int id;
   Player murderer; 
   int amstartwarten=42;
+  
+  
   // Ende Attribute1
   
   public Player(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int down, int attack, int xHealth, int yHealth, String name) {

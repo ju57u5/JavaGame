@@ -27,7 +27,7 @@ class perks extends Thread
     this.perktexture = perktexture;
     this.Game = Game;
     this.perkx=perkx;
-    this.perky=perky; 
+    this.perky=perky;
     this.perkart = perkart;
     this.art = true;
     

@@ -16,8 +16,13 @@ class Bot extends Player {
     if (name.equals("boss")) {          //Cheat
       health=200;                       //Cheat
     } // end of if
+
     name = "Bot";  //ERste Änderung an der update Klasse: hier sollte die KI/KD sachen stehen und die Keysachen nicht...
     
+    health=health/botschwierigkeit;
+    speed=speed/botschwierigkeit;
+    jumpheigth=jumpheigth/botschwierigkeit;
+    sperrzeit=sperrzeit/botschwierigkeit;
     
     if (y + textureImage.getHeight() > Game.ebenen[0][2] + 200) {
       health=0;
@@ -195,12 +200,12 @@ class Bot extends Player {
         
       } // end of For
       
-    
+      
       amstartwarten-=1;
     }
     
     
   } // end of if
-    
- }
+  
+}
    
