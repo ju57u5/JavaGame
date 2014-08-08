@@ -186,53 +186,69 @@ class GameRunner extends Thread {
                 } // end of if
               }
             } // end of for
-            } // end of if
-            
-            
-            
-            
-            
-          }
-          totencounter=0;
+          } // end of if
           
-          if (Game.updater.arg.equals("dev") && gesamtticks==0) {
-            new ScoreFrame(Game, "Justus", 3, 5, 10, 10000000) ;
-          }
           
-          neustart-=1;
-          if (neustart==0 && !schonneu) {
-            if (!wellenModus.isOn()) {
-              scoreFrame.dispose(); 
-            } // end of if
-            for (int c=1;c<Game.player.length;c++) {
-              if (Game.player[c] != null) {
-                Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
-                Game.player[c].y=0;
-                Game.player[c].health=100;
-                Game.player[c].jumpheigth=200;
-                Game.player[c].speed=5;
-                Game.player[c].sperrzeit=40;
-                Game.player[c].freezeControls=false;
-                neu=false;
-                
-              } // end of if
-            } // end of if
-          } // end of for
-        } // end of if
+          
+          
+          
+        }
+        totencounter=0;
         
-        if (!Game.online) {
-          Game.highscore.saveNames();
+        if (Game.updater.arg.equals("dev") && gesamtticks==0) {
+          new ScoreFrame(Game, "Justus", 3, 5, 10, 10000000) ;
         }
         
-        Game.getGraphics().drawImage(Game.dbImage,0,0,Game);
-        gesamtticks++;
+        neustart-=1;
+        if (neustart==0 && !schonneu) {
+          if (!wellenModus.isOn()) {
+            scoreFrame.dispose(); 
+          } // end of if
+          for (int c=1;c<Game.player.length;c++) {
+            if (Game.player[c] != null) {
+              Game.player[c].x=(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]);
+              Game.player[c].y=0;
+              Game.player[c].health=100;
+              Game.player[c].jumpheigth=200;
+              Game.player[c].speed=5;
+              Game.player[c].sperrzeit=40;
+              Game.player[c].freezeControls=false;
+              neu=false;
+              
+            } // end of if
+          } // end of if
+        } // end of Neustart
+        
+        Game.dbImage.getGraphics().drawString("Modus :",500,650);
+        if (wellenModus.isOn()) {
+          Game.dbImage.getGraphics().drawString("Wellenmodus",550,650);                        ///Modus Anzeige
+        } // end of if
+        if (!wellenModus.isOn()) {
+          Game.dbImage.getGraphics().drawString("Normal",550,650);  
+        } // end of if
+        
+        
+      } // end of if
+      
+      if (!Game.online) {
+        Game.highscore.saveNames();
       }
       
       
       
-    } // end of if
+      
+      Game.getGraphics().drawImage(Game.dbImage,0,0,Game);
+      gesamtticks++;
+      
+      
+      
+    }
     
-  } // end of while
+    
+    
+  } // end of if
+  
+} // end of while
   
   
   
