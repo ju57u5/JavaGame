@@ -323,6 +323,8 @@ public class JavaGame extends Frame implements KeyListener {
         gamerunner.wellenModus.wAnzeige=-1;
         gamerunner.wellenModus.wNeu=false;
         gamerunner.wellenModus.nNeu=false;
+        gamerunner.storyModus.amanfang=true;
+        gamerunner.wellenModus.amanfang=true;
       } // end of if
     } // end of for
     

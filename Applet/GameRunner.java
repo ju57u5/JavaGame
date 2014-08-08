@@ -28,7 +28,8 @@ class GameRunner extends Thread {
   ScoreFrame scoreFrame;
   String chatMessages[] = new String [30];
   boolean sendHighscoreFailed;
-  WellenModus wellenModus ;
+  WellenModus wellenModus;
+  StoryModus storyModus;
   
 
 
@@ -39,6 +40,7 @@ class GameRunner extends Thread {
     this.Game = Game;
     perktexture = new File(Game.basePath,"/perk.png");
     wellenModus = new WellenModus(Game);
+    storyModus = new StoryModus(Game);
     this.start();
   }  
   // Anfang Komponenten5
@@ -143,9 +145,10 @@ class GameRunner extends Thread {
           } // end of for
           
           wellenModus.update();
+          storyModus.update();
           
           if (totencounter==anzahl-1 && Game.online==false) {
-            if (!wellenModus.isOn()) {
+            if (!wellenModus.isOn() && !storyModus.isOn()) {
               for (int c=1;c<Game.player.length;c++) {
                 if (Game.player[c] != null) {
                   if (Game.player[c].health>0) {
@@ -201,7 +204,7 @@ class GameRunner extends Thread {
         
         neustart-=1;
         if (neustart==0 && !schonneu) {
-          if (!wellenModus.isOn()) {
+          if (!wellenModus.isOn() && !storyModus.isOn()) {
             scoreFrame.dispose(); 
           } // end of if
           for (int c=1;c<Game.player.length;c++) {
@@ -218,13 +221,22 @@ class GameRunner extends Thread {
           } // end of if
         } // end of Neustart
         
+        
+        /////////////////////////////////////////////////////////////MODUS ANZEIGE
+        
         Game.dbImage.getGraphics().drawString("Modus :",500,650);
         if (wellenModus.isOn()) {
           Game.dbImage.getGraphics().drawString("Wellenmodus",550,650);                        ///Modus Anzeige
         } // end of if
-        if (!wellenModus.isOn()) {
+        if (!wellenModus.isOn() && !storyModus.isOn() ) {
           Game.dbImage.getGraphics().drawString("Normal",550,650);  
         } // end of if
+        if (storyModus.isOn()) {
+          Game.dbImage.getGraphics().drawString("Storymodus",550,650);                        ///Modus Anzeige
+        } // end of if
+        
+        /////////////////////////////////////////////////////////////MODUS ANZEIGE ENDE
+        
         
         
       } // end of if

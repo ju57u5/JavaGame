@@ -17,7 +17,10 @@ class Bot extends Player {
       health=200;                       //Cheat
     } // end of if
     
-    name = "Bot";  //ERste Änderung an der update Klasse: hier sollte die KI/KD sachen stehen und die Keysachen nicht...
+    if (!Game.gamerunner.storyModus.isOn()) {
+      name = "Bot";  //ERste Änderung an der update Klasse: hier sollte die KI/KD sachen stehen und die Keysachen nicht...
+    } // end of if
+    
     
     
     
@@ -184,11 +187,15 @@ class Bot extends Player {
           } // end of if
           
           if (dif<min && Game.player[c].health>0) {
-            if (!Game.gamerunner.wellenModus.isOn()) {
+            if (!Game.gamerunner.wellenModus.isOn() && !Game.gamerunner.storyModus.isOn()) {
               angriffsziel=c;
               dif=min;
             } // end of if
-            if (Game.gamerunner.wellenModus.isOn() && !Game.player[c].name.startsWith("Bot")) {
+            if ((Game.gamerunner.wellenModus.isOn() && !Game.player[c].name.startsWith("Bot"))) {
+              angriffsziel=c;
+              dif=min;
+            } // end of if
+            if ((Game.gamerunner.storyModus.isOn() && !Game.player[c].name.startsWith("Eingeborener"))) {
               angriffsziel=c;
               dif=min;
             } // end of if

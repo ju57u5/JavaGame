@@ -10,7 +10,7 @@ public class WellenModus {
   static int MODE_OFF=0;
   static int MODE_ON=1;
   int wAnzeige;
-  boolean wNeu=false,nNeu=false;
+  boolean wNeu=false,nNeu=false,amanfang=true;
   
   public WellenModus (JavaGame Game) {
     this.Game=Game;
@@ -22,6 +22,20 @@ public class WellenModus {
   */
   public void update() {
     if (wellenModus) {
+      if (amanfang) {
+        for (int c=1;c<Game.player.length ;c++ ) {
+          if (Game.player[c] instanceof Bot) {
+            if (c>2) {
+              Game.player[c] = null;
+            } // end of if
+            
+          } // end of if
+        }
+        amanfang=false;
+      } // end of if
+      
+      
+      
       
       for (int c=1;c<Game.player.length ;c++ ) {
         if (Game.player[c] != null) {

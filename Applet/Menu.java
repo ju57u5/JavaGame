@@ -11,7 +11,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
   JavaGame Game;
   Button[] buttonSpieler = new Button[100] ;
   Button[] buttonSchuss = new Button[100] ;
-  Button Sound,Restart,Fps,Bot,bPlayer,Weiter,Stop,Welle;
+  Button Sound,Restart,Fps,Bot,bPlayer,Weiter,Stop,Welle,Story,Normal;
   Choice SpielerAuswahl;
   Button Right,Left,Up,Down,Shot;
   boolean bRight,bLeft,bUp,bDown,bShot;
@@ -251,14 +251,29 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     this.add(Stop);
     
     if (!Game.online) {
+      L1=new Label("Game Starten als :");
+      L1.setBounds(850,400,100,20);
+      L1.addKeyListener(this);
+      this.add(L1);
+      
       Welle = new Button("Wellen Modus starten");
-      Welle.setBounds(850,400,140,20);
+      Welle.setBounds(850,420,140,30);
       Welle.addActionListener(this);
       Welle.addKeyListener(this);
-      this.add( Welle);
+      this.add(Welle);
+      
+      Story = new Button("Story Modus starten");
+      Story.setBounds(850,450,140,30);
+      Story.addActionListener(this);
+      Story.addKeyListener(this);
+      this.add(Story);
+      
+      Normal = new Button("Normalen Modus starten");
+      Normal.setBounds(850,480,140,30);
+      Normal.addActionListener(this);
+      Normal.addKeyListener(this);
+      this.add(Normal);
     } // end of if
-    
-    
     
     
     if (!Game.online) {
@@ -393,7 +408,9 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       if (isNumeric(Spieler.getText()) ) {
         int anzahl = Integer.parseInt(Spieler.getText());
         int spielerAnzahl=Game.getPlayerCount();
-        
+        if (spielerAnzahl<2 && !Game.gamerunner.wellenModus.isOn() && !Game.gamerunner.storyModus.isOn() ) {
+          anzahl=2;
+        } // end of if
         if (anzahl>1 && anzahl<Game.player.length && anzahl != spielerAnzahl) {
           int textureAnzahl=0;
           int shottextureAnzahl=0;
@@ -622,6 +639,30 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
     
     if (e.getSource()==Welle) {
       Game.gamerunner.wellenModus.setState(WellenModus.MODE_ON);
+      Game.gamerunner.storyModus.setState(StoryModus.MODE_OFF);
+      
+      Game.restartGame();
+      if (Game.soundan) {
+        Game.oc.loop();
+      } // end of if
+      this.dispose();
+      Game.gamerunner.running=true;
+    }
+    if (e.getSource()==Story) {
+      Game.gamerunner.storyModus.setState(StoryModus.MODE_ON);
+      Game.gamerunner.wellenModus.setState(WellenModus.MODE_OFF);
+      Game.restartGame();
+      if (Game.soundan) {
+        Game.oc.loop();
+      } // end of if
+      this.dispose();
+      Game.gamerunner.running=true;
+    }
+    if (e.getSource()==Normal) {
+      
+      Game.gamerunner.storyModus.setState(StoryModus.MODE_OFF);
+      Game.gamerunner.wellenModus.setState(WellenModus.MODE_OFF);
+      playerCount();
       Game.restartGame();
       if (Game.soundan) {
         Game.oc.loop();
