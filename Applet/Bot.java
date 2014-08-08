@@ -195,7 +195,7 @@ class Bot extends Player {
               angriffsziel=c;
               dif=min;
             } // end of if
-            if ((Game.gamerunner.storyModus.isOn() && !Game.player[c].name.startsWith(""))) {
+            if (Game.gamerunner.storyModus.isOn() && !(Game.player[c] instanceof Bot)) {
               angriffsziel=c;
               dif=min;
             } // end of if
