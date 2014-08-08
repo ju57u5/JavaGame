@@ -1,6 +1,8 @@
 package Applet;
 
 import java.awt.event.KeyEvent;
+import java.awt.Color;
+import java.awt.Graphics;
 
 public class WellenModus {
   ScoreFrame scoreFrame;
@@ -54,8 +56,10 @@ public class WellenModus {
           } // end of if
         }
       } // end of for         
-      Game.dbImage.getGraphics().drawString("Welle "+wbanzahl,400,650);
-      
+      Graphics gra = Game.dbImage.getGraphics();
+      gra.setColor(Color.white);
+      gra.drawString("Welle "+wbanzahl,400,650);
+      gra.setColor(Color.black);
       
       if (wbtotencounter==wbanzahl && !wNeu) {///Sieg
         wAnzeige=100;

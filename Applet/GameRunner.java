@@ -106,6 +106,21 @@ class GameRunner extends Thread {
             } // end of if
           } // end of for
           
+          /////////////////////////////////////////////////////////////MODUS ANZEIGE
+          
+          gra.drawString("Modus :",500,650);
+          if (wellenModus.isOn()) {
+            gra.drawString("Wellenmodus",550,650);                        ///Modus Anzeige
+          } // end of if
+          if (!wellenModus.isOn() && !storyModus.isOn() ) {
+            gra.drawString("Normal",550,650);  
+          } // end of if
+          if (storyModus.isOn()) {
+            gra.drawString("Storymodus",550,650);                        ///Modus Anzeige
+          } // end of if
+          
+          /////////////////////////////////////////////////////////////MODUS ANZEIGE ENDE
+          
           for (int c=0;c<5;c++) {
             if (chatMessages[c] != null) {
               if (chatMessages[c].length()>=50) {
@@ -222,20 +237,7 @@ class GameRunner extends Thread {
         } // end of Neustart
         
         
-        /////////////////////////////////////////////////////////////MODUS ANZEIGE
         
-        Game.dbImage.getGraphics().drawString("Modus :",500,650);
-        if (wellenModus.isOn()) {
-          Game.dbImage.getGraphics().drawString("Wellenmodus",550,650);                        ///Modus Anzeige
-        } // end of if
-        if (!wellenModus.isOn() && !storyModus.isOn() ) {
-          Game.dbImage.getGraphics().drawString("Normal",550,650);  
-        } // end of if
-        if (storyModus.isOn()) {
-          Game.dbImage.getGraphics().drawString("Storymodus",550,650);                        ///Modus Anzeige
-        } // end of if
-        
-        /////////////////////////////////////////////////////////////MODUS ANZEIGE ENDE
         
         
         
