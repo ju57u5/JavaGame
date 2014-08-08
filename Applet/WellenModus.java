@@ -40,7 +40,7 @@ public class WellenModus {
           } // end of if
         }
       } // end of for         
-      
+      Game.dbImage.getGraphics().drawString("Welle "+wbanzahl,400,650);
       
       
       if (wbtotencounter==wbanzahl && !wNeu) {///Sieg

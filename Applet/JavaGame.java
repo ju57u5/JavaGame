@@ -320,6 +320,9 @@ public class JavaGame extends Frame implements KeyListener {
         player[c].boomRight=0;
         player[c].boomUp=0;
         player[c].boomLeft=0;
+        gamerunner.wellenModus.wAnzeige=-1;
+        gamerunner.wellenModus.wNeu=false;
+        gamerunner.wellenModus.nNeu=false;
       } // end of if
     } // end of for
     

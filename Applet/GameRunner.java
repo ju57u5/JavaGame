@@ -175,7 +175,7 @@ class GameRunner extends Thread {
                   
                   
                   if (!neu) {
-                    neustart=300;
+                    neustart=100;
                     neu=true;
                     schonneu=false;
                   } // end of if
@@ -214,7 +214,6 @@ class GameRunner extends Thread {
               Game.player[c].sperrzeit=40;
               Game.player[c].freezeControls=false;
               neu=false;
-              
             } // end of if
           } // end of if
         } // end of Neustart
