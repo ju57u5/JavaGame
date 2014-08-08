@@ -175,7 +175,7 @@ class GameRunner extends Thread {
                   
                   
                   if (!neu) {
-                    neustart=100;
+                    neustart=300;
                     neu=true;
                     schonneu=false;
                   } // end of if
