@@ -35,7 +35,7 @@ class Player extends Thread implements KeyListener  {
   boolean freeze;                                                                                    //Perks
   boolean aufeinerebeneüberjemandem=true;
   int min=1000000000,dif,angriffsziel;                                                               //Bot zielerkennung
-  int botschwierigkeit=1;
+  int botschwierigkeit=100;
   int id;
   Player murderer; 
   int amstartwarten=42;

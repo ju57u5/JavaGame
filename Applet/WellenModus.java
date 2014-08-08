@@ -3,7 +3,7 @@ package Applet;
 import java.awt.event.KeyEvent;
 
 public class WellenModus {
-  
+  ScoreFrame scoreFrame;
   int wptotencounter=0,wbtotencounter=0,wbanzahl=0,wpanzahl=0,wgewonnen;
   JavaGame Game;
   boolean wellenModus=false;
@@ -16,11 +16,11 @@ public class WellenModus {
   
   
   /**
- * Updated den Spielmodus
- */
-public void update() {
+  * Updated den Spielmodus
+  */
+  public void update() {
     if (wellenModus) {
-
+      
       for (int c=1;c<Game.player.length ;c++ ) {
         if (Game.player[c] != null) {
           if (Game.player[c] instanceof Bot) {
@@ -38,9 +38,9 @@ public void update() {
           } // end of if
         }
       } // end of for         
-
-
-
+      
+      
+      
       if (wbtotencounter==wbanzahl) {///Sieg
         int spielerAnzahl = Game.getPlayerCount(); //Du kannst ein Array nicht größer belegen als es ist, deswegen musst du herausfinden, wo der erste lehre Spielerslot ist. Hier hab ich eine Methode dazu;
         Game.dbImage.getGraphics().drawString("Welle überstanden",500,120);
@@ -61,20 +61,20 @@ public void update() {
     }     /// Ende vom Wellenmodus
   }
   
- /**
+  /**
   * Methode gibt zurück ob der Modus angeschaltet ist.
- * @return boolean
- */
-public boolean isOn() {
+  * @return boolean
+  */
+  public boolean isOn() {
     return wellenModus;
   }
   
   /**
-   * Setzt den Status des Modus.
-   * <br>Möglichkeiten sind als statische Variablen angegeben.
- * @param int state
- */
-public void setState(int state) {
+  * Setzt den Status des Modus.
+  * <br>Möglichkeiten sind als statische Variablen angegeben.
+  * @param int state
+  */
+  public void setState(int state) {
     if (state==0) {
       wellenModus=false;
     }
