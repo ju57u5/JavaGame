@@ -471,9 +471,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
         try {
           BufferedImage Image = ImageIO.read(Game.texture[c]);
           this.getGraphics().drawImage(Image,120+71*c,140,this);
-        } catch(IOException exeption) {
-          
-        }
+        } catch(IOException exeption) {}
       }  
     } // end of for
     

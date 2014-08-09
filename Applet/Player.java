@@ -39,7 +39,7 @@ class Player extends Thread implements KeyListener  {
   int id;
   Player murderer; 
   int amstartwarten=42;
-  
+  boolean neuereingeborerener=false,weitweg;
   
   // Ende Attribute1
   

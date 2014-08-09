@@ -14,6 +14,7 @@ class perks extends Thread
   boolean active=true;
   int speed, perkart;
   JavaGame Game;
+  boolean heilung=true;
   
   public perks (File perktexture, JavaGame Game, int perkx, int perky) {
     this.perktexture = perktexture;
@@ -58,7 +59,12 @@ class perks extends Thread
             perkw=perkart;
           }
           else {
-            perkw = (int) (Math.random()*6+1);
+            System.out.println("Hallo");
+            if (Game.gamerunner.storyModus.isOn()) {
+              perkw = (int) (Math.random()*7+1);
+            } else {
+              perkw = (int) (Math.random()*6+1);
+            } // end of if-else
           }
           switch (perkw) {
             case  1:
@@ -89,6 +95,17 @@ class perks extends Thread
             case 6:
             Game.player[counter].gefroren=100;
             Game.player[counter].freeze=true;
+            break;
+            case 7:
+            System.out.println("Heilung");
+            for (int c=1;c<Game.player.length ;c++) {
+              if (Game.player[c].health <0 && heilung && !(Game.player[c] instanceof Bot)) {
+                heilung=false;
+                Game.player[c].health=100;
+                Game.player[c].x=200;
+                Game.player[c].y=650;
+              } // end of if
+            } // end of for
             break;
             
             
