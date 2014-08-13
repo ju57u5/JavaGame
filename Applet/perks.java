@@ -55,17 +55,19 @@ class perks extends Thread
         if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100)) {
           active=false;
           int perkw;
+          
           if (art) {
             perkw=perkart;
           }
           else {
-            System.out.println("Hallo");
+            System.out.println(Game.gamerunner.storyModus.isOn());
             if (Game.gamerunner.storyModus.isOn()) {
-              perkw = (int) (Math.random()*7+1);
+              perkw = (int)7;// (Math.random()*7+1);
             } else {
               perkw = (int) (Math.random()*6+1);
             } // end of if-else
           }
+          
           switch (perkw) {
             case  1:
             Game.player[counter].jumpheigth=300;
@@ -99,12 +101,14 @@ class perks extends Thread
             case 7:
             System.out.println("Heilung");
             for (int c=1;c<Game.player.length ;c++) {
-              if (Game.player[c].health <0 && heilung && !(Game.player[c] instanceof Bot)) {
-                heilung=false;
-                Game.player[c].health=100;
-                Game.player[c].x=200;
-                Game.player[c].y=650;
-              } // end of if
+            	if (Game.player[c] != null) {
+	              if (Game.player[c].health <0 && heilung && !(Game.player[c] instanceof Bot)) {
+	                heilung=false;
+	                Game.player[c].health=100;
+	                Game.player[c].x=200;
+	                Game.player[c].y=650;
+	              } // end of if
+            	}
             } // end of for
             break;
             

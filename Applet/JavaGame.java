@@ -186,7 +186,6 @@ public class JavaGame extends Frame implements KeyListener {
     player[3].laden(this,(int) (Math.random()*(ebenen[0][1]-ebenen[0][0])+ebenen[0][0]),0);
     
     
-    
     this.addKeyListener(player[1]);
     this.addKeyListener(player[2]);
     this.addKeyListener(player[3]);

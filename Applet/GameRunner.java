@@ -67,7 +67,7 @@ class GameRunner extends Thread {
           if (perkjn<auftretenvonperks && !Game.online) {
             int perkx= (int) (Math.random()*1000+1);
             int perky= (int) (Math.random()*400+100);
-            perk[count] = new perks(perktexture, Game, perkx, perky, (int) (Math.random()*6+1)); 
+            perk[count] = new perks(perktexture, Game, perkx, perky); 
             count++;
             
           } // end of if
