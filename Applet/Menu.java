@@ -432,8 +432,8 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
             
             else if(Game.player[c]==null) {
               
-              Game.player[c] = new Bot(Game.texture[(int) (Math.random()*textureAnzahl)],Game.shottexture[(int) (Math.random()*shottextureAnzahl)],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Bot");
-              Game.player[c].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);
+              Game.player[c] = new Bot((int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0,false,67,100,Game.texture[(int) (Math.random()*textureAnzahl)],Game.shottexture[(int) (Math.random()*shottextureAnzahl)],KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Bot");
+              Game.player[c].laden(Game);
               
             } // end of if-else
           } // end of for
@@ -581,8 +581,8 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       int xPos = Game.player[spieler].x;
       int yPos = Game.player[spieler].y;
       
-      Game.player[spieler] = new Bot(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
-      Game.player[spieler].laden(Game,xPos,yPos);
+      Game.player[spieler] = new Bot(xPos,yPos,false,67,100,Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
+      Game.player[spieler].laden(Game);
       Game.player[spieler].name="Bot ";
       Name.setText("Bot");
     } // end of if
@@ -592,8 +592,8 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       int xPos = Game.player[spieler].x;
       int yPos = Game.player[spieler].y;
       
-      Game.player[spieler] = new Player(Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].dbImage,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
-      Game.player[spieler].laden(Game,xPos,yPos);
+      Game.player[spieler] = new Player(xPos,yPos,false,67,100,Game.player[spieler].playertexture,Game.player[spieler].shottexture,Game.player[spieler].left,Game.player[spieler].right,Game.player[spieler].jump,Game.player[spieler].down,Game.player[spieler].attack,spieler,Game.player[spieler].yHealth,Game.player[spieler].name);
+      Game.player[spieler].laden(Game);
       Game.addKeyListener(Game.player[spieler]);
       
       String playername = Game.highscore.getName(spieler);

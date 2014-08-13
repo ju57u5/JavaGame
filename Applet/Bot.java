@@ -7,8 +7,8 @@ class Bot extends Player {
   
   
   
-  public Bot(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int down, int attack, int xHealth, int yHealth, String name) {
-    super(playertexture, shottexture, dbImage, left, right, jump, down, attack, xHealth, yHealth, name);
+  public Bot(int x, int y, boolean orientation, int width, int height,File playertexture, File shottexture, int left, int right , int jump, int down, int attack, int xHealth, int yHealth, String name) {
+    super(x,y,orientation,width,height,playertexture, shottexture, left, right, jump, down, attack, xHealth, yHealth, name);
   }  
   
   public void updateKey()
@@ -22,9 +22,6 @@ class Bot extends Player {
     } // end of if
     
     
-    
-    
-    
     if (y + textureImage.getHeight() > Game.ebenen[0][2] + 200) {
       health=0;
     } // end of if
@@ -36,11 +33,11 @@ class Bot extends Player {
     } // end of if
     
     if (health>0) {
-      if (!characterInverted && health>0) {
+      if (!orientation && health>0) {
         Game.dbImage.getGraphics().drawString(name,x+33,y-10);
         Game.dbImage.getGraphics().drawImage(textureImage,x,y,Game);
       } // end of if
-      else if (characterInverted && health>0){
+      else if (orientation && health>0){
         Game.dbImage.getGraphics().drawString(name,x+33,y-10);
         Game.dbImage.getGraphics().drawImage(textureImageb,x,y,Game);
       } // end of if-else
@@ -106,11 +103,11 @@ class Bot extends Player {
         if (x<100 || x>1000) {      //selbstschutz
           if (x<100)
           {x += speed;
-            characterInverted = false;
+            orientation = false;
           }
           if (x>1000)
           {x -= speed;
-            characterInverted = true;
+            orientation = true;
           }
         } 
         else {
@@ -130,10 +127,10 @@ class Bot extends Player {
             } // end of if 
             
             if (x>Game.player[angriffsziel].x) {
-              characterInverted = true;
+              orientation = true;
             } // end of if                                                                     ////Drehen
             if (x<Game.player[angriffsziel].x) {
-              characterInverted = false;
+              orientation = false;
             } // end of if                                                                    //Bewegung Ende
             
             
@@ -147,8 +144,8 @@ class Bot extends Player {
             if (botdif<80 && botdif>-80) {     //selbe Höhe
               
               if (schusssperre == 0) {
-                Shot bullet = new Shot(shottexture,!characterInverted, 10, Game,this);
-                bullet.laden(x,y+50);
+                Shot bullet = new Shot(x,y+50,orientation,50,50,shottexture, 10, Game,this);
+                bullet.laden();
                 schusssperre = sperrzeit;
               } // end of if
               

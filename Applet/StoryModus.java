@@ -38,27 +38,13 @@ public class StoryModus {
           }
           if (Game.player[c].neuereingeborerener) {
             int spielerAnzahl = Game.getPlayerCount();
-            Game.player[spielerAnzahl+1] = new Bot(Game.texture[6],Game.shottexture[2],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,spielerAnzahl+1,35,"");
-            Game.player[spielerAnzahl+1].laden(Game,850,450);
+            Game.player[spielerAnzahl+1] = new Bot(850,450,false,67,100,Game.texture[6],Game.shottexture[2],KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,spielerAnzahl+1,35,"");
+            Game.player[spielerAnzahl+1].laden(Game);
             Game.player[c].neuereingeborerener=false;
             Game.player[c].weitweg=false;
           } // end of if
-          
-          
-          
-          
-          
-          
         }
       } // end of for
-      
-      
-      
-      
-      
-      
-      
-      
     }
     
     

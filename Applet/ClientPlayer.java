@@ -7,8 +7,8 @@ import java.io.IOException;
 
 
 public class ClientPlayer extends Player {
-	public ClientPlayer(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int down, int attack, int xHealth, int yHealth, String name) {
-	    super(playertexture, shottexture, dbImage, left, right, jump, down, attack, xHealth, yHealth, name);
+	public ClientPlayer(int x, int y, boolean orientation,int width, int height, File playertexture, File shottexture, int left, int right , int jump, int down, int attack, int xHealth, int yHealth, String name) {
+	    super(x,y,orientation,width,height,playertexture, shottexture, left, right, jump, down, attack, xHealth, yHealth, name);
 	    this.id = xHealth;
 	} 
 	
@@ -16,24 +16,20 @@ public class ClientPlayer extends Player {
 	{
 		 if (firsttimepressed && !freezeControls) {
 		     
-		    
-		    
 		    if (y + textureImage.getHeight() > Game.ebenen[0][2] + 200) {
 		      health=0;
 		    } // end of if
-//		    updateJump(jumpupdate);
-//		    updateBoom(15);
 		    drawHealth();
 		    if (schusssperre > 0) {
 		      schusssperre--;
 		    } // end of if
 		    
 		    
-		    if (!characterInverted && health>0) {
+		    if (!orientation && health>0) {
 		      Game.dbImage.getGraphics().drawString(name,x+33-(name.length()/2),y-10);
 		      Game.dbImage.getGraphics().drawImage(textureImage,x,y,Game);
 		    } // end of if
-		    else if (characterInverted && health>0){
+		    else if (orientation && health>0){
 		      Game.dbImage.getGraphics().drawString(name,x+33-name.length()/2,y-10);
 		      Game.dbImage.getGraphics().drawImage(textureImageb,x,y,Game);
 		    } // end of if-else

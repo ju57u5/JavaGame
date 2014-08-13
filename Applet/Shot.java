@@ -6,45 +6,41 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
-class Shot {
+class Shot extends GameObject{
   
   // Anfang Attribute2
-  int x,y,speed;
+  int speed;
   JavaGame Game;
   File shottexture;
   Player owner;
-  boolean rechts;
   BufferedImage textureImage = new BufferedImage(1000,1000,1);
   // Ende Attribute2
   
   
-  public Shot (File shottexture, boolean rechts, int speed, JavaGame Game, Player owner) {
-    this.shottexture = shottexture;
+  public Shot (int x, int y, boolean orientation, int width, int height, File shottexture, int speed, JavaGame Game, Player owner) {
+    super(x, y, orientation, width, height);
+	this.shottexture = shottexture;
     this.Game = Game;
     this.speed = speed;
-    this.rechts = rechts;
     this.owner = owner;
   }  
   
-  public void laden(int x, int y) {
-    
-    this.x = x;
-    this.y = y;
-    
+  public void laden() {
+   
     try { 
       textureImage = ImageIO.read(shottexture);
     } catch(IOException exeption) {
       
     }
     
-    if (rechts) {
+    if (!orientation) {
       textureImage = verticalflip(textureImage);
     } // end of if
     Game.DamageLogig.registerShot(this);            //Registrierung
   }
   
   public void updateShot() {
-    if (rechts) {
+    if (!orientation) {
       x += speed;
       
     } // end of if

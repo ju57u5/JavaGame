@@ -91,8 +91,8 @@ public class WellenModus {
     
     if (wNeu && wAnzeige<0) {
       int spielerAnzahl = Game.getPlayerCount();
-      Game.player[spielerAnzahl+1] = new Bot(Game.texture[0],Game.shottexture[0],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,spielerAnzahl+1,35,"Bot");
-      Game.player[spielerAnzahl+1].laden(Game,(int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0);
+      Game.player[spielerAnzahl+1] = new Bot((int) (Math.random()*(Game.ebenen[0][1]-Game.ebenen[0][0])+Game.ebenen[0][0]),0,false,67,100,Game.texture[0],Game.shottexture[0],KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,spielerAnzahl+1,35,"Bot");
+      Game.player[spielerAnzahl+1].laden(Game);
       Game.restartGame();
       wNeu=false;
       nNeu=false;

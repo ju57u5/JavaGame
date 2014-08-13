@@ -32,7 +32,7 @@ class damageLogig {
           if (runner.shot[counterb] != null && runner.shot[counterb].owner != runner.player[counter] && !runner.player[counter].freezeControls) {
             
             xDistance = runner.shot[counterb].x - runner.player[counter].x;
-            yDistance = runner.shot[counterb].y - runner.player[counter].y ;
+            yDistance = runner.shot[counterb].y - runner.player[counter].y;
             
             if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100) ) {
               if (xDistance < 0) {

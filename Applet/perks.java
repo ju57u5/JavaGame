@@ -5,9 +5,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
-class perks extends Thread 
+class perks extends GameObject
 {
-  int x,y,wert,perkx,perky;
+  int /*x,y,*/wert,perkx,perky;
   File perktexture;
   BufferedImage textureImage;
   boolean art=false;
@@ -16,19 +16,17 @@ class perks extends Thread
   JavaGame Game;
   boolean heilung=true;
   
-  public perks (File perktexture, JavaGame Game, int perkx, int perky) {
-    this.perktexture = perktexture;
+  public perks (int x, int y, Boolean orientation, int width, int height, File perktexture, JavaGame Game) {
+	super(x,y,orientation,width,height);
+	this.perktexture = perktexture;
     this.Game = Game;
-    this.perkx=perkx;
-    this.perky=perky;
     
     laden();
   } 
-  public perks (File perktexture, JavaGame Game, int perkx, int perky, int perkart) {
-    this.perktexture = perktexture;
+  public perks (int x, int y, Boolean orientation, int width, int height, File perktexture, JavaGame Game, int perkart) {
+	super(x,y,orientation,width,height);
+	this.perktexture = perktexture;
     this.Game = Game;
-    this.perkx=perkx;
-    this.perky=perky;
     this.perkart = perkart;
     this.art = true;
     
@@ -48,8 +46,8 @@ class perks extends Thread
     for (int counter = 0;counter<Game.player.length;counter++) {
       if (Game.player[counter] != null) {
         
-        int xDistance = perkx - Game.player[counter].x;
-        int yDistance = perky - Game.player[counter].y;
+        int xDistance = perkx - Game.player[counter].getX();
+        int yDistance = perky - Game.player[counter].getY();
         
         
         if ( (xDistance > -50 && xDistance <67) && (yDistance > -50 && yDistance < 100)) {
@@ -105,8 +103,8 @@ class perks extends Thread
 	              if (Game.player[c].health <0 && heilung && !(Game.player[c] instanceof Bot)) {
 	                heilung=false;
 	                Game.player[c].health=100;
-	                Game.player[c].x=200;
-	                Game.player[c].y=650;
+	                Game.player[c].setX(200);
+	                Game.player[c].setY(650);
 	              } // end of if
             	}
             } // end of for

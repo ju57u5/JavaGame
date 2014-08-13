@@ -65,14 +65,14 @@ class Client extends Thread{
 
     for (int c=1;c<Game.player.length;c++) {
       if (c <= playersize&& c!=id) {
-        Game.player[c] = new ClientPlayer(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Online Player "+c);
+        Game.player[c] = new ClientPlayer(100,100,false,67,100,Game.texture[1],Game.shottexture[1],KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,"Online Player "+c);
         Game.addKeyListener(Game.player[c]);
-        Game.player[c].laden(Game,-1000,100);
+        Game.player[c].laden(Game);
       }
       else if (c==id) {
-        Game.player[c] = new Player(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,Game.onlinename);
+        Game.player[c] = new Player(100,100,false,67,100,Game.texture[1],Game.shottexture[1],KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,c,35,Game.onlinename);
         Game.addKeyListener(Game.player[c]);
-        Game.player[c].laden(Game,100,100);
+        Game.player[c].laden(Game);
       }
       else if (c>playersize) {
         Game.player[c]=null;
@@ -96,7 +96,7 @@ class Client extends Thread{
     daos.writeInt(Game.player[id].x);
     daos.writeInt(Game.player[id].y);
     daos.writeInt(Game.player[id].health);
-    daos.writeBoolean(Game.player[id].characterInverted);
+    daos.writeBoolean(Game.player[id].orientation);
     daos.writeUTF(Game.player[id].name);
 
     daos.close();
@@ -247,7 +247,7 @@ class Client extends Thread{
         Game.player[playerID].x = playerx;
         Game.player[playerID].y = playery;
         Game.player[playerID].health = playerhealth;
-        Game.player[playerID].characterInverted = playerori;
+        Game.player[playerID].orientation = playerori;
         Game.player[playerID].name = playername;
       }
       //      System.out.println("[Client] Server sendet Daten von Client " + playerID+". "+playerx+" "+playery+ " "+playerhealth+" "+playerori+" "+playername);
@@ -266,17 +266,17 @@ class Client extends Thread{
       boolean rechts = dais.readBoolean();
       int shotspeed = dais.readInt();
       //      System.out.println("[Client] Schuss angekommen "+shotx+" "+shoty+" "+shotplayerID);
-      Shot shot = new Shot(Game.player[shotplayerID].shottexture, rechts, shotspeed, Game, Game.player[shotplayerID]);
-      shot.laden(shotx, shoty);
+      Shot shot = new Shot(shotx,shoty,rechts,50,50,Game.player[shotplayerID].shottexture, shotspeed, Game, Game.player[shotplayerID]);
+      shot.laden();
 
       break;
     case 2: //Player connected
       int connectplayerID = dais.readInt();
 
 
-      Game.player[connectplayerID] = new ClientPlayer(Game.texture[1],Game.shottexture[1],Game.dbImage,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,connectplayerID,35,"Online Player "+connectplayerID);
+      Game.player[connectplayerID] = new ClientPlayer(100,100,false,67,100,Game.texture[1],Game.shottexture[1],KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_Q,connectplayerID,35,"Online Player "+connectplayerID);
       Game.addKeyListener(Game.player[connectplayerID]);
-      Game.player[connectplayerID].laden(Game, 100, 100);
+      Game.player[connectplayerID].laden(Game);
 
       System.out.println("[Client] Spieler mit der ID "+ connectplayerID+" connected.");
       writeToChat( dais.readUTF() + " connected.");
@@ -294,7 +294,7 @@ class Client extends Thread{
       int perky = dais.readInt();
       int perkart = dais.readInt();
 
-      Game.gamerunner.perk[Game.gamerunner.count] = new perks(Game.gamerunner.perktexture, Game, perkx, perky, perkart);
+      Game.gamerunner.perk[Game.gamerunner.count] = new perks(perkx, perky,false,50,50, Game.gamerunner.perktexture, Game, perkart);
       Game.gamerunner.count++;
       break;
     case 5: //Restart Packet

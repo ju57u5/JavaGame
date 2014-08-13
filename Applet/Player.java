@@ -7,7 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
-class Player extends Thread implements KeyListener  {
+class Player extends GameObject implements KeyListener  {
 
   // Anfang Attribute1
   File playertexture,shottexture;
@@ -17,8 +17,7 @@ class Player extends Thread implements KeyListener  {
   KeyEvent taste;
   JavaGame Game;
   Image dbImage;
-  boolean justupdated,characterInverted,firsttimepressed,freezeControls=false;
-  int x,y=0;
+  boolean justupdated,firsttimepressed,freezeControls=false;
   int stehenzahl = -1;                                                                                                    
   int schusssperre,left,right,jump,down,attack,xHealth,yHealth;                                                                                             
   int jumpup, jumpdown = 0;                                                                                                   
@@ -43,10 +42,10 @@ class Player extends Thread implements KeyListener  {
   
   // Ende Attribute1
   
-  public Player(File playertexture, File shottexture, Image dbImage, int left, int right , int jump, int down, int attack, int xHealth, int yHealth, String name) {
-    this.playertexture = playertexture;
+  public Player(int x, int y, boolean orientation,int width,int height, File playertexture, File shottexture, int left, int right , int jump, int down, int attack, int xHealth, int yHealth, String name) {
+    super(x, y, orientation, width, height);
+	this.playertexture = playertexture;
     this.shottexture = shottexture;
-    this.dbImage = dbImage;
     this.left = left;
     this.right = right;
     this.jump = jump;
@@ -57,16 +56,11 @@ class Player extends Thread implements KeyListener  {
     this.down = down;
     this.name = name;
   }  
-  // Anfang Komponenten1
-  // Ende Komponenten1
-  // Anfang Methoden1
+ 
   
-  public void laden(JavaGame Game, int x, int y) {
+  public void laden(JavaGame Game) {
     
     this.Game = Game;
-    
-    this.x = x;
-    this.y = y;
     
     boomUp=0;
     boomRight=0;
@@ -110,13 +104,13 @@ class Player extends Thread implements KeyListener  {
     if (firsttimepressed && !freezeControls) {
       
       if (keys[right] ) {                              
-        x +=speed;
-        characterInverted = false;
+        x +=speed ;
+        orientation = false;
       } // end of if
       
       if (keys[left] ) {                                 
         x -=speed;
-        characterInverted = true; 
+        orientation = true; 
       } // end of if
       
       if (keys[jump] ) {                                 
@@ -134,11 +128,11 @@ class Player extends Thread implements KeyListener  {
       } // end of if
       
       if (keys[attack] && y<900 && schusssperre == 0) {                             
-        Shot bullet = new Shot(shottexture,!characterInverted, 10, Game, this);
-        bullet.laden(x,y+50);
+        Shot bullet = new Shot(x,y+50,orientation,50,50,shottexture, 10, Game, this);
+        bullet.laden();
         if (Game.online) {
           try {
-            Game.client.sendNewShot(bullet, id, x,y+50,!characterInverted,10);
+            Game.client.sendNewShot(bullet, id, x,y+50,orientation,10);
           } catch (IOException e) {
             e.printStackTrace();
           }
@@ -159,11 +153,11 @@ class Player extends Thread implements KeyListener  {
     } // end of if
     
     
-    if (!characterInverted && health>0) {
+    if (!orientation && health>0) {
       Game.dbImage.getGraphics().drawString(name,x+33-(name.length()/2),y-10);
       Game.dbImage.getGraphics().drawImage(textureImage,x,y,Game);
     } // end of if
-    else if (characterInverted && health>0){
+    else if (orientation && health>0){
       Game.dbImage.getGraphics().drawString(name,x+33-name.length()/2,y-10);
       Game.dbImage.getGraphics().drawImage(textureImageb,x,y,Game);
     } // end of if-else
@@ -245,10 +239,6 @@ class Player extends Thread implements KeyListener  {
     }
   }
   
-  public void move(boolean rechts, int amount)  {
-    
-    
-  }  
   
   public void drawHealth() {
     Graphics gra = Game.dbImage.getGraphics();
