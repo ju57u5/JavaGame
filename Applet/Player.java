@@ -4,7 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+
 import javax.imageio.ImageIO;
+
 import java.awt.image.BufferedImage;
 
 class Player extends GameObject implements KeyListener  {
@@ -142,8 +145,11 @@ class Player extends GameObject implements KeyListener  {
     } // end of if  
     
     
-    if (y + textureImage.getHeight() > Game.ebenen[0][2] + 200) {
+    if (y + textureImage.getHeight() > Game.ebenen[0][2] + 200 && health>0) {
       health=0;
+      HashMap<String,String> arguments = new HashMap<String, String>();
+      arguments.put("id", ""+id);
+      Game.eventHandler.trigger("death", arguments);
     } // end of if
     updateJump(jumpupdate);
     updateBoom(15);
@@ -250,8 +256,6 @@ class Player extends GameObject implements KeyListener  {
     gra.drawString(name,xHealth,yHealth+30);
   }  
   
-  public void run() {
-  }
   
   public void setDamage(int damage, boolean inverted, Player murderer) {
     health -= damage;
@@ -264,8 +268,12 @@ class Player extends GameObject implements KeyListener  {
       boomLeft = boomLeft+(100-health)*10;
     } // end of if-else
     
-    if (health < 0) {
+    if (health < 0 && !freezeControls) {
+      System.out.println("testatestbtestc");
       freezeControls = true;
+      HashMap<String,String> arguments = new HashMap<String, String>();
+      arguments.put("id", ""+id);
+      Game.eventHandler.trigger("death", arguments);
     } // end of if
   }  
   

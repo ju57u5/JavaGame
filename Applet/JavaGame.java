@@ -5,15 +5,12 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import java.awt.image.BufferedImage;
 import java.net.*; 
-
 import org.newdawn.easyogg.OggClip;
-
 import javax.swing.*;
+import  tk.ju57u5v.event.EventHandler;
 
 
 //import Applet.*;
@@ -30,7 +27,6 @@ public class JavaGame extends Frame implements KeyListener {
   boolean fpsan=false;
   URL  PlayerTextureUrl;
 
-   
   File basePath;//Pfad zu den Resourcen
   File backgroundTexture;
   File sound;
@@ -44,6 +40,7 @@ public class JavaGame extends Frame implements KeyListener {
   damageLogig DamageLogig;
   int[][] ebenen = new int[100][3] ;
   GameRunner gamerunner;
+  EventHandler eventHandler;
   float vol;
   BufferedImage backgroundImage;
   OggClip oc;
@@ -85,7 +82,8 @@ public class JavaGame extends Frame implements KeyListener {
     this.args = args;
     updater = new Updater(this);
     highscore = new Highscore(this);
-    
+    eventHandler = new EventHandler(this);
+    eventHandler.registerTestEvents();
     
     setTitle("Survive-JavaGame");  // Fenstertitel setzen
     setSize(1200,900);                            // Fenstergröße einstellen
@@ -169,7 +167,6 @@ public class JavaGame extends Frame implements KeyListener {
     ebenen[5][0]= 835;
     ebenen[5][1]= 969;
     ebenen[5][2]= 441;
-    
     
     
     // Spieler
@@ -361,7 +358,10 @@ public class JavaGame extends Frame implements KeyListener {
     } // end of for
     return spielerAnzahl;
   }
-  // Ende Methoden
+  
+  public Graphics getDBGraphics() {
+	  return dbImage.getGraphics();
+  }
 } // end of class JavaGame
 
 

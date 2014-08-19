@@ -43,9 +43,6 @@ class GameRunner extends Thread {
     storyModus = new StoryModus(Game);
     this.start();
   }  
-  // Anfang Komponenten5
-  // Ende Komponenten5
-  // Anfang Methoden5
   
   public void run() {
     while (true) {
@@ -60,7 +57,6 @@ class GameRunner extends Thread {
           Game.repaint();
           Game.dbImage.getGraphics().clearRect(0,0, (int)Game.getWidth(), (int)Game.getHeight());
           
-          //Game.dbImage.getGraphics().drawImage(Game.backgroundImage,100,200-67,Game);
           Game.dbImage.getGraphics().drawImage(Game.backgroundImage,0,0,Game);
           
           int perkjn= (int) (Math.random()*3000+1);

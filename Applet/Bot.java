@@ -5,8 +5,6 @@ import java.io.File;
 
 class Bot extends Player {
   
-  
-  
   public Bot(int x, int y, boolean orientation, int width, int height,File playertexture, File shottexture, int left, int right , int jump, int down, int attack, int xHealth, int yHealth, String name) {
     super(x,y,orientation,width,height,playertexture, shottexture, left, right, jump, down, attack, xHealth, yHealth, name);
   }  
@@ -170,9 +168,6 @@ class Bot extends Player {
         
       } // end of if
       gefroren-=1;
-      
-      
-      
       
       min=100000;
       for (int c=1;c<Game.player.length;c++) {
