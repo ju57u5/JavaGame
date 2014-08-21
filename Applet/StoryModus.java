@@ -2,20 +2,16 @@ package Applet;
 
 import java.awt.event.KeyEvent;
 
-public class StoryModus {
-  JavaGame Game;
-  boolean storyModus=false;
-  static int MODE_OFF=0;
-  static int MODE_ON=1;
-  boolean amanfang=true;
+public class StoryModus extends GameMode{
+
   
   
   public StoryModus (JavaGame Game) {
-    this.Game=Game;
+	super(Game);
   }
   
   public void update() {
-    if (storyModus) {
+    if (modeON) {
       if (amanfang) {
         for (int c=1;c<Game.player.length ;c++ ) {
           if (Game.player[c] instanceof Bot) {
@@ -49,17 +45,4 @@ public class StoryModus {
     
     
   }   //Ende void update
-  public boolean isOn() {
-    return storyModus;
-  }
-  
-  
-  public void setState(int state) {
-    if (state==0) {
-      storyModus=false;
-    }
-    else {
-      storyModus=true;
-    }
-  }
 }

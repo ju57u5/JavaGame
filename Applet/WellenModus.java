@@ -4,18 +4,14 @@ import java.awt.event.KeyEvent;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class WellenModus {
+public class WellenModus extends GameMode{
   ScoreFrame scoreFrame;
   int wptotencounter=0,wbtotencounter=0,wbanzahl=0,wpanzahl=0,wgewonnen;
-  JavaGame Game;
-  boolean wellenModus=false;
-  static int MODE_OFF=0;
-  static int MODE_ON=1;
   int wAnzeige;
   boolean wNeu=false,nNeu=false,amanfang=true;
   
   public WellenModus (JavaGame Game) {
-    this.Game=Game;
+    super(Game);
   }
   
   
@@ -23,7 +19,7 @@ public class WellenModus {
   * Updated den Spielmodus
   */
   public void update() {
-    if (wellenModus) {
+    if (modeON) {
       if (amanfang) {
         for (int c=1;c<Game.player.length ;c++ ) {
           if (Game.player[c] instanceof Bot) {
@@ -66,7 +62,7 @@ public class WellenModus {
         wNeu=true;
       } // end of if                                                                         ///////WELLENMODUS - Sieg oder Niederlage
       if (wptotencounter==wpanzahl && !nNeu) {                                            ///Niederlage
-        wellenModus=false;
+    	  modeON=false;
         wAnzeige=100;
         nNeu=true;
       } // end of if    
@@ -80,11 +76,11 @@ public class WellenModus {
     
     wAnzeige-=1;
     
-    if (wellenModus==false && wAnzeige>0) {
+    if (modeON==false && wAnzeige>0) {
       Game.dbImage.getGraphics().drawString("Welle nicht überstanden    Neustart in "+wAnzeige/10,500,120);
       
     } // end of if
-    if (wellenModus==true && wAnzeige>0) {
+    if (modeON==true && wAnzeige>0) {
       Game.dbImage.getGraphics().drawString("Welle überstanden    Neustart in "+wAnzeige/10,500,120);
       
     } // end of if
@@ -98,29 +94,5 @@ public class WellenModus {
       nNeu=false;
     } // end of if
     
-  }
-  
-  
-  
-  /**
-  * Methode gibt zurück ob der Modus angeschaltet ist.
-  * @return boolean
-  */
-  public boolean isOn() {
-    return wellenModus;
-  }
-  
-  /**
-  * Setzt den Status des Modus.
-  * <br>Möglichkeiten sind als statische Variablen angegeben.
-  * @param int state
-  */
-  public void setState(int state) {
-    if (state==0) {
-      wellenModus=false;
-    }
-    else {
-      wellenModus=true;
-    }
   }
 }

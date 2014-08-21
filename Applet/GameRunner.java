@@ -28,6 +28,7 @@ class GameRunner extends Thread {
   ScoreFrame scoreFrame;
   String chatMessages[] = new String [30];
   boolean sendHighscoreFailed;
+  GameMode modus;
   WellenModus wellenModus;
   StoryModus storyModus;
   
