@@ -65,7 +65,7 @@ class Updater extends Frame{
           folder.mkdirs();
         } // end of if
         
-        download("http://ju57u5v.tk/JavaGame/" + listenName , System.getenv("APPDATA")+"\\texture", false);
+        download("http://5.35.242.154/JavaGame/" + listenName , System.getenv("APPDATA")+"\\texture", false);
         try {
           fileSize = getContentSize();
         } catch (Exception e) {
@@ -106,7 +106,7 @@ class Updater extends Frame{
           } // end of if
           else {
             if ((currentver<ver || firstrun) && !line.startsWith("#")) {
-              download("http://ju57u5v.tk/JavaGame/" + line, System.getenv("APPDATA")+"\\texture", true);
+              download("http://5.35.242.154/JavaGame/" + line, System.getenv("APPDATA")+"\\texture", true);
             }
           } // end of if-else
           if (counter==0 && !line.startsWith("!")) {

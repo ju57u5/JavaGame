@@ -315,7 +315,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
         }
       } // end of for
     }
-    Game.oc.setGain((float) lautstaerke.getValue()/100);
     Game.currentVolume=lautstaerke.getValue();
   }
   
@@ -348,8 +347,7 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       playerCount();
       Game.gamerunner.running=true;
       if (Game.soundan) {
-        Game.oc.loop();
-      } // end of if
+     } // end of if
       this.dispose(); 
     }   
     else if (bLeft) {
@@ -457,7 +455,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       playerCount();
       Game.gamerunner.running=true;
       if (Game.soundan) {
-        Game.oc.loop();
       } // end of if
       e.getWindow().dispose();                   // Fenster "killen"
     }           
@@ -559,7 +556,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       playerCount();
       Game.restartGame();
       if (Game.soundan) {
-        Game.oc.loop();
       } // end of if
       this.dispose();
       Game.gamerunner.running=true;
@@ -570,7 +566,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       playerCount();
       Game.gamerunner.running=true;
       if (Game.soundan) {
-        Game.oc.loop();
       } // end of if
       
       this.dispose();
@@ -641,7 +636,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       
       Game.restartGame();
       if (Game.soundan) {
-        Game.oc.loop();
       } // end of if
       this.dispose();
       Game.gamerunner.running=true;
@@ -651,7 +645,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       Game.gamerunner.wellenModus.setState(WellenModus.MODE_OFF);
       Game.restartGame();
       if (Game.soundan) {
-        Game.oc.loop();
       } // end of if
       this.dispose();
       Game.gamerunner.running=true;
@@ -663,7 +656,6 @@ class Menu extends Frame implements ActionListener,ItemListener,KeyListener,Adju
       playerCount();
       Game.restartGame();
       if (Game.soundan) {
-        Game.oc.loop();
       } // end of if
       this.dispose();
       Game.gamerunner.running=true;

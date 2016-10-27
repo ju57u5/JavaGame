@@ -8,7 +8,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.net.*; 
-import org.newdawn.easyogg.OggClip;
 import javax.swing.*;
 import  tk.ju57u5v.event.EventHandler;
 
@@ -43,7 +42,6 @@ public class JavaGame extends Frame implements KeyListener {
   EventHandler eventHandler;
   float vol;
   BufferedImage backgroundImage;
-  OggClip oc;
   String[] args = new String[100];
   Highscore highscore;
   String[] nachricht = new String[5];
@@ -115,7 +113,6 @@ public class JavaGame extends Frame implements KeyListener {
       File File = new File((System.getenv("APPDATA")));
       basePath = new File(File, "/texture");
       backgroundTexture = new File(basePath,"/hintergrund.jpg");
-      oc = new OggClip(new FileInputStream(basePath+"\\sound.ogg"));
     }
     catch(Exception ex)
     { ex.printStackTrace(); }
@@ -131,8 +128,6 @@ public class JavaGame extends Frame implements KeyListener {
     
     
     if (soundan) {
-      oc.loop();
-      oc.setGain(0.8f);
       currentVolume= 80;
     } // end of if
     
@@ -247,7 +242,6 @@ public class JavaGame extends Frame implements KeyListener {
         gamerunner.running=false;
       }
       if (soundan) {
-        oc.stop();
       } // end of if
       Menu menu = new Menu(this);
       //volume.setValue(vol);
@@ -256,7 +250,6 @@ public class JavaGame extends Frame implements KeyListener {
     else if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {
       gamerunner.running=true;
       if (soundan) {
-        oc.loop();
       } // end of if
     } // end of if-else
     
@@ -265,7 +258,6 @@ public class JavaGame extends Frame implements KeyListener {
     }
     
     else if (e.getKeyCode()==KeyEvent.VK_F11) {
-      oc.stop();
       dispose();
       setUndecorated(true);
       String[] arguments = {"fullscreen"};
