@@ -2,6 +2,3 @@ JavaGame
 ========
 
 JavaGame
-
-
-DEINE MUDDA
